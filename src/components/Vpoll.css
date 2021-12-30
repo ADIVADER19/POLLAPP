@@ -1,0 +1,84 @@
+
+.actoll{
+    margin-left: 5% ;
+}
+
+.polsta{
+    display: flex;
+    border-style: solid;
+    border-width: 3px;
+    border-color: grey;
+    border-radius: 15px;
+}
+
+.poldet{
+    border-radius: 15px;
+    background-color:beige;
+    width: 50%;
+    padding: 2% 0% 0% 2%;
+    position: relative;
+    z-index: 1;
+}
+
+.poldet::after{
+    content: "";
+    border-radius: 15px;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0%;
+    position: absolute;
+    z-index: -1;
+    transition: 500ms;
+}
+
+.poldet:hover::after{
+    background: rgba(228, 173, 173, 0.2);
+}
+
+.sta{
+    border-radius: 15px;
+    background-color:whitesmoke;
+    width: 50%;
+    padding: 2% 0% 0% 2%;
+    position: relative;
+    z-index: 1;
+}
+
+.sta::after{
+    content: "";
+    border-radius: 15px;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0%;
+    position: absolute;
+    z-index: -1;
+    transition: 500ms;
+}
+
+.sta:hover::after{
+    background-color: rgb(235, 235, 235);
+}
+
+.clooll{
+    margin-left: 5%;
+}
+
+.colsta{
+    display: flex;
+    border-style: solid;
+    border-width: 3px;
+    border-color: grey;
+    border-radius: 15px;
+}
+
+.crells{
+    margin-top: 3%;
+    margin-left: 5%;
+}
+.cpoll{
+    background-color: black !important;
+    color: white !important;
+}
+
