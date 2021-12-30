@@ -3,6 +3,7 @@ import NavBar from './components/NavBar';
 import Homepage from './components/Homepage'
 import Poll from './components/Poll'
 import Vpoll from './components/Vpoll'
+import LivepollT from './components/LivepollT'
 import { BrowserRouter as Router ,Routes, Route} from "react-router-dom";
 import { useNavigate } from 'react-router';
 
@@ -15,6 +16,7 @@ function App() {
           <Route path="/" element={<Homepage />}/>
           <Route path="/poll/:id" element={<Poll />}/>
           <Route path="/vpoll" element={<Vpoll />}/>
+          <Route path="/LivepollT" element={<LivepollT />}/>
         </Routes>
       </Router>
     </div>

@@ -7,6 +7,7 @@ import VisibilityIcon from '@material-ui/icons/Visibility';
 import { v4 as uuidv4 } from 'uuid';
 import {yellow,black} from '@material-ui/core/colors'
 import { createTheme } from '@material-ui/core/styles'
+import { Delete } from '@material-ui/icons';
 
 
 function Vpoll() {
@@ -18,6 +19,13 @@ function Vpoll() {
 
     }
 
+    function viewpoll()
+    {
+        const id=uuidv4();
+        navigate("/livepollT");
+
+    }
+
     return (
         <div className='coomtainer'>
             <div className='actoll'>
@@ -25,20 +33,27 @@ function Vpoll() {
                 <h2>No Active Polls</h2>
                 <div className='polsta'>
                     <div className='poldet'>Poll Details:
-                    <h3 className='pollin'>poll link:</h3>
-                    <h3 className='poltim'>poll time:</h3>
+                        <h3 className='pollin'>poll link:</h3>
+                        <h3 className='poltim'>poll time:</h3>
                     </div>
                     <div className='sta'>stats:</div>
+                    <div className='futons'>
+                        <Button className="viewpoll" onClick={viewpoll} size="large" variant="contained" endIcon={<VisibilityIcon/>}>VIEW POLL</Button>
+                        <Button className="deletepoll" size="large" variant="contained" endIcon={<Delete/>}>END POLL</Button>
+                    </div>
                 </div>
             </div>
             <div className='clooll'>
                 <h1>Closed Polls</h1>
                 <h2>No Closed Polls</h2>
-                <div className='colsta'>
+                <div className='closta'>
                     <div className='poldet'>Poll Details:
                     <h3 className='poltim'>poll time:</h3>
                     </div>
                     <div className='sta'>stats:</div>
+                    <div className='futons'>    
+                        <Button className="viewpoller" onClick={viewpoll} size="large" variant="contained" endIcon={<VisibilityIcon/>}>VIEW POLL</Button>
+                    </div>
                 </div>
             </div>
             <div className='crells'>
