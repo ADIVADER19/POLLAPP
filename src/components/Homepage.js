@@ -8,6 +8,8 @@ import {yellow,black} from '@material-ui/core/colors'
 import { createTheme } from '@material-ui/core/styles'
 
 
+
+
 function Homepage() {
     let navigate = useNavigate();
     function createpoll()
@@ -34,7 +36,8 @@ function Homepage() {
         container:{
             marginTop:100,
             alignItems: 'center',
-            marginLeft:250
+            marginLeft:250,
+            position:"relative"
         },
         cpoll:{
             marginRight:100,
@@ -64,12 +67,13 @@ function Homepage() {
         
     })
     const classes=useStyles()
+  
     return (
         
         <div className={classes.container}>
-          
+         
             
-            <Typography className={classes.title} variant="h1">WELCOME TO POLL-APP</Typography>
+            <Typography className={classes.title} variant="h1">HELLO,{}</Typography>
             <Typography className={classes.motto} variant="h3">CREATE AND VIEW LIVE POLLS</Typography>
             <Button color="secondary" className={classes.cpoll} onClick={createpoll} size="large" variant="contained" endIcon={<AddIcon/>}>CREATE POLL</Button>
             <Button color="secondary" className={classes.vpoll} onClick={viewpoll}  size="large" variant="contained" endIcon={<VisibilityIcon/>}>VIEW POLLS</Button>
