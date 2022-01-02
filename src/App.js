@@ -8,7 +8,8 @@ import { BrowserRouter as Router ,Routes, Route} from "react-router-dom";
 import Signup from './components/Signup';
 import Login from './components/Login'
 import { useNavigate } from 'react-router';
-
+import Closepoll from './components/Closepoll'
+import PollStu from './components/PollStu'
 
 function App() {
   return (
@@ -20,7 +21,9 @@ function App() {
           <Route path="/home" element={<><NavBar /> <Homepage /></>}/>
           <Route path="/poll/:id" element={<Poll />}/>
           <Route path="/vpoll" element={<Vpoll />}/>
-          <Route path="/LivepollT" element={<LivepollT />}/>
+          <Route path="/livepollT" element={<LivepollT />}/>
+          <Route path="/closepoll" element={<Closepoll />}/>
+          <Route path="/pollStu" element={<PollStu />}/>
         </Routes>
       </Router>
     </div>

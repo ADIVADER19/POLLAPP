@@ -19,10 +19,17 @@ function Vpoll() {
 
     }
 
-    function viewpoll()
+    function livepoll()
     {
         const id=uuidv4();
         navigate("/livepollT");
+
+    }
+
+    function closepoll()
+    {
+        const id=uuidv4();
+        navigate("/closepoll");
 
     }
 
@@ -38,7 +45,7 @@ function Vpoll() {
                     </div>
                     <div className='sta'>stats:</div>
                     <div className='futons'>
-                        <Button className="viewpoll" onClick={viewpoll} size="large" variant="contained" endIcon={<VisibilityIcon/>}>VIEW POLL</Button>
+                        <Button className="viewpoll" onClick={livepoll} size="large" variant="contained" endIcon={<VisibilityIcon/>}>VIEW POLL</Button>
                         <Button className="deletepoll" size="large" variant="contained" endIcon={<Delete/>}>END POLL</Button>
                     </div>
                 </div>
@@ -52,7 +59,7 @@ function Vpoll() {
                     </div>
                     <div className='sta'>stats:</div>
                     <div className='futons'>    
-                        <Button className="viewpoller" onClick={viewpoll} size="large" variant="contained" endIcon={<VisibilityIcon/>}>VIEW POLL</Button>
+                        <Button className="viewpoller" onClick={closepoll} size="large" variant="contained" endIcon={<VisibilityIcon/>}>VIEW POLL</Button>
                     </div>
                 </div>
             </div>
