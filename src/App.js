@@ -17,7 +17,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Login />}/>
           <Route path="/signin" element={<Signup />}/>
-          <Route path="/home" element={<Homepage />}/>
+          <Route path="/home" element={<><NavBar /> <Homepage /></>}/>
           <Route path="/poll/:id" element={<Poll />}/>
           <Route path="/vpoll" element={<Vpoll />}/>
           <Route path="/LivepollT" element={<LivepollT />}/>

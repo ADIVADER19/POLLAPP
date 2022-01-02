@@ -23,15 +23,6 @@ function Homepage() {
         navigate("/vpoll");
 
     }
-    const theme = createMuiTheme({
-        palette:
-        {
-            primary:{
-                main:'#000000',
-            },
-            secondary: yellow
-        }
-    })
     const  useStyles = makeStyles({
         container:{
             marginTop:100,
