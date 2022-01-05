@@ -1,4 +1,4 @@
-import React from 'react'
+import React,{useState,useEffect} from 'react'
 import {Typography,Button,makeStyles,createMuiTheme,ThemeProvider}  from '@material-ui/core'
 import { useNavigate } from 'react-router';
 import AddIcon from '@material-ui/icons/Add';
@@ -23,6 +23,31 @@ function Homepage() {
         navigate("/vpoll");
 
     }
+    const [data, setData] = useState("");
+	const [userInfo, setUserInfo] = useState({});
+	const homee = async () => {
+		try {
+			const res = await fetch("/userdata", {
+				method: "GET",
+				headers: {
+					Accept: "application/json",
+					"Content-Type": "application/json",
+				},
+				credentials: "include",
+			});
+			const data = await res.json();
+			console.log(data);
+			setUserInfo(data);
+
+			if (!res.status === 200) {
+				throw "invalid attempt";
+			}
+		} catch (err) {
+			console.log(err);
+			navigate("/");
+		}
+	};
+   
     const  useStyles = makeStyles({
         container:{
             marginTop:100,
@@ -57,7 +82,11 @@ function Homepage() {
         
         
     })
+   
     const classes=useStyles()
+    useEffect(() => {
+		homee();
+	}, []);
   
     return (
         

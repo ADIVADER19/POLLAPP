@@ -3,10 +3,9 @@ import {Typography,Button,makeStyles,createMuiTheme,ThemeProvider} from '@materi
 import { GoogleLogin } from 'react-google-login';
 import { useNavigate } from 'react-router';
 import { toast } from 'react-toastify';
+import './Signup.css'
 
 
-
-toast.configure()
 
 function Signup() {
     
@@ -39,8 +38,10 @@ function Signup() {
 			});
             const data= await res.json();
 			if (res.status === 400 || !data) {
+                window.alert('Something went wrong')
 				console.log("USER REGISTRATION FAILED");
 			} else if (res.status === 200 || res.status === 201) {
+                window.alert("ACCOUNT CREATED SUCCESSFULLY")
 			    navigate('/')
 				console.log("ZA WARUDOO!!!!");
 			} else {
@@ -49,27 +50,17 @@ function Signup() {
 		}
 	};
 
-        
+    function linkto()
+    {
+        navigate('/home');
+    }
         
       
-    const useStyles=makeStyles({
-        sign:{
-            height:100,
-            width:200,
-        
-        },
-        log:{
-            height:100,
-            width:200,
-        }
-
-      })
-    const classes =useStyles();
     const navigate=useNavigate();
     return (
         <div>
-                <Typography className="" variant="h2">WELCOME TO POLL-APP</Typography>
-                <GoogleLogin className={classes.sign}  
+                <Typography className="title" variant="h2">WELCOME TO POLL-APP</Typography>
+                <GoogleLogin className="sign"  
                     clientId="399611436919-fo4n24pr7bpmslat5vamj5u8rc5q0v6f.apps.googleusercontent.com"
                     buttonText="SIGN UP"
                     onSuccess={responseGoogle}
@@ -77,6 +68,7 @@ function Signup() {
                     cookiePolicy={'single_host_origin'}
                     color="primary"
                 />
+                <Button  className="log" variant="outlined" onClick={linkto}>Login</Button>
         </div>
     )
 }
