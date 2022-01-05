@@ -6,12 +6,15 @@ import VisibilityIcon from '@material-ui/icons/Visibility';
 import { v4 as uuidv4 } from 'uuid';
 import {yellow,black} from '@material-ui/core/colors'
 import { createTheme } from '@material-ui/core/styles'
-
+import Popup from './Popup';
+import {useState, useEffect} from 'react';
 
 
 
 function Homepage() {
     let navigate = useNavigate();
+    const [timedPopup, setTimedPopup] = useState(false);
+    
     function createpoll()
     {
         const id=uuidv4();
@@ -58,7 +61,13 @@ function Homepage() {
         
     })
     const classes=useStyles()
-  
+
+    useEffect(() => {
+        setTimeout(()=>{
+            setTimedPopup(true);
+        },1000);
+    }, [])
+
     return (
         
         <div className={classes.container}>
@@ -68,7 +77,11 @@ function Homepage() {
             <Typography className={classes.motto} variant="h3">CREATE AND VIEW LIVE POLLS</Typography>
             <Button color="secondary" className={classes.cpoll} onClick={createpoll} size="large" variant="contained" endIcon={<AddIcon/>}>CREATE POLL</Button>
             <Button color="secondary" className={classes.vpoll} onClick={viewpoll}  size="large" variant="contained" endIcon={<VisibilityIcon/>}>VIEW POLLS</Button>
-      </div>
+        <Popup trigger={timedPopup} setTrigger={setTimedPopup}>
+            <h3>My popup</h3>
+        </Popup>
+        </div>
+        
     )
 }
 
