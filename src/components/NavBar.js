@@ -1,72 +1,50 @@
 import React from 'react'
-import {Typography,AppBar,Toolbar,Button,makeStyles,createMuiTheme,ThemeProvider,IconButton} from '@material-ui/core';
-import {red} from '@material-ui/core/colors'
+import {makeStyles} from '@material-ui/core';
 import PollIcon from '@material-ui/icons/Poll';
-import MenuIcon from '@material-ui/icons/Menu';
 import { useNavigate } from 'react-router';
-import { createTheme } from '@material-ui/core/styles'
 import './Navbar.css';
 
-const theme = createMuiTheme({
-    palette:
-    {
-        primary:{
-            main:'#000000',
-        },
-        secondary: red
-    }
-})
 const  useStyles = makeStyles({
-    navicon:{
-        marginLeft:100,
-        marginRight:50
-
+    navbar:{
+        width: "100%",
+        display:"flex",
+        backgroundColor: "rgb(233,245,251)",
+    }  
+    ,navbarTitle:{
+        display: "flex",
+        width: "85%",
+        height: "10%",
+        color: "rgb(0,86,146)",
+        margin: "1%",
+        '& h1':{
+            display: "inline",
+            marginLeft: "2%",
+            fontFamily: "Roboto,Arial,sans-serif",
+        },
+        '& PollIcon':{
+            marginTop:"1%",
+        }
     },
-    navitems: {
-        marginLeft:100,
-        marginRight:100
-    
-    },
-    navtitle:
-    {
-        marginLeft:100,
-        marginRight:100,
-        fontSize:40,
-    },
-    hamburger:
-    {
-        display:'none'
-        
-    }
-    
-    
 })
 function NavBar() {
     let navigate = useNavigate();
     function navicon() {
-        navigate('/')
+        navigate('/home')
     }
     const classes=useStyles()
     return (
-        <div>
-           
-                <ThemeProvider theme={theme}>
-                        <AppBar   classNaposition="fixed">
-                            <Toolbar>
-                                <IconButton  onClick={navicon} className={classes.navicon}>
-                                    <PollIcon color="secondary"/>
-                                </IconButton>
-                                <Typography  className={classes.navtitle} variant="h5">POLLAPP</Typography>
-                                <Button    color="secondary" variant="outlined"className={classes.navitems}>LOGIN</Button>
-                                <Button   color="secondary" variant="outlined" className={classes.navitems}>SIGNUP</Button>
-                                <Button   color="secondary" variant="outlined" className={classes.navitems}>CREATE POLL</Button>
-                                <IconButton  className={classes.hamburger} color="secondary">
-                                    <MenuIcon/>
-                                </IconButton>
-                            </Toolbar>
-                        </AppBar>
-                </ThemeProvider>
-           
+        <div className={classes.navbar}>
+           <div className={classes.navbarTitle}>
+               <PollIcon style={{cursor:"pointer"}} fontSize='large' className={classes.navBarIcon} onClick={navicon}/>
+               <h1 style={{cursor:"pointer"}} onClick={navicon}>PollApp</h1>
+           </div>
+           <div class="dropdown">
+               <button class="dropbtn">Profile</button>
+               <div class="dropdown-content">
+                   <a href="#">Settings</a>
+                   <a href="#">Logout</a>
+                </div>
+            </div>        
         </div>
     )
 }

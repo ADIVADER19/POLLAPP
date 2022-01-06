@@ -1,6 +1,6 @@
 import React from 'react'
 import {Typography,Button,makeStyles,createMuiTheme,ThemeProvider} from '@material-ui/core'
-import { GoogleLogin } from 'react-google-login';
+
 import { useNavigate } from 'react-router';
 import { toast } from 'react-toastify';
 import './Signup.css'
@@ -60,14 +60,7 @@ function Signup() {
     return (
         <div>
                 <Typography className="title" variant="h2">WELCOME TO POLL-APP</Typography>
-                <GoogleLogin className="sign"  
-                    clientId="399611436919-fo4n24pr7bpmslat5vamj5u8rc5q0v6f.apps.googleusercontent.com"
-                    buttonText="SIGN UP"
-                    onSuccess={responseGoogle}
-                    onFailure={responseGoogle}
-                    cookiePolicy={'single_host_origin'}
-                    color="primary"
-                />
+                
                 <Button  className="log" variant="outlined" onClick={linkto}>Login</Button>
         </div>
     )
