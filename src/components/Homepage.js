@@ -58,7 +58,7 @@ function Homepage() {
     let navigate = useNavigate();
     function viewpoll()
     {
-        navigate("/view_poll/");
+        navigate("/vpoll/");
 
     }
     function viewlobby(){

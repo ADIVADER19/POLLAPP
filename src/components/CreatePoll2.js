@@ -1,12 +1,12 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core';
 import { useState } from 'react';
-import {Typography} from '@mui/material';
+import {Typography} from '@material-ui/core';
 import { IconButton } from '@material-ui/core';
-import CloseIcon from '@mui/icons-material/Close';
-import { Button } from '@mui/material';
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-import AddIcon from '@mui/icons-material/Add';
+import CloseIcon from '@material-ui/icons/Close';
+import { Button } from '@material-ui/core';
+import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
+import AddIcon from '@material-ui/icons/Add';
 import './CreatePoll.css';
 const  useStyles = makeStyles({
     createpoll:{
