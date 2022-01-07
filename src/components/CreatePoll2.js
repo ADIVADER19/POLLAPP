@@ -1,7 +1,7 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core';
 import { useState } from 'react';
-import {Typography} from '@mui/material';
+import {Typography} from '@material-ui/core';
 import { IconButton } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import { Button } from '@material-ui/core';
