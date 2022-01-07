@@ -5,7 +5,6 @@ import Homepage from './components/Homepage';
 import Vpoll from './components/Vpoll';
 import LivepollT from './components/LivepollT';
 import Signup from './components/Signup';
-import Login from './components/Login'
 import { useNavigate } from 'react-router';
 import Closepoll from './components/Closepoll'
 import PollStu from './components/PollStu'
