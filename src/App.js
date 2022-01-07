@@ -4,8 +4,6 @@ import NavBar from './components/NavBar';
 import Homepage from './components/Homepage';
 import Vpoll from './components/Vpoll';
 import LivepollT from './components/LivepollT';
-import Signup from './components/Signup';
-import Login from './components/Login'
 import { useNavigate } from 'react-router';
 import Closepoll from './components/Closepoll'
 import PollStu from './components/PollStu'
@@ -17,8 +15,6 @@ function App() {
     <div className="app">
       <Router>
         <Routes>
-          <Route path="/login" element={<Login />}/>
-          <Route path="/signin" element={<Signup />}/>
           <Route path="/" element={<><NavBar /><Homepage /></>}/>
           <Route path="/vpoll" element={<Vpoll />}/>
           <Route path="/livepollT/:stuid" element={<LivepollT />}/>
