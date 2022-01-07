@@ -66,11 +66,17 @@ function Homepage() {
 			setUserInfo(data);
 
 			if (!res.status === 200) {
-				throw "invalid attempt";
+				console.log("something went wrong")
 			}
+            else
+            {
+                setTimeout(()=>{
+                    setTimedPopup(true);
+                },1000);
+            
+            }
 		} catch (err) {
 			console.log(err);
-			navigate("/");
 		}
 	};
     const responseGoogle = async (response) => {
@@ -147,7 +153,6 @@ function Homepage() {
 				console.log("USER REGISTRATION FAILED");
 			} else if (res.status === 200 || res.status === 201) {
                 window.alert("SUCCESSFULLY LOGGED IN")
-                userd()
 
 			    navigate('/')
 				console.log("ZA WARUDOO!!!!");
@@ -205,7 +210,7 @@ function Homepage() {
                 <h4>Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusantium alias, cupiditate commodi nihil ab maxime quasi eum consectetur quas delectus.</h4>
             </div>
         </div>
-        <Popup trigger={timedPopup} setTrigger={setTimedPopup}>
+        <Popup className="popup" trigger={timedPopup} setTrigger={setTimedPopup}>
             <h3>SIGN IN TO CONTINUE</h3>
             <GoogleLogin className="sign"  
                         clientId="399611436919-fo4n24pr7bpmslat5vamj5u8rc5q0v6f.apps.googleusercontent.com"
