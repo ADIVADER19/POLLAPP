@@ -15,6 +15,12 @@ module.exports = function(app) {
   }
 
   ));
+  app.use('/userdata',
+   createProxyMiddleware({
+    target: 'http://localhost:2000',
+    changeOrigin:true,
+  }
 
+  ));
   
 };

@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import Popup from './Popup';
 import {useState, useEffect} from 'react';
+import { GoogleLogin } from 'react-google-login';
 
 const  useStyles = makeStyles({
     homepagecontainer:{
@@ -48,7 +49,116 @@ const  useStyles = makeStyles({
 })
 function Homepage() {
     const [timedPopup, setTimedPopup] = useState(false);
+    const [data, setData] = useState("");
+	const [userInfo, setUserInfo] = useState({});
+    const userd = async () => {
+		try {
+			const res = await fetch("/userdata", {
+				method: "GET",
+				headers: {
+					Accept: "application/json",
+					"Content-Type": "application/json",
+				},
+				credentials: "include",
+			});
+			const data = await res.json();
+			console.log(data);
+			setUserInfo(data);
 
+			if (!res.status === 200) {
+				throw "invalid attempt";
+			}
+		} catch (err) {
+			console.log(err);
+			navigate("/");
+		}
+	};
+    const responseGoogle = async (response) => {
+        
+        console.log(response);
+        const mail=response.profileObj.email
+        const name=response.profileObj.name
+        const givenName=response.profileObj.givenName
+        console.log(mail);
+        console.log(name);
+        console.log(givenName);
+        if (
+			!mail ||
+			!name ||
+			!givenName 
+		) {
+			console.log("Please fill all the credentials");
+		} else {
+			const res = await fetch("/login", {
+				method: "POST",
+				headers: {
+					"Content-type": "application/json",
+				},
+				body: JSON.stringify({
+                    mail,
+                    name,
+                    givenName,
+				}),
+			});
+            const data= await res.json();
+			if (res.status === 400 || !data) {
+                window.alert('Something went wrong')
+				console.log("USER REGISTRATION FAILED");
+			} else if (res.status === 200 || res.status === 201) {
+                window.alert("SUCCESSFULLY LOGGED IN")
+                userd()
+			    navigate('/')
+				console.log("ZA WARUDOO!!!!");
+			} else {
+				console.log("Invalid User Creation");
+			}
+		}
+	};
+    const responseeGoogle = async (response) => {
+        
+        console.log(response);
+        const mail=response.profileObj.email
+        const name=response.profileObj.name
+        const givenName=response.profileObj.givenName
+        console.log(mail);
+        console.log(name);
+        console.log(givenName);
+        if (
+			!mail ||
+			!name ||
+			!givenName 
+		) {
+			console.log("Please fill all the credentials");
+		} else {
+			const res = await fetch("/u", {
+				method: "POST",
+				headers: {
+					"Content-type": "application/json",
+				},
+				body: JSON.stringify({
+                    mail,
+                    name,
+                    givenName,
+				}),
+			});
+            const data= await res.json();
+			if (res.status === 400 || !data) {
+                window.alert('Something went wrong')
+				console.log("USER REGISTRATION FAILED");
+			} else if (res.status === 200 || res.status === 201) {
+                window.alert("SUCCESSFULLY LOGGED IN")
+                userd()
+
+			    navigate('/')
+				console.log("ZA WARUDOO!!!!");
+			} else {
+				console.log("Invalid User Creation");
+			}
+		}
+	};
+	
+	var usern = userInfo.username;
+	console.log(usern);
     useEffect(() => {
             setTimeout(()=>{
                 setTimedPopup(true);
@@ -79,12 +189,12 @@ function Homepage() {
             <h1 class={classes.vac}>Features</h1>
         <div class={classes.house}>
             <div class={classes.home}>
-                <h2><u>Feature 1</u></h2>
-                <h4>Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusantium alias, cupiditate commodi nihil ab maxime quasi eum consectetur quas delectus.</h4>
+                <h2><u>Live POLLS</u></h2>
+                <h4>Conduct live polls</h4>
             </div>
             <div class={classes.home}>
-                <h2><u>Feature 2</u></h2>
-                <h4>Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusantium alias, cupiditate commodi nihil ab maxime quasi eum consectetur quas delectus.</h4>
+                <h2><u>Google authentication</u></h2>
+                <h4>login in through google</h4>
             </div>
             <div class={classes.home}>
                 <h2><u>Feature 3</u></h2>
@@ -96,7 +206,23 @@ function Homepage() {
             </div>
         </div>
         <Popup trigger={timedPopup} setTrigger={setTimedPopup}>
-            <h3>My popup</h3>
+            <h3>SIGN IN TO CONTINUE</h3>
+            <GoogleLogin className="sign"  
+                        clientId="399611436919-fo4n24pr7bpmslat5vamj5u8rc5q0v6f.apps.googleusercontent.com"
+                        buttonText="LOGIN IN"
+                        onSuccess={responseGoogle}
+                        onFailure={responseGoogle}
+                        cookiePolicy={'single_host_origin'}
+                        color="primary"
+                    />
+               <GoogleLogin className="sign"  
+                        clientId="399611436919-fo4n24pr7bpmslat5vamj5u8rc5q0v6f.apps.googleusercontent.com"
+                        buttonText="SIGN UP"
+                        onSuccess={responseeGoogle}
+                        onFailure={responseeGoogle}
+                        cookiePolicy={'single_host_origin'}
+                        color="primary"
+                    />
         </Popup>
         </div>
     )
