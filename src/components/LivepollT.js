@@ -23,7 +23,7 @@ function LivepollT() {
         body: JSON.stringify({data:lobbyuuid})
     }).then((res) => res.json())
         .then((ret) => {
-          console.log(ret);
+          console.log(ret.myitem[0].pollOption);
            setItems(ret.myitem);
 
           console.log(polldes);
@@ -67,7 +67,7 @@ function LivepollT() {
                         <h3>{oop.optionValue}</h3>
                     </div>
                         <div className='vote'>
-                        Votes = ''
+                        Votes = '{oop.optionArray.length}'
                         </div>
                         </>
                         )}
