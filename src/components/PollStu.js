@@ -1,7 +1,142 @@
-import React from 'react'
+import {useEffect,useState}  from 'react'
 import './PollStu.css';
+import Popup from './Popup'
+import { GoogleLogin } from 'react-google-login';
 
 function PollStu() {
+    const [timedPopup, setTimedPopup] = useState(false);
+    const [userInfo, setUserInfo] = useState({});
+    const suserd = async () => {
+		try {
+			const res = await fetch("/suserdata", {
+				method: "GET",
+				headers: {
+					Accept: "application/json",
+					"Content-Type": "application/json",
+				},
+				credentials: "include",
+			});
+			const data = await res.json();
+			console.log(data);
+			setUserInfo(data);
+
+			if (res.status === 200) {
+				console.log("DATA retrieved from token")
+			}
+            else if (res.status === 422) {
+                setTimeout(()=>{
+                    setTimedPopup(true);
+                },1000);
+            }
+            else
+            {
+                setTimeout(()=>{
+                    setTimedPopup(true);
+                },1000);
+            
+            }
+		} catch (err) {
+			console.log(err);
+		}
+	};
+    const responseGoogle = async (response) => {
+        
+        console.log(response);
+        const mail=response.profileObj.email
+        const name=response.profileObj.name
+        const givenName=response.profileObj.givenName
+        console.log(mail);
+        console.log(name);
+        console.log(givenName);
+        if (
+			!mail ||
+			!name ||
+			!givenName 
+		) {
+			console.log("Please fill all the credentials");
+		} else {
+			const res = await fetch("/slogin", {
+				method: "POST",
+				headers: {
+					"Content-type": "application/json",
+				},
+				body: JSON.stringify({
+                    mail,
+                    name,
+                    givenName,
+				}),
+			});
+            const data= await res.json();
+			if (res.status === 400 || !data) {
+                window.alert('Something went wrong')
+				console.log("USER REGISTRATION FAILED");
+			} else if (res.status === 200 || res.status === 201) {
+                window.alert("SUCCESSFULLY LOGGED IN")
+                setTimedPopup(false);
+                suserd()
+				console.log("ZA WARUDOO!!!!");
+			} 
+            else if(res.status === 422)
+                {
+                window.alert("USER DOES NOT EXSIST")
+				console.log("Invalid User Creation");
+			}
+            else
+            {
+                window.alert("INVALID USER")
+            }
+		}
+	};
+    const responseeGoogle = async (response) => {
+        
+        console.log(response);
+        const mail=response.profileObj.email
+        const name=response.profileObj.name
+        const givenName=response.profileObj.givenName
+        console.log(mail);
+        console.log(name);
+        console.log(givenName);
+        if (
+			!mail ||
+			!name ||
+			!givenName 
+		) {
+			console.log("Please fill all the credentials");
+		} else {
+			const res = await fetch("/su", {
+				method: "POST",
+				headers: {
+					"Content-type": "application/json",
+				},
+				body: JSON.stringify({
+                    mail,
+                    name,
+                    givenName,
+				}),
+			});
+            const data= await res.json();
+			if (res.status === 400 || !data) {
+                window.alert('Something went wrong')
+				console.log("USER REGISTRATION FAILED");
+			} else if (res.status === 200 || res.status === 201) {
+                window.alert("SUCCESSFULLY SIGNED UP")
+                document.getElementByclassName("sign").style.display="none";
+				console.log("ZA WARUDOO!!!!");
+                
+			} 
+            else if(res.status === 422)
+            {
+                window.alert("USER ALREADY EXISTS");
+            }
+            else {
+				console.log("Invalid User Creation");
+			}
+		}
+	};
+    useEffect(()=>
+{
+    suserd();
+},[])
     return (
         <div className='actuallythepage'>
             <div className='ice2'>
@@ -61,8 +196,29 @@ function PollStu() {
                     </div>
                 </div>
             </div>
+            <Popup id="popup" trigger={timedPopup} setTrigger={setTimedPopup}>
+                <h3>SIGN UP OR LOGIN TO CONTINUE</h3>
+                <GoogleLogin id="log" className="log"  
+                            clientId="399611436919-fo4n24pr7bpmslat5vamj5u8rc5q0v6f.apps.googleusercontent.com"
+                            buttonText="LOGIN IN"
+                            onSuccess={responseGoogle}
+                            onFailure={responseGoogle}
+                            cookiePolicy={'single_host_origin'}
+                            color="primary"
+                        />
+                <GoogleLogin id="sign" className="sign"  
+                            clientId="399611436919-fo4n24pr7bpmslat5vamj5u8rc5q0v6f.apps.googleusercontent.com"
+                            buttonText="SIGN UP"
+                            onSuccess={responseeGoogle}
+                            onFailure={responseeGoogle}
+                            cookiePolicy={'single_host_origin'}
+                            color="primary"
+                        />
+        </Popup>
         </div>
     )
 }
+
+
 
 export default PollStu
