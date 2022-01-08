@@ -65,12 +65,23 @@ function Homepage() {
 			console.log(data);
 			setUserInfo(data);
 
-			if (!res.status === 200) {
-				throw "invalid attempt";
+			if (res.status === 200) {
+				console.log("DATA retrieved from token")
 			}
+            else if (res.status === 422) {
+                setTimeout(()=>{
+                    setTimedPopup(true);
+                },1000);
+            }
+            else
+            {
+                setTimeout(()=>{
+                    setTimedPopup(true);
+                },1000);
+            
+            }
 		} catch (err) {
 			console.log(err);
-			navigate("/");
 		}
 	};
     const responseGoogle = async (response) => {
@@ -106,12 +117,20 @@ function Homepage() {
 				console.log("USER REGISTRATION FAILED");
 			} else if (res.status === 200 || res.status === 201) {
                 window.alert("SUCCESSFULLY LOGGED IN")
+                //props.setTrigger(false)
+                setTimedPopup(false);
                 userd()
-			    navigate('/')
 				console.log("ZA WARUDOO!!!!");
-			} else {
+			} 
+            else if(res.status === 422)
+                {
+                window.alert("USER DOES NOT EXSIST")
 				console.log("Invalid User Creation");
 			}
+            else
+            {
+                window.alert("INVALID USER")
+            }
 		}
 	};
     const responseeGoogle = async (response) => {
@@ -146,12 +165,16 @@ function Homepage() {
                 window.alert('Something went wrong')
 				console.log("USER REGISTRATION FAILED");
 			} else if (res.status === 200 || res.status === 201) {
-                window.alert("SUCCESSFULLY LOGGED IN")
-                userd()
-
-			    navigate('/')
+                window.alert("SUCCESSFULLY SIGNED UP")
+                document.getElementByclassName("sign").style.display="none";
 				console.log("ZA WARUDOO!!!!");
-			} else {
+                
+			} 
+            else if(res.status === 422)
+            {
+                window.alert("USER ALREADY EXISTS");
+            }
+            else {
 				console.log("Invalid User Creation");
 			}
 		}
@@ -160,11 +183,15 @@ function Homepage() {
 	var usern = userInfo.username;
 	console.log(usern);
     useEffect(() => {
-            setTimeout(()=>{
-                setTimedPopup(true);
-            },1000);
+        userd();
         }, [])
+    // useEffect(() => {
+    //     setTimeout(()=>{
+    //         setTimedPopup(true);
+    //     },1000);
 
+    // },[])
+       
     let navigate = useNavigate();
     function viewpoll()
     {
@@ -205,9 +232,9 @@ function Homepage() {
                 <h4>Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusantium alias, cupiditate commodi nihil ab maxime quasi eum consectetur quas delectus.</h4>
             </div>
         </div>
-        <Popup trigger={timedPopup} setTrigger={setTimedPopup}>
-            <h3>SIGN IN TO CONTINUE</h3>
-            <GoogleLogin className="sign"  
+        <Popup id="popup" trigger={timedPopup} setTrigger={setTimedPopup}>
+            <h3>SIGN UP OR LOGIN TO CONTINUE</h3>
+            <GoogleLogin id="log" className="log"  
                         clientId="399611436919-fo4n24pr7bpmslat5vamj5u8rc5q0v6f.apps.googleusercontent.com"
                         buttonText="LOGIN IN"
                         onSuccess={responseGoogle}
@@ -215,7 +242,7 @@ function Homepage() {
                         cookiePolicy={'single_host_origin'}
                         color="primary"
                     />
-               <GoogleLogin className="sign"  
+               <GoogleLogin id="sign" className="sign"  
                         clientId="399611436919-fo4n24pr7bpmslat5vamj5u8rc5q0v6f.apps.googleusercontent.com"
                         buttonText="SIGN UP"
                         onSuccess={responseeGoogle}
