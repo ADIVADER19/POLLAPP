@@ -51,25 +51,26 @@ module.exports = function(app) {
  }
   ));
 
-  app.use('/lobs',
-  createProxyMiddleware({
-   target: 'http://localhost:2000',
-   changeOrigin:true,
- }
-  ));
-
-  app.use('/bobs',
+  app.use('/su',
   createProxyMiddleware({
    target: 'http://localhost:2000',
    changeOrigin:true,
  }
   ));
   
-  app.use('/ross',
+  app.use('/slogin',
   createProxyMiddleware({
    target: 'http://localhost:2000',
    changeOrigin:true,
  }
   ));
 
+  app.use('/suserdata',
+  createProxyMiddleware({
+   target: 'http://localhost:2000',
+   changeOrigin:true,
+ }
+  ));
+  
 };
+
