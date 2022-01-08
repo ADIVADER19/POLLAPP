@@ -71,6 +71,44 @@ module.exports = function(app) {
    changeOrigin:true,
  }
   ));
+
+  app.use('/close',
+  createProxyMiddleware({
+   target: 'http://localhost:2000',
+   changeOrigin:true,
+ }
+  ));
   
+  app.use('/clsrlobbies',
+  createProxyMiddleware({
+   target: 'http://localhost:2000',
+   changeOrigin:true,
+ }
+  ));
+
+  app.use(
+    '/bobs',
+    createProxyMiddleware({
+      target: 'http://localhost:2000',
+      changeOrigin: true,
+    })
+  );
+
+  app.use(
+    '/ross',
+    createProxyMiddleware({
+      target: 'http://localhost:2000',
+      changeOrigin: true,
+    })
+  );
+
+  app.use(
+    '/check',
+    createProxyMiddleware({
+      target: 'http://localhost:2000',
+      changeOrigin: true,
+    })
+  );
+
 };
 

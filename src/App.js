@@ -18,7 +18,7 @@ function App() {
           <Route path="/" element={<><NavBar /><Homepage /></>}/>
           <Route path="/vpoll" element={<Vpoll />}/>
           <Route path="/livepollT/:stuid" element={<LivepollT />}/>
-          <Route path="/closepoll" element={<Closepoll />}/>
+          <Route path="/closepoll/:stuid" element={<Closepoll />}/>
           <Route path="/pollStu/:stuid" element={<PollStu />}/>
           <Route path="/poll/:createid" element={<CreatePoll2/>}/>
           <Route path="/view_lobby" element={<><NavBar/><ViewLobby/></>}/>

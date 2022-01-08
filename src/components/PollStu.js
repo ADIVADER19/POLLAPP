@@ -6,6 +6,12 @@ import { GoogleLogin } from 'react-google-login';
 function PollStu() {
     const [timedPopup, setTimedPopup] = useState(false);
     const [userInfo, setUserInfo] = useState({});
+    const currentPathName = window.location.pathname;
+    const lobbyuuid = currentPathName.slice(9);
+    const [polldes, setItems] = useState([]);
+    const [lobbydes, setTritems] = useState([]);
+    const [check, setBitems] = useState([]);    
+    
     const suserd = async () => {
 		try {
 			const res = await fetch("/suserdata", {
@@ -134,67 +140,91 @@ function PollStu() {
 		}
 	};
     useEffect(()=>
-{
-    suserd();
-},[])
+    {
+        suserd();
+    },[])
+
+    useEffect(() => {
+        fetch("/bobs", {method: "POST",
+        headers: {
+            "Content-type": "application/json",
+        },
+        body: JSON.stringify({data:lobbyuuid})
+    }).then((res) => res.json())
+        .then((ret) => {
+        console.log(ret.myitem[0].pollOption);
+        setItems(ret.myitem);
+
+        console.log(polldes);
+        })
+    }, []);
+
+    useEffect(()=>{
+        fetch("/ross",{method:"POST",
+        headers: {
+            "Content-type": "application/json",
+        },
+        body: JSON.stringify({data:lobbyuuid})
+    }).then((res)=>res.json())
+        .then((rte)=>{
+            console.log(rte);
+        setTritems(rte.myitem[0]);
+
+        console.log(lobbydes);
+        })
+    },[]);
+
+    useEffect(()=>{
+        fetch("/check",{method:"POST",
+        headers: {
+            "Content-type": "application/json",
+        },
+        body: JSON.stringify({data:lobbyuuid})
+    }).then((res)=>res.json())
+        .then((rat)=>{
+            console.log(rat.myitem[0].close);
+        setBitems(rat.myitem[0].close);
+
+        console.log(check);
+        })
+    },[])
+
     return (
         <div className='actuallythepage'>
+            {check == true &&(
+                            <h3>this room is no longer accepting responses</h3>
+            )}
+            {check == false &&(
+            <>                  
             <div className='ice2'>
                 <div className='poltle'>
-                    <h1>Poll Title</h1>
-                    <h2>Poll description</h2>
+                    <h1>Poll Title: {lobbydes.lobbyName}</h1>
+                    <h2>Poll description: {lobbydes.lobbyDescription}</h2>
                 </div>
-                <div className='quests'>
+                {polldes.map((lob)=>(
+                <div className='quests' key={lob}>
                     <div className='question'>
-                        <h3>Questions here in loop</h3>
+                        <h3>{lob.pollQuestion}</h3>
                     </div>
-                    <div className='options'>
-                        <h3>Options here in loop</h3>
-                    </div>
-                    <div className='vote'>
-                        Votes = ''
-                    </div>
-                    <div className='options'>
-                        <h3>Options here in loop</h3>
-                    </div>
-                    <div className='vote'>
-                        Votes = ''
-                    </div>
+                    {lob.pollOption.map((oop)=>(
+                        <>{oop.optionValue == "" &&(
+                            <></>
+                        )}
+                        {!oop.optionValue == "" &&(
+                        <>
+                            <div className='options'>
+                                <h3>{oop.optionValue}</h3>
+                            </div>
+                            <div className='vote'>
+                                Votes = '{oop.optionArray.length}'
+                            </div>
+                        </>
+                        )}
+                        </>    
+                        ))}
                 </div>
-                <div className='quests'>
-                    <div className='question'>
-                        <h3>Questions here in loop</h3>
-                    </div>
-                    <div className='options'>
-                        <h3>Options here in loop</h3>
-                    </div>
-                    <div className='vote'>
-                        Votes = ''
-                    </div>
-                    <div className='options'>
-                        <h3>Options here in loop</h3>
-                    </div>
-                    <div className='vote'>
-                        Votes = ''
-                    </div>
-                </div>
-                <div className='quests'>
-                    <div className='question'>
-                        <h3>Questions here in loop</h3>
-                    </div>
-                    <div className='options'>
-                        <h3>Options here in loop</h3>
-                    </div>
-                    <div className='vote'>
-                        Votes = ''
-                    </div>
-                    <div className='options'>
-                        <h3>Options here in loop</h3>
-                    </div>
-                    <div className='vote'>
-                        Votes = ''
-                    </div>
-                </div>
+                ))}
+                
             </div>
             <Popup id="popup" trigger={timedPopup} setTrigger={setTimedPopup}>
                 <h3>SIGN UP OR LOGIN TO CONTINUE</h3>
@@ -214,7 +244,8 @@ function PollStu() {
                             cookiePolicy={'single_host_origin'}
                             color="primary"
                         />
-        </Popup>
+            </Popup></>
+            )}
         </div>
     )
 }
