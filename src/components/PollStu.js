@@ -23,11 +23,12 @@ function PollStu() {
 				credentials: "include",
 			});
 			const data = await res.json();
-			console.log(data);
-			setUserInfo(data);
+		
 
 			if (res.status === 200) {
 				console.log("DATA retrieved from token")
+                console.log(data);
+                setUserInfo(data);
 			}
             else if (res.status === 422) {
                 setTimeout(()=>{
@@ -139,6 +140,9 @@ function PollStu() {
 			}
 		}
 	};
+    var usern = userInfo.mail;
+	console.log('variable',usern);
+    console.log('data',userInfo.name);
     useEffect(()=>
     {
         suserd();
