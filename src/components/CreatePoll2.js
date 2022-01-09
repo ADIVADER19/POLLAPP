@@ -1,12 +1,13 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core';
-import { useState } from 'react';
-import {Typography} from '@material-ui/core';
+import { useState,useEffect  } from 'react';
+import {Typography,Dialog,AppBar,Toolbar} from '@material-ui/core';
 import { IconButton } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import { Button } from '@material-ui/core';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import AddIcon from '@material-ui/icons/Add';
+import Slide from '@mui/material/Slide';
 import './CreatePoll.css';
 const  useStyles = makeStyles({
     createpoll:{
@@ -16,6 +17,7 @@ const  useStyles = makeStyles({
         alignItems:"center",
         justifyContent:"center",
         backgroundColor: "#323232",
+        flexDirection:"column",
     },
     add_poll:{
         width:"55vw",
@@ -109,13 +111,56 @@ const  useStyles = makeStyles({
     add_question_bottom_left:{
         width: "100%",
     },
+    lobbypollsseen:{
+        marginTop:"10vh",
+    }
+});
+
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
 });
 
 function CreatePoll2() {
     const currentPathName = window.location.pathname;
     const lobbyuuid = currentPathName.slice(6);
     console.log(lobbyuuid);
+    const [polldes, setItems] = useState([]);
+     const [lobbydes, setTritems] = useState([]);
+     let f = polldes.length+1;
+    const [num,setNum]=useState([{value:f}]);
     const classes = useStyles();
+    const [open, setOpen] = React.useState(false);
+    useEffect(()=>{
+        fetch("/ross", {method: "POST",
+        headers: {
+            "Content-type": "application/json",
+        },
+        body: JSON.stringify({data:lobbyuuid})
+    }).then((res) => res.json())
+            .then((rte)=>{
+                console.log("Hi",rte);
+                setTritems(rte.myitem[0]);
+                console.log("Hello",lobbydes);
+        })
+    },[]);
+  const handleClickOpen = () => {
+    setOpen(true);
+    fetch("/bobs", {method: "POST",
+        headers: {
+            "Content-type": "application/json",
+        },
+        body: JSON.stringify({data:lobbyuuid})
+    }).then((res) => res.json())
+        .then((ret) => {
+          console.log(ret.myitem[0].pollOption);
+           setItems(ret.myitem);
+          console.log(polldes);
+        })
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
     const [opt, setopt] = useState([{
         optionValue:"",
         optionArray:[],
@@ -203,14 +248,32 @@ function CreatePoll2() {
                     "Content-type": "application/json",
                 },
                 body: JSON.stringify({lobbyUniqueId,pollQuestion,pollOption})
-            })
+            });
+            var setPollQuestion = [...poll];
+            setPollQuestion.pollQuestion = "";
+            setPoll(setPollQuestion);
+            console.log(poll);
+            setopt([{
+                optionValue:"",
+                optionArray:[],
+                optionCorrect:false,
+            }]);
+            var newNumber = [...num];
+            let i = newNumber[0].value;
+            i+=1;
+            newNumber[0].value = i;
+            setNum(newNumber);
+            console.log(num);
+            console.log(i);
     }
     return (
         <div className={classes.createpoll}>
+                    <h1 style={{color:"white"}}>Lobby Title:</h1>
+                    <h2 style={{color:"white"}}>Lobby description:</h2>
             <div className={classes.add_poll}>
                 <Typography style={{color:"white"}} variant="h3" align="center">Create A Poll</Typography>
                 <div style={{display:"flex", width:"100%"}}>
-                <h1 style={{color:"white", marginLeft:"1%", marginTop:"1%"}}>1.</h1>
+                <h1 style={{color:"white", marginLeft:"1%", marginTop:"1%"}}>{num[0].value}</h1>
                 <input type="text" className={classes.question} value={poll.pollQuestion}placeholder="Question" onChange={(e)=>{ChangePollQuestion(e.target.value)}}></input>
             </div>
             <br/>
@@ -235,9 +298,51 @@ function CreatePoll2() {
                 <div className={classes.add_footer}>
                     <Button sx={{color: "white", width:"70%",backgroundColor:"#93291e",'&:hover':{ backgroundColor:"#ed213a"}}} endIcon={<AddCircleOutlineIcon/>} onClick={CreatePoll}>Create Poll</Button>
                 </div>
+                <Button variant="outlined" onClick={handleClickOpen}>
+        Open full-screen dialog
+      </Button>
+      <Dialog
+        fullScreen
+        open={open}
+        onClose={handleClose}
+        TransitionComponent={Transition}
+      >
+          <AppBar sx={{ position: 'relative' }}>
+          <Toolbar>
+            <IconButton
+              edge="start"
+              color="inherit"
+              onClick={handleClose}
+              aria-label="close"
+            >
+              <CloseIcon />
+            </IconButton>
+            </Toolbar>
+            </AppBar>
+            {polldes.map((lob)=>(
+                <div className={classes.lobbypollsseen} key={lob}>
+                    <div className='question'>
+                        <h3>{lob.pollQuestion}</h3>
+                    </div>
+                    {lob.pollOption.map((oop)=>(
+                    <>{oop.optionValue == "" &&(
+                        <></>
+                    )}
+                    {!oop.optionValue == "" &&(
+                    <div style={{display:"flex"}}>
+                    <input type="radio" value={oop.optionValue}></input>
+                    <p>{oop.optionValue}</p>
+                    </div>
+                    )}
+                    </>    
+                    ))}
+                    
+                </div>))}
+          </Dialog>
                 </div>
             </div>
     )
 }
 
 export default CreatePoll2
+
