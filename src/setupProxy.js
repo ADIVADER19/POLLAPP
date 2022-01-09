@@ -110,5 +110,14 @@ module.exports = function(app) {
     })
   );
 
+  app.use(
+    '/select',
+    createProxyMiddleware({
+      target: 'http://localhost:2000',
+      changeOrigin: true,
+    })
+  );
+
+
 };
 

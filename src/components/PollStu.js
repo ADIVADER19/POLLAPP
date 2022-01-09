@@ -2,6 +2,8 @@ import {useEffect,useState}  from 'react'
 import './PollStu.css';
 import Popup from './Popup'
 import { GoogleLogin } from 'react-google-login';
+import M from "materialize-css";
+
 
 function PollStu() {
     const [timedPopup, setTimedPopup] = useState(false);
@@ -140,9 +142,9 @@ function PollStu() {
 			}
 		}
 	};
-    var usern = userInfo.mail;
+    var usern = userInfo.name;
 	console.log('variable',usern);
-    console.log('data',userInfo.name);
+    console.log('data',userInfo.mail);
     useEffect(()=>
     {
         suserd();
@@ -193,6 +195,35 @@ function PollStu() {
         })
     },[])
 
+    const selectthis=(puid,opuid)=>{
+        fetch("/select", {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              puid,
+              opuid,
+              usern
+            }),
+          })
+            .then((res) => res.json())
+            .then((data) => {
+              if (data.error) {
+                M.toast({ html: data.error });
+              } else {
+                console.log("value")
+                M.toast({
+                  html: "Successfully Updated!",
+                  classes: "#2e7d32 green darken-3",
+                });
+              }
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+    }
+
     return (
         <div className='actuallythepage'>
             {check == true &&(
@@ -215,14 +246,14 @@ function PollStu() {
                             <></>
                         )}
                         {!oop.optionValue == "" &&(
-                        <>
-                            <div className='options'>
-                                <h3>{oop.optionValue}</h3>
+                        <div id= "catrina">
+                            <div className= "options" >
+                                <input type="radio" value={oop.optionValue} name={lob.pollQuestion} id="gywshb" 
+                                onClick={()=>selectthis(lob._id,oop._id)}
+                                ></input>
+                                <h3 id="muda">{oop.optionValue}</h3>
                             </div>
-                            <div className='vote'>
-                                Votes = '{oop.optionArray.length}'
-                            </div>
-                        </>
+                        </div>
                         )}
                         </>    
                         ))}
