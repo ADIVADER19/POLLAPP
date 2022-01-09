@@ -29,7 +29,7 @@ export default function Profile() {
 			setUserInfo(data);
 
 			if (!res.status === 200) {
-				throw "invalid attempt";
+				window.alert("login first");
 			}
 		} catch (err) {
 			console.log(err);
@@ -140,7 +140,7 @@ export default function Profile() {
 						className="label"
 						variant="h5"
 					>
-						Email:
+						Name:
 					</Typography>
 					<TextField
 						value={userInfo.name}
@@ -178,8 +178,9 @@ export default function Profile() {
 						UPDATE DETAILS
 					</Button>
 				</div> */}
-                <Button  variant="outlined" onClick={goBack} className="butt">BACK</Button>
+               
 			</Box>
+            <button onClick={goBack} className="butt">BACK</button>
 		</div>
 	);
 }

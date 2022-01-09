@@ -94,6 +94,7 @@ module.exports = function(app) {
     })
   );
 
+
   app.use(
     '/ross',
     createProxyMiddleware({
@@ -104,6 +105,13 @@ module.exports = function(app) {
 
   app.use(
     '/check',
+    createProxyMiddleware({
+      target: 'http://localhost:2000',
+      changeOrigin: true,
+    })
+  );
+  app.use(
+    '/logout',
     createProxyMiddleware({
       target: 'http://localhost:2000',
       changeOrigin: true,

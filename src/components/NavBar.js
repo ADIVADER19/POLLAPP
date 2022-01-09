@@ -31,27 +31,28 @@ function NavBar() {
     const [userInfo, setUserInfo] = useState({});
     let navigate = useNavigate();
     function navicon() {
-        navigate('/home')
+        navigate('/')
     }
-    const logout = async (req, res) => {
-        const rest = await fetch("/logout", {
+    const logout = async () => {
+        await fetch("/logout", {
             method: "GET",
             headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
+                "Content-type": "application/json",
             },
             credentials: "include",
-        });
-        const data = await rest.json();
-        console.log(data);
-        if (rest.status === 200 || rest.status===201) {
-            window.alert("LOGGED OUT SUCCESSFULLY")
-            console.log("DATA retrieved from token")
-        }
-        else
-        {
-            window.alert("SOMETHING WENT WRONG")
-        }
+        }).then((res)=>{
+
+            if (res.status === 200) {
+                window.alert("LOGGED OUT SUCCESSFULLY")
+                console.log("LOGGED OUT")
+            }
+            else
+            {
+                window.alert("SOMETHING WENT WRONG")
+            }
+
+        })
+     
 
     };
     function profile(){
