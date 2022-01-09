@@ -10,6 +10,7 @@ import PollStu from './components/PollStu'
 import CreatePoll2 from "./components/CreatePoll2";
 import ViewLobby from "./components/ViewLobby";
 import ViewLobbyPoll from "./components/ViewLobbyPoll";
+import Profile from "./components/Profile";
 function App() {
   return (
     <div className="app">
@@ -17,6 +18,7 @@ function App() {
         <Routes>
           <Route path="/" element={<><NavBar /><Homepage /></>}/>
           <Route path="/vpoll" element={<Vpoll />}/>
+          <Route path="/profile" element={<Profile />}/>
           <Route path="/livepollT/:stuid" element={<LivepollT />}/>
           <Route path="/closepoll/:stuid" element={<Closepoll />}/>
           <Route path="/pollStu/:stuid" element={<PollStu />}/>

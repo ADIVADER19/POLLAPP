@@ -1,0 +1,34 @@
+.form
+{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-top: 100px;
+    /* justify-content: center; */
+    /* align-items: center; */
+}
+
+.detail
+{
+    display:flex;
+    margin-left:10%;
+    margin-bottom:20px;
+}
+
+.butt
+{
+    margin-right: 450px;
+}
+
+.title
+{
+    display:flex;
+    margin-bottom:5%;
+    justify-content: center;
+}
+
+.submit
+{
+    display:flex;
+    justify-content:center;
+}

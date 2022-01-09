@@ -45,7 +45,26 @@ const  useStyles = makeStyles({
         "&:hover":{
             boxShadow: "2px 2px 5px #999",
         }
-    },        
+    },
+    log:
+    {
+        marginLeft:100,
+        margrinRight:150,
+        width:150,
+        height:50
+
+    },
+    sign:{
+        marginLeft:150,
+        margrinRight:150,
+        width:150,
+        height:50
+    },
+    poptit:{
+        fontSize:25,
+        marginLeft:130,
+        fontWeight:20
+    }      
 })
 function Homepage() {
     const [timedPopup, setTimedPopup] = useState(false);
@@ -167,7 +186,7 @@ function Homepage() {
 				console.log("USER REGISTRATION FAILED");
 			} else if (res.status === 200 || res.status === 201) {
                 window.alert("SUCCESSFULLY SIGNED UP")
-                document.getElementByclassName("sign").style.display="none";
+                document.getElementByClassName("sign").style.visibility="hidden";
 				console.log("ZA WARUDOO!!!!");
                 
 			} 
@@ -235,8 +254,8 @@ function Homepage() {
             </div>
         </div>
         <Popup id="popup" trigger={timedPopup} setTrigger={setTimedPopup}>
-            <h3>SIGN UP OR LOGIN TO CONTINUE</h3>
-            <GoogleLogin id="log" className="log"  
+            <h3 className={classes.poptit}>SIGN UP OR LOGIN TO CONTINUE</h3>
+            <GoogleLogin id="log" className={classes.log}  
                         clientId="399611436919-fo4n24pr7bpmslat5vamj5u8rc5q0v6f.apps.googleusercontent.com"
                         buttonText="LOGIN IN"
                         onSuccess={responseGoogle}
@@ -244,7 +263,7 @@ function Homepage() {
                         cookiePolicy={'single_host_origin'}
                         color="primary"
                     />
-               <GoogleLogin id="sign" className="sign"  
+               <GoogleLogin id="sign" className={classes.sign} 
                         clientId="399611436919-fo4n24pr7bpmslat5vamj5u8rc5q0v6f.apps.googleusercontent.com"
                         buttonText="SIGN UP"
                         onSuccess={responseeGoogle}
