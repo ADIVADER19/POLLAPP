@@ -62,11 +62,12 @@ function Homepage() {
 				credentials: "include",
 			});
 			const data = await res.json();
-			console.log(data);
-			setUserInfo(data);
-
-			if (res.status === 200) {
+		
+            
+			if (res.status === 200 || res.status===201) {
 				console.log("DATA retrieved from token")
+                console.log(data);
+                setUserInfo(data);
 			}
             else if (res.status === 422) {
                 setTimeout(()=>{
@@ -180,8 +181,9 @@ function Homepage() {
 		}
 	};
 	
-	var usern = userInfo.username;
-	console.log(usern);
+	var usern = userInfo.mail;
+	console.log('variable',usern);
+    console.log('data',userInfo.name);
     useEffect(() => {
         userd();
         }, [])
