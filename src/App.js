@@ -8,8 +8,6 @@ import { useNavigate } from 'react-router';
 import Closepoll from './components/Closepoll'
 import PollStu from './components/PollStu'
 import CreatePoll2 from "./components/CreatePoll2";
-import ViewLobby from "./components/ViewLobby";
-import ViewLobbyPoll from "./components/ViewLobbyPoll";
 import Profile from "./components/Profile";
 function App() {
   return (
@@ -23,8 +21,6 @@ function App() {
           <Route path="/closepoll/:stuid" element={<Closepoll />}/>
           <Route path="/pollStu/:stuid" element={<PollStu />}/>
           <Route path="/poll/:createid" element={<CreatePoll2/>}/>
-          <Route path="/view_lobby" element={<><NavBar/><ViewLobby/></>}/>
-          <Route path="/view_lobby_poll/:i" element={<ViewLobbyPoll/>}/>
         </Routes>
       </Router>
     </div>
