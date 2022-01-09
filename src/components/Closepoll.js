@@ -10,6 +10,11 @@ function Closepoll() {
     const [polldes, setItems] = useState([]);
     const [lobbydes, setTritems] = useState([]);
     
+    function createfile()
+    {
+        
+    }
+    
     useEffect(() => {
         fetch("/bobs", {method: "POST",
         headers: {

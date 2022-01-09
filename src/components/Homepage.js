@@ -1,11 +1,12 @@
 import React from 'react'
-import {Typography,Button,makeStyles}  from '@material-ui/core'
+import {Typography,Button,makeStyles,TextField,Dialog,DialogActions,DialogContent,DialogContentText,DialogTitle}  from '@material-ui/core'
 import { useNavigate } from 'react-router';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import Popup from './Popup';
 import {useState, useEffect} from 'react';
 import { GoogleLogin } from 'react-google-login';
-
+import AddIcon from '@material-ui/icons/Add';
+import { v4 as uuidv4 } from 'uuid';
 const  useStyles = makeStyles({
     homepagecontainer:{
         backgroundColor: "#F0F0F0",
@@ -45,12 +46,32 @@ const  useStyles = makeStyles({
         "&:hover":{
             boxShadow: "2px 2px 5px #999",
         }
-    },        
+    },
+    log:
+    {
+        marginLeft:100,
+        margrinRight:150,
+        width:150,
+        height:50
+
+    },
+    sign:{
+        marginLeft:150,
+        margrinRight:150,
+        width:150,
+        height:50
+    },
+    poptit:{
+        fontSize:25,
+        marginLeft:130,
+        fontWeight:20
+    }      
 })
 function Homepage() {
     const [timedPopup, setTimedPopup] = useState(false);
     const [data, setData] = useState("");
 	const [userInfo, setUserInfo] = useState({});
+    
     const userd = async () => {
 		try {
 			const res = await fetch("/userdata", {
@@ -167,7 +188,7 @@ function Homepage() {
 				console.log("USER REGISTRATION FAILED");
 			} else if (res.status === 200 || res.status === 201) {
                 window.alert("SUCCESSFULLY SIGNED UP")
-                document.getElementByclassName("sign").style.display="none";
+                document.getElementByClassName("sign").style.visibility="hidden";
 				console.log("ZA WARUDOO!!!!");
                 
 			} 
@@ -181,9 +202,12 @@ function Homepage() {
 		}
 	};
 	
-	var usern = userInfo.mail;
+	var usern = userInfo;
 	console.log('variable',usern);
-    console.log('data',userInfo.name);
+    console.log('data',usern._id);
+    var userIds = usern._id;
+    console.log('user',userIds);
+    console.log("Type",typeof(userIds));
     useEffect(() => {
         userd();
         }, [])
@@ -193,15 +217,54 @@ function Homepage() {
     //     },1000);
 
     // },[])
-       
+    const createid=uuidv4();
+    const [open, setOpen] = React.useState(false);
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+    const handleClose = () => {
+        setOpen(false);
+    };
+    const [Lobby, setLobby] = useState({
+        lobbyId:createid,
+        lobbyName:"",
+        lobbyDescription:"",
+        studentformId:"",
+        pollId:[],
+        userId:"",
+    });
+    let name, value;
+    const handleInputs = (e) => {
+		name = e.target.name;
+		value = e.target.value;
+		setLobby({ ...Lobby, [name]: value });
+	};
+    const Lob = async(e)=>{
+        var lobs = {...Lobby};
+        lobs.userId = userIds;
+        setLobby(lobs);
+        Lobby.userId = userIds;
+        if(Lobby.lobbyName=="" || Lobby.lobbyDescription==""){
+            console.log("Please fill all the fields");
+        }
+        else{
+            console.log("UserData",Lobby);
+            const{lobbyId,lobbyName,lobbyDescription,studentformId,pollId,userId} = Lobby;
+            const res = await fetch("/createnewlobby", {
+                method: "POST",
+                headers: {
+                    "Content-type": "application/json",
+                },
+                body: JSON.stringify({lobbyId,lobbyName,lobbyDescription,studentformId,pollId,userId})
+            })
+            navigate("/poll/"+Lobby.lobbyId);
+        }
+    } 
     let navigate = useNavigate();
     function viewpoll()
     {
         navigate("/vpoll/");
 
-    }
-    function viewlobby(){
-        navigate("/view_lobby/");
     }
     const classes=useStyles()
     return (
@@ -210,7 +273,21 @@ function Homepage() {
         flexDirection:"column",alignItems:"center",justifyContent:"space-between"}}>
                 <Typography className={classes.motto} variant="h5"><u style={{color:"rgb(119,194,108)"}}>CREATE</u> <u style={{color:"rgb(255,198,59)"}}>AND</u> <u style={{color:"rgb(234,57,73)"}}>VIEW</u> <u style={{color: "rgb(0,86,146)",}}>LIVE POLLS</u></Typography>
                 <div>
-                <Button color="secondary" className={classes.vpoll} onClick={viewlobby}  size="large" variant="contained" endIcon={<VisibilityIcon/>}>VIEW Created Lobby</Button>
+                <Button color="secondary" className={classes.cpoll} onClick={handleClickOpen} size="large" variant="contained" endIcon={<AddIcon/>}>CREATE NEW LOBBY</Button>
+                &nbsp;&nbsp;
+                <Dialog open={open} onClose={handleClose}>
+              <DialogTitle>LOBBY</DialogTitle>
+              <DialogContent>
+                <DialogContentText>
+                <TextField sx={{width:"30em"}} name="lobbyName" value={Lobby.lobbyName} autoFocus margin="dense" id="name" label="Enter Lobby Name" type="text" fullWidth variant="standard" onChange={handleInputs}/>
+                <TextField 	name="lobbyDescription"	value={Lobby.lobbyDescription}margin="dense" id="outlined-multiline-static" label="Lobby Description" type="text" fullWidth  multiline rows={2} onChange={handleInputs}/>
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handleClose} >Cancel</Button>
+                <Button onClick={Lob}>Create</Button>
+              </DialogActions>
+            </Dialog>
                 <Button color="secondary" className={classes.vpoll} onClick={viewpoll}  size="large" variant="contained" endIcon={<VisibilityIcon/>}>VIEW DASHBOARD</Button>
                 </div>
             </div>
@@ -235,8 +312,8 @@ function Homepage() {
             </div>
         </div>
         <Popup id="popup" trigger={timedPopup} setTrigger={setTimedPopup}>
-            <h3>SIGN UP OR LOGIN TO CONTINUE</h3>
-            <GoogleLogin id="log" className="log"  
+            <h3 className={classes.poptit}>SIGN UP OR LOGIN TO CONTINUE</h3>
+            <GoogleLogin id="log" className={classes.log}  
                         clientId="399611436919-fo4n24pr7bpmslat5vamj5u8rc5q0v6f.apps.googleusercontent.com"
                         buttonText="LOGIN IN"
                         onSuccess={responseGoogle}
@@ -244,7 +321,7 @@ function Homepage() {
                         cookiePolicy={'single_host_origin'}
                         color="primary"
                     />
-               <GoogleLogin id="sign" className="sign"  
+               <GoogleLogin id="sign" className={classes.sign} 
                         clientId="399611436919-fo4n24pr7bpmslat5vamj5u8rc5q0v6f.apps.googleusercontent.com"
                         buttonText="SIGN UP"
                         onSuccess={responseeGoogle}

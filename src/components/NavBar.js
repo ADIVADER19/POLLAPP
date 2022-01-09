@@ -1,7 +1,8 @@
 import React from 'react'
-import {makeStyles} from '@material-ui/core';
+import {makeStyles,Button} from '@material-ui/core';
 import PollIcon from '@material-ui/icons/Poll';
 import { useNavigate } from 'react-router';
+import {useState,useEffect} from 'react';
 import './Navbar.css';
 
 const  useStyles = makeStyles({
@@ -27,9 +28,36 @@ const  useStyles = makeStyles({
     },
 })
 function NavBar() {
+    const [userInfo, setUserInfo] = useState({});
     let navigate = useNavigate();
     function navicon() {
-        navigate('/home')
+        navigate('/')
+    }
+    const logout = async () => {
+        await fetch("/logout", {
+            method: "GET",
+            headers: {
+                "Content-type": "application/json",
+            },
+            credentials: "include",
+        }).then((res)=>{
+
+            if (res.status === 200) {
+                window.alert("LOGGED OUT SUCCESSFULLY")
+                console.log("LOGGED OUT")
+            }
+            else
+            {
+                window.alert("SOMETHING WENT WRONG")
+            }
+
+        })
+     
+
+    };
+    function profile(){
+        navigate("/profile")
+
     }
     const classes=useStyles()
     return (
@@ -41,8 +69,8 @@ function NavBar() {
            <div class="dropdown">
                <button class="dropbtn">Profile</button>
                <div class="dropdown-content">
-                   <a href="#">Settings</a>
-                   <a href="#">Logout</a>
+                   <Button onClick={profile}>View Profile</Button>
+                   <Button onClick={logout}>Logout</Button>
                 </div>
             </div>        
         </div>
