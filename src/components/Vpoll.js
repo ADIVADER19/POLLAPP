@@ -12,30 +12,82 @@ import M from "materialize-css";
 function Vpoll() {
     let navigate = useNavigate();
     const close = true;
-
+    const [userInfo, setUserInfo] = useState({});
     const [lobbies,setLobbies] = useState([]);
     const [clobbies,setClobbies] = useState([])
-    useEffect(()=> {fetch("/usrlobbies").then(res=>res.json()).then(data=>setLobbies(data))
-    },[]);
-
-    useEffect(()=> {fetch("/clsrlobbies").then(res=>res.json()).then(data=>setClobbies(data))
-    },[]);
+    const [loading, setLoading] = useState(false);
     
+    const suserd = async () => {
+      try {
+			const res = await fetch("/userdata", {
+				method: "GET",
+				headers: {
+					Accept: "application/json",
+					"Content-Type": "application/json",
+				},
+				credentials: "include",
+			});
+			const data = await res.json();      
+			if (res.status === 200 || res.status===201) {
+				console.log("DATA retrieved from token")
+                console.log(data._id);
+                setUserInfo(data);
+                openlobbies(data._id);
+                closelobbies(data._id);
+        }
+        else if (res.status === 422) {
+          console.log("res 442 status");
+        }
+              else
+              {
+                 console.log("something went wrong")
+              }
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    
+    useEffect(()=>{
+      setLoading(true);
+      (suserd()).finally(() => {
+        setLoading(false);
+      });
+    },[])
+
+    if (loading) {
+      return <p>Data is loading...</p>;
+    }
+
+    const openlobbies = async (tata)=> {await fetch("/usrlobbies", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({tata:tata}),
+    }).then(res=>res.json()).then(data=>{setLobbies(data);console.log(data)})
+    };
+
+    const closelobbies = async(tata)=> {fetch("/clsrlobbies", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({tata:tata}),
+    }).then(res=>res.json()).then(data=>setClobbies(data))
+    };
+    
+    //console.log('variable',usern);
+    //console.log('data',userInfo._id);
+    
+
     function createpoll()
     {
         const id=uuidv4();
         navigate("/poll/"+id);
     }
 
-    function livepoll()
-    {
-        const id=uuidv4();
-        navigate("/livepollT");
-    }
-
     function Closelobby(stuid)
     {
-        const id=uuidv4();
         navigate("/closepoll/"+stuid);
     }
 
@@ -69,8 +121,8 @@ function Vpoll() {
           })
           .catch((err) => {
             console.log(err);
-          });
-      };
+      });
+    };
 
     return (
         <div className='coomtainer'>
