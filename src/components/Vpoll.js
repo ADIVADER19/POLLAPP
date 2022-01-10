@@ -17,7 +17,7 @@ function Vpoll() {
     const [clobbies,setClobbies] = useState([])
     const [loading, setLoading] = useState(false);
     
-    const suserd = async () => {
+    const userd = async () => {
       try {
 			const res = await fetch("/userdata", {
 				method: "GET",
@@ -49,7 +49,7 @@ function Vpoll() {
     
     useEffect(()=>{
       setLoading(true);
-      (suserd()).finally(() => {
+      (userd()).finally(() => {
         setLoading(false);
       });
     },[])
@@ -128,8 +128,9 @@ function Vpoll() {
         <div className='coomtainer'>
             <div className='actoll'>
                 <h1>Active Polls</h1>
-                
+                {lobbies.length == 0 &&(
                 <h2>No Active Polls</h2>
+                )}
                 {lobbies.map(lob=>(
                 <div className='polsta'>
                     <div className='poldet' key={lob._id}>Poll Details:
@@ -149,7 +150,9 @@ function Vpoll() {
             </div>
             <div className='clooll'>
                 <h1>Closed Polls</h1>
+                {clobbies.length == 0 &&(
                 <h2>No Closed Polls</h2>
+                )}
                 {clobbies.map(Clob=>(
                 <div className='closta'>
                     <div className='poldet'key={Clob._id}>Poll Details:

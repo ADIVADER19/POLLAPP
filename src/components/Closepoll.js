@@ -52,10 +52,10 @@ function Closepoll() {
                 <h1>Poll Title: {lobbydes.lobbyName}</h1>
                     <h2>Poll description: {lobbydes.lobbyDescription}</h2>
                 </div>
-                {polldes.map((lob)=>(
+                {polldes.map((lob, x)=>(
                 <div className='quests' key={lob}>
                     <div className='question'>
-                        <h3>{lob.pollQuestion}</h3>
+                        <h3>{x+1}. {lob.pollQuestion}</h3>
                     </div>
                     {lob.pollOption.map((oop)=>(
                         <>{oop.optionValue == "" &&(

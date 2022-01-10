@@ -13,7 +13,7 @@ function PollStu() {
     const [polldes, setItems] = useState([]);
     const [lobbydes, setTritems] = useState([]);
     const [check, setBitems] = useState([]);    
-    
+
     const suserd = async () => {
 		try {
 			const res = await fetch("/suserdata", {
@@ -204,7 +204,8 @@ function PollStu() {
             body: JSON.stringify({
               puid,
               opuid,
-              usern
+              usern,
+              data:lobbyuuid
             }),
           })
             .then((res) => res.json())
@@ -236,10 +237,10 @@ function PollStu() {
                     <h1>Poll Title: {lobbydes.lobbyName}</h1>
                     <h2>Poll description: {lobbydes.lobbyDescription}</h2>
                 </div>
-                {polldes.map((lob)=>(
+                {polldes.map((lob,x)=>(
                 <div className='quests' key={lob}>
                     <div className='question'>
-                        <h3>{lob.pollQuestion}</h3>
+                        <h3>{x+1}. {lob.pollQuestion}</h3>
                     </div>
                     {lob.pollOption.map((oop)=>(
                         <>{oop.optionValue == "" &&(
