@@ -30,6 +30,7 @@ export default function Profile() {
 
 			if (!res.status === 200) {
 				window.alert("login first");
+				navigate('/');
 			}
 		} catch (err) {
 			console.log(err);

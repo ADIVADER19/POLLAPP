@@ -26,6 +26,10 @@ const  useStyles = makeStyles({
             marginTop:"1%",
         }
     },
+    butt:
+    {
+        width:100
+    }
 })
 function NavBar() {
     const [userInfo, setUserInfo] = useState({});
@@ -44,6 +48,7 @@ function NavBar() {
 
             if (res.status === 200) {
                 window.alert("LOGGED OUT SUCCESSFULLY")
+                window.location.reload();
                 console.log("LOGGED OUT")
             }
             else
@@ -69,8 +74,8 @@ function NavBar() {
            <div class="dropdown">
                <button class="dropbtn">Profile</button>
                <div class="dropdown-content">
-                   <Button onClick={profile}>View Profile</Button>
-                   <Button onClick={logout}>Logout</Button>
+                   <Button className={classes.butt} onClick={profile}>View Profile</Button>
+                   <Button className={classes.butt} onClick={logout}>Logout</Button>
                 </div>
             </div>        
         </div>
