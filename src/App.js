@@ -20,7 +20,7 @@ function App() {
           <Route path="/livepollT/:stuid" element={<LivepollT />}/>
           <Route path="/closepoll/:stuid" element={<Closepoll />}/>
           <Route path="/pollStu/:stuid" element={<PollStu />}/>
-          <Route path="/poll/:createid" element={<CreatePoll2/>}/>
+          <Route path="/poll/:createid" element={<><NavBar/><CreatePoll2/></>}/>
         </Routes>
       </Router>
     </div>

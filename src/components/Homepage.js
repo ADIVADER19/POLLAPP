@@ -7,41 +7,58 @@ import {useState, useEffect} from 'react';
 import { GoogleLogin } from 'react-google-login';
 import AddIcon from '@material-ui/icons/Add';
 import { v4 as uuidv4 } from 'uuid';
+import livepoll from './livepoll.png';
+import googleauthenticate from './googleauthenticate.png';
+import organization from './organization.png';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const  useStyles = makeStyles({
     homepagecontainer:{
-        backgroundColor: "#F0F0F0",
+        backgroundColor: "whitesmoke",
         margin:0,
         padding:0,
     },
     motto:{
-        marginTop:"0.5%",
         fontFamily: "Roboto,Arial,sans-serif",
     },
     vac:{
-        marginTop:"2%",
-        marginLeft:"47%",
+        marginTop:"10%",
         fontFamily: "Roboto,Arial,sans-serif",
-        width:"10%",
+    },
+    cpoll:{
+        backgroundColor:"black",
+        color:"whitesmoke",
+        '&:hover':{
+            color:"#F5F5DC",
+            backgroundColor:"#A1509B"
+        }
     },
     house:{
-        display: "flex",
-        flexDirection:"row",
-        marginTop:"2%"
+        marginTop:"10%",
+        width:"100%",
     },
     home:{
-        display: "inline-block",
-        margin: "10px",
+        fontFamily: "Roboto,Arial,sans-serif",
         border: "1px solid rgb(223, 223, 223)",
-        padding:"1%",
+        padding:"3%",
+        width:"20%",
+        minHeight:"150px",
+        margin:"1%",
+        backgroundColor:"#F5F5DC",
+        display:"flex",
+        alignItems:"center",
+        justifyContent:"center",
+        flexDirection:"column",
         '& h2':{
             fontWeight: "normal",
-            marginLeft: "10px",
+            textAlign:"center",
+            marginBottom:"1%",
         },
-        '& h4':{
-            marginLeft: "10px",
-            marginBottom: "2px",
+        '& p':{
             fontWeight: "normal",
-            color: "rgb(109, 109, 109)",
+            textAlign:"center",
+            fontSize:"20px",
+            color:"#313738"
         },
         "&:hover":{
             boxShadow: "2px 2px 5px #999",
@@ -229,7 +246,7 @@ function Homepage() {
         lobbyId:createid,
         lobbyName:"",
         lobbyDescription:"",
-        studentformId:"",
+        studentformId:[],
         pollId:[],
         userId:"",
     });
@@ -245,7 +262,16 @@ function Homepage() {
         setLobby(lobs);
         Lobby.userId = userIds;
         if(Lobby.lobbyName=="" || Lobby.lobbyDescription==""){
-            console.log("Please fill all the fields");
+            toast.error("Please enter all the details", {
+                position: "top-center",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: false,
+                draggable: false,
+                progress: undefined,
+            });
+            window.alert("Please enter all the details");
         }
         else{
             console.log("UserData",Lobby);
@@ -257,6 +283,13 @@ function Homepage() {
                 },
                 body: JSON.stringify({lobbyId,lobbyName,lobbyDescription,studentformId,pollId,userId})
             })
+            const data= await res.json();
+			if (res.status === 400 || !data) {
+                toast.error("Lobby Creation Failed");
+			} else if (res.status === 200 || res.status === 201) {
+                toast.success("Lobby Created Successfully");
+                window.alert("Lobby Created Successfully");
+			} 
             navigate("/poll/"+Lobby.lobbyId);
         }
     } 
@@ -269,14 +302,15 @@ function Homepage() {
     const classes=useStyles()
     return (
         <div className={classes.homepagecontainer}>
-            <div style={{backgroundImage:`url(${"https://pcdn.sharethis.com/wp-content/uploads/2021/05/Blog_Survey_051821-min.png"})` ,backgroundRepeat: 'no-repeat', backgroundSize: '100% 100%', width:"100vw", height:"80vh",display:"flex",
-        flexDirection:"column",alignItems:"center",justifyContent:"space-between"}}>
-                <Typography className={classes.motto} variant="h5"><u style={{color:"rgb(119,194,108)"}}>CREATE</u> <u style={{color:"rgb(255,198,59)"}}>AND</u> <u style={{color:"rgb(234,57,73)"}}>VIEW</u> <u style={{color: "rgb(0,86,146)",}}>LIVE POLLS</u></Typography>
-                <div>
-                <Button color="secondary" className={classes.cpoll} onClick={handleClickOpen} size="large" variant="contained" endIcon={<AddIcon/>}>CREATE NEW LOBBY</Button>
+            <div style={{paddingTop:"8%", display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center"}}>
+            <Typography className={classes.motto} variant="h2" align="center" style={{color:"#A1509B"}}>POLLAPP</Typography>
+            <hr style={{width:"50%", border:"2px solid #A1509B"}}/>
+                <Typography className={classes.motto} variant="h4" align="center" style={{color:"#A1509B"}}>CREATE AND VIEW LIVE POLLS</Typography>
+                <div style={{width:"100%",display:"flex",alignItems:"center",justifyContent:"center", marginTop:"2%"}}>
+                <Button className={classes.cpoll} onClick={handleClickOpen} size="large" variant="contained" endIcon={<AddIcon/>}>CREATE NEW LOBBY</Button>
                 &nbsp;&nbsp;
                 <Dialog open={open} onClose={handleClose}>
-              <DialogTitle>LOBBY</DialogTitle>
+              <DialogTitle>Create New LOBBY</DialogTitle>
               <DialogContent>
                 <DialogContentText>
                 <TextField sx={{width:"30em"}} name="lobbyName" value={Lobby.lobbyName} autoFocus margin="dense" id="name" label="Enter Lobby Name" type="text" fullWidth variant="standard" onChange={handleInputs}/>
@@ -284,31 +318,35 @@ function Homepage() {
                 </DialogContentText>
               </DialogContent>
               <DialogActions>
-                <Button onClick={handleClose} >Cancel</Button>
-                <Button onClick={Lob}>Create</Button>
+                <Button className={classes.cpoll} onClick={handleClose} >Cancel</Button>
+                <Button className={classes.cpoll} onClick={Lob}>Create</Button>
               </DialogActions>
             </Dialog>
-                <Button color="secondary" className={classes.vpoll} onClick={viewpoll}  size="large" variant="contained" endIcon={<VisibilityIcon/>}>VIEW DASHBOARD</Button>
+                <Button color="secondary" className={classes.cpoll} onClick={viewpoll}  size="large" variant="contained" endIcon={<VisibilityIcon/>}>VIEW DASHBOARD</Button>
                 </div>
             </div>
-            
-            <h1 class={classes.vac}>Features</h1>
         <div class={classes.house}>
+        <Typography variant="h2" align="center">Features</Typography>
+            <div style={{display:"flex",alignItems:"center",justifyContent:"center"}}>
             <div class={classes.home}>
-                <h2><u>Live POLLS</u></h2>
-                <h4>Conduct live polls</h4>
+                <img src={livepoll} style={{width:"40%", margin:"3%"}}/>
+                <h2>Live Polls</h2>
+                <p>Real time poll updates when user gives the response.</p>
             </div>
             <div class={classes.home}>
-                <h2><u>Google authentication</u></h2>
-                <h4>login in through google</h4>
+            <img src={googleauthenticate} style={{width:"30%", margin:"3%"}}/>
+                <h2>Secured</h2>
+                <p>Authenticated with google which makes POLLAPP more secured.</p>
             </div>
             <div class={classes.home}>
-                <h2><u>Feature 3</u></h2>
-                <h4>Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusantium alias, cupiditate commodi nihil ab maxime quasi eum consectetur quas delectus.</h4>
+            <img src={organization} style={{width:"30%", margin:"3%"}}/>
+                <h2>Lobby</h2>
+                <p>Lobby keep your polls organized by grouping similar polls.</p>
             </div>
             <div class={classes.home}>
                 <h2><u>Feature 4</u></h2>
-                <h4>Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusantium alias, cupiditate commodi nihil ab maxime quasi eum consectetur quas delectus.</h4>
+                <p></p>
+            </div>
             </div>
         </div>
         <Popup id="popup" trigger={timedPopup} setTrigger={setTimedPopup}>
@@ -330,6 +368,7 @@ function Homepage() {
                         color="primary"
                     />
         </Popup>
+        <ToastContainer></ToastContainer>
         </div>
     )
 }

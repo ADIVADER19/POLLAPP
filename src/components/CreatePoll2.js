@@ -10,22 +10,22 @@ import AddIcon from '@material-ui/icons/Add';
 import Slide from '@mui/material/Slide';
 import './CreatePoll.css';
 const  useStyles = makeStyles({
+    root:{
+        margin:"0",
+        padding:"0",
+    },
     createpoll:{
-        width:"100vw",
         height:"100vh",
         display:"flex",
-        alignItems:"center",
-        justifyContent:"center",
-        backgroundColor: "#323232",
+        backgroundColor: "whitesmoke",
         flexDirection:"column",
+        fontFamily: "'Google Sans',Roboto,Arial,sans-serif",
     },
     add_poll:{
         width:"55vw",
         height:"80vh",
         display: "flex",
         flexDirection: "column",
-        borderTop: "6px solid rgb(103, 58, 183)",
-        backgroundColor: "#121212",
         paddingTop:"5%",
         padddingBottom:"5%",
         borderRadius:"3%",
@@ -36,16 +36,16 @@ const  useStyles = makeStyles({
         fontSize: 30,
         fontweight: 400,
         lineHeight: "40%",
-        border:"1px solid #121212",
+        border:"2px solid #323232",
         outline:"none",
-        color:"white",
+        color:"#A1509B",
         padding:"1%",
         borderRadius:"7px",
         width:"93%",
         marginLeft:"1%",
         background:"#323232 !important",
         "&:focus":{
-            borderBottom:"1px solid rgb(103, 58, 183)",
+            borderBottom:"2px solid #A1509B",
             backgroundColor: "white",
         },
     },
@@ -111,9 +111,6 @@ const  useStyles = makeStyles({
     add_question_bottom_left:{
         width: "100%",
     },
-    lobbypollsseen:{
-        marginTop:"10vh",
-    }
 });
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -129,7 +126,20 @@ function CreatePoll2() {
      let f = polldes.length+1;
     const [num,setNum]=useState([{value:f}]);
     const classes = useStyles();
-    const [open, setOpen] = React.useState(false);
+    useEffect(() => {
+        fetch("/bobs", {method: "POST",
+        headers: {
+            "Content-type": "application/json",
+        },
+        body: JSON.stringify({data:lobbyuuid})
+    }).then((res) => res.json())
+        .then((ret) => {
+          console.log(ret.myitem[0].pollOption);
+           setItems(ret.myitem);
+
+          console.log(polldes);
+        })
+    }, []);
     useEffect(()=>{
         fetch("/ross", {method: "POST",
         headers: {
@@ -143,24 +153,7 @@ function CreatePoll2() {
                 console.log("Hello",lobbydes);
         })
     },[]);
-  const handleClickOpen = () => {
-    setOpen(true);
-    fetch("/bobs", {method: "POST",
-        headers: {
-            "Content-type": "application/json",
-        },
-        body: JSON.stringify({data:lobbyuuid})
-    }).then((res) => res.json())
-        .then((ret) => {
-          console.log(ret.myitem[0].pollOption);
-           setItems(ret.myitem);
-          console.log(polldes);
-        })
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
+    
     const [opt, setopt] = useState([{
         optionValue:"",
         optionArray:[],
@@ -193,10 +186,12 @@ function CreatePoll2() {
     }
     function removeOption(i){
         console.log(i);
+        if(i!=0){
         var removeOpt = [...opt];
         removeOpt.splice(i,1);
         setopt(removeOpt);
         console.log(opt);
+        }
     }
     function addOption(i){
         console.log(i);
@@ -240,8 +235,19 @@ function CreatePoll2() {
         }
         console.log(pollOption);
         const lobbyUniqueId = poll[0].lobbyUniqueId;
-        const pollQuestion = poll.pollQuestion;
+        var pollQuestion = poll.pollQuestion;
         console.log(poll);
+        console.log(pollQuestion);
+        
+        if(options.length<2){
+            window.alert("Atleast 2 options required");
+        }
+        else if(pollQuestion==undefined || options[0].optionValue=="" || options[1].optionValue==""){
+            console.log(pollQuestion);
+            console.log(options.length);
+            window.alert("Please fill all the details");
+        }
+        else{
             const res = await fetch("/createnewpoll", {
                 method: "POST",
                 headers: {
@@ -249,6 +255,12 @@ function CreatePoll2() {
                 },
                 body: JSON.stringify({lobbyUniqueId,pollQuestion,pollOption})
             });
+            const data= await res.json();
+			if (res.status === 400 || !data) {
+                window.alert('Poll Creation Failed')
+			} else if (res.status === 200 || res.status === 201) {
+                window.alert("Poll Created Successfully")
+			} 
             var setPollQuestion = [...poll];
             setPollQuestion.pollQuestion = "";
             setPoll(setPollQuestion);
@@ -258,22 +270,21 @@ function CreatePoll2() {
                 optionArray:[],
                 optionCorrect:false,
             }]);
-            var newNumber = [...num];
-            let i = newNumber[0].value;
-            i+=1;
-            newNumber[0].value = i;
-            setNum(newNumber);
-            console.log(num);
-            console.log(i);
+            for(let i=0;i<options.length;i++){
+                question[0].pollOption[i].optionValue = "";
+                question[0].pollOption[i].optionCorrect = false;
+            }
+            setPoll(question);
+            window.location.reload();
+        }
     }
     return (
-        <div className={classes.createpoll}>
-                    <h1 style={{color:"white"}}>Lobby Title:</h1>
-                    <h2 style={{color:"white"}}>Lobby description:</h2>
+        <div style={{display:"flex",width:"100%",backgroundColor: "whitesmoke"}}>
+        <div className={classes.createpoll} style={{margin:"0",padding:"0"}}>
+                    <Typography variant="h3" style={{color:"#A1509B",marginLeft:"2%",marginTop:"1%"}}>{lobbydes.lobbyName}</Typography>
+                    <Typography variant="h4" style={{color:"#A1509B",marginLeft:"2%",marginTop:"1%",marginBottom:"1%"}}>{lobbydes.lobbyDescription}</Typography>
             <div className={classes.add_poll}>
-                <Typography style={{color:"white"}} variant="h3" align="center">Create A Poll</Typography>
                 <div style={{display:"flex", width:"100%"}}>
-                <h1 style={{color:"white", marginLeft:"1%", marginTop:"1%"}}>{num[0].value}</h1>
                 <input type="text" className={classes.question} value={poll.pollQuestion}placeholder="Question" onChange={(e)=>{ChangePollQuestion(e.target.value)}}></input>
             </div>
             <br/>
@@ -292,54 +303,48 @@ function CreatePoll2() {
             </div>
                 <div className="add_question_body">
                 {opt.length < 5 ? (
-                <Button variant="contained" sx={{color: "white", backgroundColor:"rgb(103, 58, 183)", '&:hover':{backgroundColor:"#4e1ba8"}}}  endIcon={<AddIcon/>} onClick={()=>addOption(opt.length)}>Add Option</Button>):"" }
+                <Button variant="contained" style={{margin:"1%",color: "white", backgroundColor:"#A1509B", '&:hover':{backgroundColor:"#4e1ba8"}}}  endIcon={<AddIcon/>} onClick={()=>addOption(opt.length)}>Add Option</Button>):"" }
                 </div>
                 <br/>
                 <div className={classes.add_footer}>
-                    <Button sx={{color: "white", width:"70%",backgroundColor:"#93291e",'&:hover':{ backgroundColor:"#ed213a"}}} endIcon={<AddCircleOutlineIcon/>} onClick={CreatePoll}>Create Poll</Button>
+                    <Button style={{color: "white", width:"25%",backgroundColor:"black"}} endIcon={<AddCircleOutlineIcon/>} onClick={CreatePoll}>Create Poll</Button>
                 </div>
-                <Button variant="outlined" onClick={handleClickOpen}>
-        Open full-screen dialog
-      </Button>
-      <Dialog
-        fullScreen
-        open={open}
-        onClose={handleClose}
-        TransitionComponent={Transition}
-      >
-          <AppBar sx={{ position: 'relative' }}>
-          <Toolbar>
-            <IconButton
-              edge="start"
-              color="inherit"
-              onClick={handleClose}
-              aria-label="close"
-            >
-              <CloseIcon />
-            </IconButton>
-            </Toolbar>
-            </AppBar>
-            {polldes.map((lob)=>(
+                </div>
+            </div>
+            <div style={{paddingLeft:"2%", width:"100%",backgroundColor:"#F5F5DC",}}>
+            <Typography variant="h3" style={{color:"#A1509B",marginLeft:"2%",marginTop:"1%"}}>Polls Created</Typography>  
+            <hr style={{border:"2px solid #A1509B"}}/> 
+            <div>
+                {polldes.map((lob,x)=>(
                 <div className={classes.lobbypollsseen} key={lob}>
-                    <div className='question'>
-                        <h3>{lob.pollQuestion}</h3>
+                    <div style={{display:"flex", fontFamily: "Roboto,Arial,sans-serif",color:"#A1509B"}}>
+                        <Typography variant="h5">{x+1}.</Typography>&nbsp;&nbsp;
+                        <Typography variant="h5">{lob.pollQuestion}</Typography>
                     </div>
-                    {lob.pollOption.map((oop)=>(
+                    <br/>
+                    <div style={{display:"flex",fontFamily: "Roboto,Arial,sans-serif", fontSize: 25,fontWeight: 400,letterSpacing: ".2px",}}> 
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <h5>Options:</h5>&nbsp;&nbsp;
+                    <div style={{color:"#323232"}}>
+                       {lob.pollOption.map((oop)=>(
                     <>{oop.optionValue == "" &&(
                         <></>
                     )}
                     {!oop.optionValue == "" &&(
-                    <div style={{display:"flex"}}>
-                    <input type="radio" value={oop.optionValue}></input>
+                    <div style={{display:"flex", color:"black"}}>
                     <p>{oop.optionValue}</p>
                     </div>
                     )}
+                    <hr style={{border:"1px solid #323232"}}/>
                     </>    
                     ))}
-                    
-                </div>))}
-          </Dialog>
+                    </div>
+                    </div> 
+                    <br/>   
+                    <hr style={{border:"2px solid #A1509B"}}/>
+                </div>))}               
                 </div>
+            </div>
             </div>
     )
 }
