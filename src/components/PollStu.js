@@ -2,6 +2,7 @@ import {useEffect,useState}  from 'react'
 import './PollStu.css';
 import Popup from './Popup'
 import { GoogleLogin } from 'react-google-login';
+import {makeStyles} from '@material-ui/core'
 import M from "materialize-css";
 
 
@@ -12,7 +13,32 @@ function PollStu() {
     const lobbyuuid = currentPathName.slice(9);
     const [polldes, setItems] = useState([]);
     const [lobbydes, setTritems] = useState([]);
-    const [check, setBitems] = useState([]);    
+    const [check, setBitems] = useState([]);
+
+    
+    const useStyles=makeStyles({
+          log:
+    {
+        marginLeft:100,
+        margrinRight:150,
+        width:150,
+        height:50
+
+    },
+    sign:{
+        marginLeft:150,
+        margrinRight:150,
+        width:150,
+        height:50
+    },
+    poptit:{
+        fontSize:25,
+        marginLeft:130,
+        fontWeight:20
+    }   
+    });
+
+
     
     const suserd = async () => {
 		try {
@@ -204,7 +230,8 @@ function PollStu() {
             body: JSON.stringify({
               puid,
               opuid,
-              usern
+              usern,
+              data:lobbyuuid
             }),
           })
             .then((res) => res.json())
@@ -223,8 +250,9 @@ function PollStu() {
               console.log(err);
             });
     }
-
+    const classes=useStyles();
     return (
+        
         <div className='actuallythepage'>
             {check == true &&(
                             <h3>this room is no longer accepting responses</h3>
@@ -236,10 +264,10 @@ function PollStu() {
                     <h1>Poll Title: {lobbydes.lobbyName}</h1>
                     <h2>Poll description: {lobbydes.lobbyDescription}</h2>
                 </div>
-                {polldes.map((lob)=>(
+                {polldes.map((lob,x)=>(
                 <div className='quests' key={lob}>
                     <div className='question'>
-                        <h3>{lob.pollQuestion}</h3>
+                        <h3>{x+1}. {lob.pollQuestion}</h3>
                     </div>
                     {lob.pollOption.map((oop)=>(
                         <>{oop.optionValue == "" &&(
@@ -262,7 +290,7 @@ function PollStu() {
                 
             </div>
             <Popup id="popup" trigger={timedPopup} setTrigger={setTimedPopup}>
-                <h3>SIGN UP OR LOGIN TO CONTINUE</h3>
+                <h3 className="poptit">SIGN UP OR LOGIN TO CONTINUE</h3>
                 <GoogleLogin id="log" className="log"  
                             clientId="399611436919-fo4n24pr7bpmslat5vamj5u8rc5q0v6f.apps.googleusercontent.com"
                             buttonText="LOGIN IN"
