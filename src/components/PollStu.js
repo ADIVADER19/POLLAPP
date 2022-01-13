@@ -4,7 +4,9 @@ import Popup from './Popup'
 import { GoogleLogin } from 'react-google-login';
 import {makeStyles} from '@material-ui/core'
 import M from "materialize-css";
+import io from 'socket.io-client';
 
+let socket;
 
 function PollStu() {
     const [timedPopup, setTimedPopup] = useState(false);
@@ -14,7 +16,7 @@ function PollStu() {
     const [polldes, setItems] = useState([]);
     const [lobbydes, setTritems] = useState([]);
     const [check, setBitems] = useState([]);
-
+    const ENDPOINT = 'localhost:5000';
     
     const useStyles=makeStyles({
           log:
@@ -57,6 +59,10 @@ function PollStu() {
 				console.log("DATA retrieved from token")
                 console.log(data);
                 setUserInfo(data);
+                
+                socket.emit('join',{data,lobbyuuid},(error)=>{
+                    if(error){alert(error);}
+                });
 			}
             else if (res.status === 422) {
                 setTimeout(()=>{
@@ -176,6 +182,30 @@ function PollStu() {
         suserd();
     },[])
 
+    useEffect(()=>{
+        socket = io(ENDPOINT)
+        console.log(socket)
+        // console.log(window.location.href)
+        // setTimeout(()=>{
+        //     console.log(usern)
+        //     socket.emit('join',{usern});    
+        //            },1000);
+        return()=>{
+            socket.emit('disconnect');
+            socket.off();
+        }
+        
+    },[ENDPOINT, lobbyuuid])
+
+    const socker=(question,option)=>{
+        socket.emit('sendPoll', {lobbyuuid,question,option}, (error) => {
+            if(error) {
+              alert(error);
+            }
+          });
+    
+    }
+
     useEffect(() => {
         fetch("/bobs", {method: "POST",
         headers: {
@@ -250,7 +280,9 @@ function PollStu() {
               console.log(err);
             });
     }
+
     const classes=useStyles();
+    
     return (
         
         <div className='actuallythepage'>
@@ -277,7 +309,7 @@ function PollStu() {
                         <div id= "catrina">
                             <div className= "options" >
                                 <input type="radio" value={oop.optionValue} name={lob.pollQuestion} id="gywshb" 
-                                onClick={()=>selectthis(lob._id,oop._id)}
+                                onClick={()=>selectthis(lob._id,oop._id),()=>socker(lob.pollQuestion,oop.optionValue)}
                                 ></input>
                                 <h3 id="muda">{oop.optionValue}</h3>
                             </div>

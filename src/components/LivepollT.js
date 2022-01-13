@@ -1,19 +1,46 @@
 import React from 'react'
 import './LivepollT.css';
-import { useState,useEffect } from 'react'
+import { useState,useEffect } from 'react';
+import io from 'socket.io-client';
 
+let socket;
 
 function LivepollT() {
     
     const currentPathName = window.location.pathname;
     const lobbyuuid = currentPathName.slice(11);
 
-     const [polldes, setItems] = useState([]);
-     const [lobbydes, setTritems] = useState([]);
+    const [polldes, setItems] = useState([]);
+    const [lobbydes, setTritems] = useState([]);
+    const [users, setUsers] = useState('');
+    const [polls, setPolls] = useState([])
+    const data = {name:'teacher'};
+    const ENDPOINT = 'localhost:5000';
     
+     useEffect(()=>{
+        socket = io(ENDPOINT)
+        socket.emit('join',{data,lobbyuuid},(error)=>{
+            if(error){alert(error);}
+        });    
+        return()=>{
+            socket.emit('disconnect');
+            socket.off();
+        }
+        
+    },[ENDPOINT, lobbyuuid])
+    
+    useEffect(() => {
+        socket.on("LobbyData", ({ users }) => {
+          setUsers(users);
+        });
+        socket.on("PollData", ({ poll }) => {
+            console.log(poll)
+            setPolls(poll);
+            
+          });
+    }, []);
 
 
-    
 
     useEffect(() => {
         fetch("/bobs", {method: "POST",
@@ -23,9 +50,11 @@ function LivepollT() {
         body: JSON.stringify({data:lobbyuuid})
     }).then((res) => res.json())
         .then((ret) => {
-          console.log(ret.myitem[0].pollOption);
-           setItems(ret.myitem);
-
+          console.log(ret);
+          socket.emit('polls',{ret,lobbyuuid},(error)=>{
+            if(error){alert(error);}
+          });
+          setItems(ret.myitem);
           console.log(polldes);
         })
     }, []);
@@ -78,6 +107,24 @@ function LivepollT() {
             </div>
             <div className='fire'>
                 <h1>stats?</h1>
+                {
+                users
+                    ? (
+                    <div>
+                        <h1>People currently votting:</h1>
+                        <div className="activeContainer">
+                        <h2>
+                            {users.map(({name}) => (
+                            <div key={name} className="activeItem">
+                                {name}
+                            </div>
+                            ))}
+                        </h2>
+                        </div>
+                    </div>
+                    )
+                    : null
+                }
             </div>
         </div>
     )
