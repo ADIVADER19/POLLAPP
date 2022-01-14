@@ -216,7 +216,9 @@ function PollStu() {
         .then((ret) => {
         console.log(ret.myitem[0].pollOption);
         setItems(ret.myitem);
-
+        socket.emit('polls',{ret,lobbyuuid},(error)=>{
+            if(error){alert(error);}
+        });
         console.log(polldes);
         })
     }, []);

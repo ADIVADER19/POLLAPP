@@ -12,12 +12,18 @@ function LivepollT() {
 
     const [polldes, setItems] = useState([]);
     const [lobbydes, setTritems] = useState([]);
-    const [users, setUsers] = useState('');
-    const [polls, setPolls] = useState([])
+    const [users, setUsers] = useState([]);
+    const [polls, setPolls] = useState([]);
+    const [pain, setpain] = useState(0)
+    const [spain, setspain] = useState(0)
     const data = {name:'teacher'};
     const ENDPOINT = 'localhost:5000';
     
-     useEffect(()=>{
+    
+      
+    
+
+    useEffect(()=>{
         socket = io(ENDPOINT)
         socket.emit('join',{data,lobbyuuid},(error)=>{
             if(error){alert(error);}
@@ -31,10 +37,12 @@ function LivepollT() {
     
     useEffect(() => {
         socket.on("LobbyData", ({ users }) => {
+          console.log(users)  
           setUsers(users);
+          
         });
         socket.on("PollData", ({ poll }) => {
-            console.log(poll)
+            console.log(poll[0].option[0].votes)
             setPolls(poll);
             
           });
@@ -73,7 +81,8 @@ function LivepollT() {
           console.log(lobbydes);
         })
     },[]);
-
+   // console.log(users[0])
+    console.log(pain);
     return (
         <div className='actuallythepage'>
             <div className='ice'>
@@ -81,27 +90,29 @@ function LivepollT() {
                     <h1>Poll Title: {lobbydes.lobbyName}</h1>
                     <h2>Poll description: {lobbydes.lobbyDescription}</h2>
                 </div>
-                {polldes.map((lob, x)=>(
+                {polls.map((lob, x)=>(
                 <div className='quests' key={lob}>
-                    <div className='question'>
-                        <h3>{x+1}. {lob.pollQuestion}</h3>
+                    <div className='question1'>
+                        <h3>{x+1}. {lob.question}</h3>
                     </div>
-                    {lob.pollOption.map((oop)=>(
-                    <>{oop.optionValue == "" &&(
+                    {lob.option.map((oop, y)=>(
+                    <>{oop.value == "" &&(
                         <></>
+                      )}
+                      {!oop.value == "" &&(
+                      <>
+                      <div className='opt'>
+                          <h3>{y+1}. {oop.value}</h3>
+                      </div>
+                          
+                            <div className='vote'>
+                            <h1>{oop.votes}</h1>
+                            </div>
+                          
+                      </>
                     )}
-                    {!oop.optionValue == "" &&(
-                    <>
-                    <div className='options'>
-                        <h3>{oop.optionValue}</h3>
-                    </div>
-                        <div className='vote'>
-                        Votes = '{oop.optionArray.length}'
-                        </div>
-                        </>
-                        )}
-                        </>    
-                        ))}
+                    </>    
+                    ))}
                     
                 </div>))}
             </div>
@@ -114,10 +125,21 @@ function LivepollT() {
                         <h1>People currently votting:</h1>
                         <div className="activeContainer">
                         <h2>
-                            {users.map(({name}) => (
-                            <div key={name} className="activeItem">
-                                {name}
-                            </div>
+                            {users.map((usa) => (
+                                <div key={usa}>
+                                    <div className="activeItem">
+                                            {usa.name=='teacher'?<div></div>:
+                                            <div>
+                                                <h1>{usa.name}</h1>
+                                                {usa.poll.map((texas)=>(
+                                                    <div key={texas}>
+                                                        <h2>{texas.question}</h2>
+                                                        <h3>{texas.option}</h3>
+                                                    </div>
+                                                ))}
+                                            </div>}
+                                    </div>
+                                </div>
                             ))}
                         </h2>
                         </div>
