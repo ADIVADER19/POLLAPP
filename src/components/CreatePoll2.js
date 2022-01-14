@@ -9,17 +9,14 @@ import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import AddIcon from '@material-ui/icons/Add';
 import Slide from '@mui/material/Slide';
 import './CreatePoll.css';
+import './Nav.css';
+import { useNavigate } from 'react-router';
+import PollIcon from '@material-ui/icons/Poll';
+import MenuIcon from '@mui/icons-material/Menu';
 const  useStyles = makeStyles({
     root:{
         margin:"0",
         padding:"0",
-    },
-    createpoll:{
-        height:"100vh",
-        display:"flex",
-        backgroundColor: "whitesmoke",
-        flexDirection:"column",
-        fontFamily: "'Google Sans',Roboto,Arial,sans-serif",
     },
     add_poll:{
         width:"55vw",
@@ -29,6 +26,15 @@ const  useStyles = makeStyles({
         paddingTop:"5%",
         padddingBottom:"5%",
         borderRadius:"3%",
+        ['@media (max-width:780px)']: {
+            width:"100vw",
+          }
+    },
+    lobbypollsseen:{
+        width:"45%",height:"40vh",backgroundColor:"whitesmoke",display:"flex",padding:"2%",flexDirection:"column",alignItems:"flex-start",borderRadius:"1em",
+        ['@media (max-width:780px)']: {
+            width:"100%",
+          }
     },
     question:{
         boxSizing: "border-box",
@@ -38,16 +44,21 @@ const  useStyles = makeStyles({
         lineHeight: "40%",
         border:"2px solid #323232",
         outline:"none",
-        color:"#A1509B",
+        color:"#f4511e",
         padding:"1%",
         borderRadius:"7px",
         width:"93%",
         marginLeft:"1%",
         background:"#323232 !important",
         "&:focus":{
-            borderBottom:"2px solid #A1509B",
+            borderBottom:"2px solid #f4511e",
             backgroundColor: "white",
         },
+    },
+    quest:{
+        fontFamily: "'Google Sans',Roboto,Arial,sans-serif",
+        fontSize: 30,
+        fontweight: 400,
     },
     add_question_body:{
         display:"flex",
@@ -70,7 +81,7 @@ const  useStyles = makeStyles({
         background:"#323232 !important",
         padding:"1%",
         "&:focus":{
-            borderBottom: "1.5px solid rgb(103, 58, 183)",
+            borderBottom: "1.5px solid #f4511e",
             backgroundColor: "white",
         }
     },
@@ -85,7 +96,7 @@ const  useStyles = makeStyles({
         width:"20em",
         background:"transparent !important",
         "&:focus":{
-            borderBottom: "1.5px solid rgb(103, 58, 183)",
+            borderBottom: "1.5px solid #f4511e",
             backgroundColor: "white",
         }
     },
@@ -102,6 +113,31 @@ const  useStyles = makeStyles({
                 backgroundColor: "green !important",
             }   
     },
+    crtBtn:{
+        background:"#678e23",
+        color:"white",
+        border:"1px solid #51701a",
+        '&:hover':{
+          background:"#51701a",
+          border:"1px solid #678e23",
+          color:"white",
+        },
+        ['@media (max-width:752px)']: {
+          width:"100%",
+        }
+      },
+      optBtn:{
+          background:"#13708a",
+          color:"white",
+          border:"1px solid #0c586e",
+          "&:hover":{
+            background:"#0c586e",
+            border:"1px solid #13708a",
+        },
+        ['@media (max-width:752px)']: {
+          width:"100%",
+        }
+      },
     add_footer:{
         display: "flex",
         alignItems:"cener",
@@ -111,6 +147,108 @@ const  useStyles = makeStyles({
     add_question_bottom_left:{
         width: "100%",
     },
+    main:{
+        boxSizing:"border-box",
+        fontFamily: "Roboto,Arial,sans-serif",
+        textTransform:"capitalize",
+        position:"fixed",
+        zIndex:"2",
+        top:"0",
+        left:"0",
+        right:"0",
+        backgroundColor:"whitesmoke",
+        boxShadow:"0 5px 10px rgba(0,0,0,.1)",
+        padding:"0px 2%",
+        display:"flex",
+        alignItems:"center",
+        height:"10vh",
+        width:"100vw",
+        justifyContent:"space-between",
+        '& a':{
+            textDecoration:"none",
+        },
+        '& #toggle':{
+            display:"none",
+        },
+        '& label':{
+            display:"none",
+        },
+        '& nav':{
+            '& ul':{
+                listStyle:"none",
+                '& li':{
+                    position:"relative",
+                    float:"left",
+                    
+                    '& ul':{
+                        position:"absolute",
+                        boxShadow:"0 5px 10px rgba(0,0,0,.1)",
+                        left:"0",
+                        width:"200px",
+                        backgroundColor:"whitesmoke",
+                        display:"none",
+                        '& li':{
+                            width:"100%",
+                            borderTop: "1px solid rgba(0,0,0,.1)",
+                        },
+                        
+                    },
+                    '&:hover':{
+                        '& ul':{
+                            display:"initial",
+                        }
+                    },
+                    '&:focus-within':{
+                        '& ul':{
+                            display:"initial",
+                        }
+                    },
+                    '& a':{
+                        display:"flex",
+                        alignItems:"center",
+                        justifyContent:"center",
+                        padding:"3vh",
+                        color:"#333",
+                        '&:hover':{
+                            color:"#f4511e",
+                        }
+                    }
+                }
+            }
+        },
+        ["@media(max-width: 650px)"]: {
+            '& label':{
+                display:"initial",
+                zIndex:"100",
+            },
+            
+            '& nav':{
+                position:"absolute",
+                top:"100%",
+                left:"0",
+                right:"0",
+                backgroundColor:"whitesmoke",
+                borderTop:"1px solid rgba(0,0,0,.1)",
+                display:"none",
+                '& ul':{
+                    '& li':{
+                        width:"100%",
+                        borderBottom:"1px solid rgba(0,0,0,.1)",
+                        '& ul':{
+                            position:"relative !important",
+                            width:"100vw !important",
+                        },
+                        
+                    },
+                    '&.div':{
+                        height:"2px",
+                        color:"green",
+                    },
+                }
+            },
+           	
+		},
+    }
 });
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -118,6 +256,18 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 function CreatePoll2() {
+    const [checked, setChecked] = useState(false);
+    let navigate = useNavigate();
+    function toggle(value){
+        return !value;
+      }
+      function navicon() {
+          navigate('/')
+      }
+      function viewpoll(e){
+        e.preventDefault();
+        navigate("/vpoll/");
+    }
     const currentPathName = window.location.pathname;
     const lobbyuuid = currentPathName.slice(6);
     console.log(lobbyuuid);
@@ -279,10 +429,20 @@ function CreatePoll2() {
         }
     }
     return (
-        <div style={{display:"flex",width:"100%",backgroundColor: "whitesmoke"}}>
+        <>
+        <header className={classes.main}>
+               <a href="#" style={{display:"flex",color:"#f4511e"}}><PollIcon style={{cursor:"pointer"}} fontSize='medium' onClick={navicon}/><h2 onClick={navicon}>POLLAPP</h2></a>
+               <input type="checkbox" name="toggle" id="toggle" checked={checked}onChange={e => setChecked(toggle)}/>
+               <label for="toggle">{!checked?<MenuIcon/>:<CloseIcon/>}</label>
+               <nav className="checks">
+                   <ul>
+                       <li><a href="#" onClick={(e)=>{viewpoll(e)}}>Dashboard</a></li>
+                   </ul>
+                </nav>
+            </header> 
+        <div style={{display:"flex",flexDirection:"column-reverse",width:"100%",backgroundColor: "white",alignItems:"center",justifyContent:"center",position:"relative",top:"10vh"}}>
         <div className={classes.createpoll} style={{margin:"0",padding:"0"}}>
-                    <Typography variant="h3" style={{color:"#A1509B",marginLeft:"2%",marginTop:"1%"}}>{lobbydes.lobbyName}</Typography>
-                    <Typography variant="h4" style={{color:"#A1509B",marginLeft:"2%",marginTop:"1%",marginBottom:"1%"}}>{lobbydes.lobbyDescription}</Typography>
+                  
             <div className={classes.add_poll}>
                 <div style={{display:"flex", width:"100%"}}>
                 <input type="text" className={classes.question} value={poll.pollQuestion}placeholder="Question" onChange={(e)=>{ChangePollQuestion(e.target.value)}}></input>
@@ -303,49 +463,48 @@ function CreatePoll2() {
             </div>
                 <div className="add_question_body">
                 {opt.length < 5 ? (
-                <Button variant="contained" style={{margin:"1%",color: "white", backgroundColor:"#A1509B", '&:hover':{backgroundColor:"#4e1ba8"}}}  endIcon={<AddIcon/>} onClick={()=>addOption(opt.length)}>Add Option</Button>):"" }
+                <Button variant="contained" className={classes.optBtn} endIcon={<AddIcon/>} onClick={()=>addOption(opt.length)}>Add Option</Button>):"" }
                 </div>
                 <br/>
                 <div className={classes.add_footer}>
-                    <Button style={{color: "white", width:"25%",backgroundColor:"black"}} endIcon={<AddCircleOutlineIcon/>} onClick={CreatePoll}>Create Poll</Button>
+                    <Button className={classes.crtBtn} endIcon={<AddCircleOutlineIcon/>} onClick={CreatePoll}>Create Poll</Button>
                 </div>
                 </div>
             </div>
-            <div style={{paddingLeft:"2%", width:"100%",backgroundColor:"#F5F5DC",}}>
-            <Typography variant="h3" style={{color:"#A1509B",marginLeft:"2%",marginTop:"1%"}}>Polls Created</Typography>  
-            <hr style={{border:"2px solid #A1509B"}}/> 
-            <div>
+            <div style={{width:"100%",backgroundColor:"white"}}>
+            <div style={{width:"100%",display:"flex",flexWrap:"wrap",alignItems:"center",justifyContent:"space-around"}}>
                 {polldes.map((lob,x)=>(
                 <div className={classes.lobbypollsseen} key={lob}>
-                    <div style={{display:"flex", fontFamily: "Roboto,Arial,sans-serif",color:"#A1509B"}}>
-                        <Typography variant="h5">{x+1}.</Typography>&nbsp;&nbsp;
-                        <Typography variant="h5">{lob.pollQuestion}</Typography>
+                    <div style={{display:"flex", fontFamily: "Roboto,Arial,sans-serif",color:"#333",padding:"1%",}}>
+                        <h1 className={classes.quest} style={{color:"#f4511e"}} variant="h5">{x+1}.</h1>&nbsp;&nbsp;
+                        <h1 className={classes.quest} variant="h5">{lob.pollQuestion}</h1>
                     </div>
                     <br/>
-                    <div style={{display:"flex",fontFamily: "Roboto,Arial,sans-serif", fontSize: 25,fontWeight: 400,letterSpacing: ".2px",}}> 
+                    <div style={{display:"flex",fontFamily: "Roboto,Arial,sans-serif", fontSize: 25,fontWeight: 400,letterSpacing: ".2px"}}> 
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <h5>Options:</h5>&nbsp;&nbsp;
-                    <div style={{color:"#323232"}}>
+                    <h5 style={{color:"#f4511e",fontSize: 25,fontWeight: 400,}}>Options:</h5>&nbsp;&nbsp;
+                    <div style={{color:"#323232",width:"100%",height:"100%",display:"flex",flexDirection:"column",justifyContent:"space-around",}}>
                        {lob.pollOption.map((oop)=>(
                     <>{oop.optionValue == "" &&(
                         <></>
                     )}
                     {!oop.optionValue == "" &&(
-                    <div style={{display:"flex", color:"black"}}>
-                    <p>{oop.optionValue}</p>
+                    <div style={{color:"black",width:"100%",margin:"1%"}}>
+                    <p style={{marginTop:"1%",fontSize: 25,fontWeight: 400,}}>{oop.optionValue}</p>
                     </div>
                     )}
-                    <hr style={{border:"1px solid #323232"}}/>
                     </>    
                     ))}
                     </div>
                     </div> 
                     <br/>   
-                    <hr style={{border:"2px solid #A1509B"}}/>
                 </div>))}               
                 </div>
             </div>
+                <Typography variant="h4" style={{color:"#f4511e",marginLeft:"2%",marginTop:"1%",marginBottom:"1%"}}>{lobbydes.lobbyDescription}</Typography>
+                <Typography variant="h3" style={{color:"#f4511e",marginLeft:"2%",marginTop:"1%"}}>{lobbydes.lobbyName}</Typography>
             </div>
+            </>
     )
 }
 

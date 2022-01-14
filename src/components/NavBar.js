@@ -9,13 +9,13 @@ const  useStyles = makeStyles({
     navbar:{
         width: "100%",
         display:"flex",
-        backgroundColor: "rgb(233,245,251)",
+        backgroundColor: "#F5F5DC",
     }  
     ,navbarTitle:{
         display: "flex",
         width: "85%",
         height: "10%",
-        color: "rgb(0,86,146)",
+        color: "#A1509B",
         margin: "1%",
         '& h1':{
             display: "inline",
@@ -28,7 +28,7 @@ const  useStyles = makeStyles({
     },
     butt:
     {
-        width:100
+        width:"100%",
     }
 })
 function NavBar() {

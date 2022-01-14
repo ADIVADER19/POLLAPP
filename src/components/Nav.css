@@ -1,0 +1,9 @@
+label{
+    color:#333;
+    cursor:pointer;
+}
+#toggle:checked ~ .checks{
+    display:initial;
+    position:absolute;
+    z-index:1;
+}

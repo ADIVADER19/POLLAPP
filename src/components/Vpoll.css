@@ -1,91 +1,73 @@
 
-.actoll,.clooll{
-    margin-left: 5% ;
-    margin-right: 5%;
+.actoll{
+    width:100%;
+    display:flex;
+    flex-direction:column;
+    align-items:flex-start;
+    justify-content:center;
+    position:relative;
+    top:20vh;
 }
-
+.clooll{
+    width:100%;
+    display:flex;
+    flex-direction:column;
+    align-items:flex-start;
+    justify-content:center;
+    position:relative;
+    top:10vh;
+}
+.pollstaAlign,.collstaAlign{
+    width:100%;
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    justify-content:center;
+    color:black;
+}
 .polsta,.closta{
-    display: flex;
-    border-style: solid;
-    border-width: 3px;
-    border-color: grey;
-    border-radius: 15px;
-    position: relative;
-    margin: 1% 0% 1% 0%;
+    width:48%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
 }
 
 .poldet{
     border-radius: 15px;
-    background-color:beige;
-    width: 45%;
-    max-width: 45%;
-    padding: 2% 0% 0% 2%;
-    position: relative;
-    z-index: 1;
-}
-
-.poldet::after{
-    content: "";
-    border-radius: 15px;
-    height: 100%;
-    width: 100%;
-    top: 0;
-    left: 0%;
-    position: absolute;
-    z-index: -1;
-    transition: 500ms;
-}
-
-.poldet:hover::after{
-    background: rgba(228, 173, 173, 0.2);
-}
-
-.sta{
-    border-radius: 15px;
     background-color:whitesmoke;
-    width: 45%;
-    max-width: 45%;
-    padding: 2% 0% 0% 2%;
-    position: relative;
-    z-index: 1;
+    width:100%;
+    display:flex;
+    position:relative;
+    flex-direction:column;
+    align-items:flex-start;
+    justify-content:space-around;
+    boxShadow: 0 5px 10px grey;
+    padding:3%;
+    margin:1%;
+    min-height:50vh;
+    transition:0.5s;
 }
-
-.sta::after{
-    content: "";
-    border-radius: 15px;
-    height: 100%;
-    width: 100%;
-    top: 0;
-    left: 0%;
-    position: absolute;
-    z-index: -1;
-    transition: 500ms;
+.polu{
+    font-size:3vw;
+    font-weight:normal;
 }
-
-.sta:hover::after{
-    background-color: rgb(235, 235, 235);
+.polh3 h2{
+    font-size:2vw;
+    font-weight:normal;
+    color:#333;
 }
-
-.futons{
-    width: 15%;
-    max-width: 15%;
+.poldet:hover .polu{
+    color:#333;
 }
-
-.viewpoll,.deletepoll{
-    background-color: black !important;
-    color: white !important;
+.poldet:hover .polh3 h2{
+    color:whitesmoke;
 }
-
-.viewpoll{
-    top: 10%;
-    left: 9%;
+.poldet:hover{
+    margin-top:0;
+    color:white;
+    background-color:#e6977e;
+    box-shadow:5px 5px 25px 5px grey; 
 }
-
-.deletepoll{
-    top: 30%;
-    left: 10%
-}
-
 .viewpoller{
     background-color: black !important;
     color: white !important;
@@ -101,4 +83,28 @@
     background-color: black !important;
     color: white !important;
 }
-
+@media  only screen and (max-width: 748px){
+    .polu{
+        font-size:5vw;
+    }
+    .polh3 h2{
+        font-size:3vw;
+    }
+    .polh3{
+        display:flex;
+        flex-direction:column;
+    }
+    .pollstaAlign,.collstaAlign{
+        width:100%;
+        flex-direction:column;
+    }
+    .polsta,.closta{
+        width:90%;
+    }
+    .poldet{
+        min-height:40vh;
+    }
+    .actoll,.clooll{
+        align-items:center;
+    }
+}
