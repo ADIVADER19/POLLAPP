@@ -15,6 +15,9 @@ import CloseIcon from '@mui/icons-material/Close';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import DoneAllIcon from '@mui/icons-material/DoneAll';
 import Slide from '@mui/material/Slide';
+import io from 'socket.io-client';
+
+let socket;
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -220,6 +223,8 @@ function Vpoll() {
     const[loads,setLoads]=useState(false);
     const[linktxt,setLinktxt]=useState("Share Link");
     const [op, setOp] = React.useState(false);
+    const data = {name:'teacher'};
+    const ENDPOINT = 'localhost:5000';
 
   const handleClickOp = () => {
     setOp(true);
@@ -265,6 +270,10 @@ function Vpoll() {
       setLoading(false);
       userd();
     },[])
+
+    useEffect(()=>{
+      socket = io(ENDPOINT)
+  },[ENDPOINT, 'vpoll'])
 
     var usern = userInfo;
 	console.log('variable',usern);
@@ -347,6 +356,9 @@ function Vpoll() {
               M.toast({ html: data.error });
             } else {
               console.log(close)
+              socket.emit('closepoll',{lobbyuuid:stuid},(error)=>{
+                if(error){alert(error);}
+              });
               M.toast({
                 html: "Successfully Updated!",
                 classes: "#2e7d32 green darken-3",
@@ -474,7 +486,7 @@ function Vpoll() {
                   <p className='polh3' style={{fontFamily: "Roboto,Arial,sans-serif"}}><h1 className='polu'>Lobby description:</h1><h2>{Clob.lobbyDescription}</h2></p>
                   <br/>
                   <div className={classes.futons}>
-                  <Button className={classes.btns} onClick={()=>Livelobby(Clob.lobbyId)} size="large" variant="contained" endIcon={<VisibilityIcon/>} style={{fontFamily: "Roboto,Arial,sans-serif"}}>VIEW LOBBY</Button>
+                  <Button className={classes.btns} onClick={()=>Closelobby(Clob.lobbyId)} size="large" variant="contained" endIcon={<VisibilityIcon/>} style={{fontFamily: "Roboto,Arial,sans-serif"}}>VIEW LOBBY</Button>
                   <Button className={classes.delBtn} onClick={()=>{if(window.confirm('Are you sure to delete this record?')){ DeleteLobby(Clob.lobbyId);}} } size="large" variant="contained" endIcon={<DeleteOutlined/>} style={{fontFamily: "Roboto,Arial,sans-serif"}}>DELETE LOBBY</Button>
                   <Dialog
         open={op}
