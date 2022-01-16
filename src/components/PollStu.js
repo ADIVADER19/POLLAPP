@@ -15,7 +15,7 @@ function PollStu() {
     const lobbyuuid = currentPathName.slice(9);
     const [polldes, setItems] = useState([]);
     const [lobbydes, setTritems] = useState([]);
-    const [check, setBitems] = useState([]);
+    const [check, setBitems] = useState();
     const ENDPOINT = 'localhost:5000';
     
     const useStyles=makeStyles({
@@ -206,7 +206,7 @@ function PollStu() {
     
     }
 
-    useEffect(() => {
+    const polls =(() => {
         fetch("/bobs", {method: "POST",
         headers: {
             "Content-type": "application/json",
@@ -221,9 +221,9 @@ function PollStu() {
         });
         console.log(polldes);
         })
-    }, []);
+    });
 
-    useEffect(()=>{
+    const lobby =(()=>{
         fetch("/ross",{method:"POST",
         headers: {
             "Content-type": "application/json",
@@ -236,7 +236,7 @@ function PollStu() {
 
         console.log(lobbydes);
         })
-    },[]);
+    });
 
     useEffect(()=>{
         fetch("/check",{method:"POST",
@@ -247,9 +247,16 @@ function PollStu() {
     }).then((res)=>res.json())
         .then((rat)=>{
             console.log(rat.myitem[0].close);
-        setBitems(rat.myitem[0].close);
-
-        console.log(check);
+            setBitems(rat.myitem[0].close);
+            console.log(check);
+            if(rat.myitem[0].close){
+                console.log("closed");
+                return;
+            }
+            else{
+                lobby()
+                polls()
+            }
         })
     },[])
 
