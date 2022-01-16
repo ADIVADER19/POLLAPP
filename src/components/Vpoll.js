@@ -428,8 +428,8 @@ function Vpoll() {
                <label for="toggle">{!checked?<MenuIcon/>:<CloseIcon/>}</label>
                <nav className="checks">
                    <ul>
-                       <li><a href="#">Active Polls</a></li>
-                       <li><a href="#closed">Closed Polls</a></li>
+                       <li><a href="#">Active Lobby</a></li>
+                       <li><a href="#closed">Closed Lobby</a></li>
                        <li><a href="#" onClick={(e)=>{handleClickOpen(e)}}>Create New Lobby</a></li>
                    </ul>
                 </nav>
