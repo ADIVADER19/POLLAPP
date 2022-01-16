@@ -47,24 +47,14 @@ function Closepoll() {
            console.log(lobbydes);
         })
     },[]);
-    const giorno=polldes
-    const dio= lobbydes
-    console.log('giorno',giorno)
-    console.log('dio',dio)
-    const lname=dio.lobbyName
-    const lid=dio.lobbyId
-    console.log(lname)
-    console.log(lid)
+
     const excel = async () =>{
-        console.log(dio)
         const res = await fetch("/excel", {
             method: "POST",
             headers: {
                 "Content-type": "application/json",
             },
             body: JSON.stringify({
-                 lname:lobbydes.lobbyName,
-                 lid:lobbydes.lobbyId,
                  giorno:polldes,
                  dio:lobbydes,
             }),
