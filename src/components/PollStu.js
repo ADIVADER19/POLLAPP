@@ -15,7 +15,7 @@ function PollStu() {
     const lobbyuuid = currentPathName.slice(9);
     const [polldes, setItems] = useState([]);
     const [lobbydes, setTritems] = useState([]);
-    const [check, setBitems] = useState();
+    const [check, setBitems] = useState(Boolean);
     const ENDPOINT = 'localhost:5000';
     
     const useStyles=makeStyles({
@@ -185,11 +185,6 @@ function PollStu() {
     useEffect(()=>{
         socket = io(ENDPOINT)
         console.log(socket)
-        // console.log(window.location.href)
-        // setTimeout(()=>{
-        //     console.log(usern)
-        //     socket.emit('join',{usern});    
-        //            },1000);
         return()=>{
             socket.emit('disconnect');
             socket.off();
@@ -197,14 +192,13 @@ function PollStu() {
         
     },[ENDPOINT, lobbyuuid])
 
-    const socker=(question,option)=>{
-        socket.emit('sendPoll', {lobbyuuid,question,option}, (error) => {
-            if(error) {
-              alert(error);
-            }
-          });
-    
-    }
+const socker=(question,option)=>{
+    socket.emit('sendPoll', {lobbyuuid,question,option}, (error) => {
+        if(error) {
+            alert(error);
+        }
+    })
+}      
 
     const polls =(() => {
         fetch("/bobs", {method: "POST",
@@ -292,6 +286,25 @@ function PollStu() {
 
     const classes=useStyles();
     
+    const nowdigonthis=(puid,opuid,question,option)=>{
+        fetch("/check",{method:"POST",
+        headers: {
+            "Content-type": "application/json",
+        },
+        body: JSON.stringify({data:lobbyuuid})
+    }).then((res)=>res.json())
+        .then((rat)=>{
+            console.log(rat.myitem[0].close);
+            if(!rat.myitem[0].close){
+                selectthis(puid,opuid);
+                socker(question,option);
+            }    
+            else{
+                window.alert("POLL HAS BEEN CLOSED");
+            }
+            })
+    }
+
     return (
         
         <div className='actuallythepage'>
@@ -318,7 +331,7 @@ function PollStu() {
                         <div id= "catrina">
                             <div className= "options" >
                                 <input type="radio" value={oop.optionValue} name={lob.pollQuestion} id="gywshb" 
-                                onClick={()=>selectthis(lob._id,oop._id),()=>socker(lob.pollQuestion,oop.optionValue)}
+                                onClick={()=>nowdigonthis(lob._id,oop._id,lob.pollQuestion,oop.optionValue)}
                                 ></input>
                                 <h3 id="muda">{oop.optionValue}</h3>
                             </div>

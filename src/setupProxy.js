@@ -133,5 +133,19 @@ module.exports = function(app) {
 
   ));
 
+  app.use('/excel',
+   createProxyMiddleware({
+    target: 'http://localhost:2000',
+    changeOrigin:true,
+  }
+  ));
+
+  app.use('/download',
+  createProxyMiddleware({
+    target: 'http://localhost:2000',
+    changeOrigin:true,
+  }
+  ))
+
 };
 

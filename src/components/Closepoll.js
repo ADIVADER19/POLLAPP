@@ -9,10 +9,13 @@ function Closepoll() {
 
     const [polldes, setItems] = useState([]);
     const [lobbydes, setTritems] = useState([]);
-    
-    function createfile()
+
+    const downloadd=()=> 
     {
         
+        console.log('clicked')
+        excel();
+    
     }
     
     useEffect(() => {
@@ -30,6 +33,7 @@ function Closepoll() {
         })
     }, []);
 
+
     useEffect(()=>{
         fetch("/ross",{method:"POST",
         headers: {
@@ -38,12 +42,46 @@ function Closepoll() {
         body: JSON.stringify({data:lobbyuuid})
     }).then((res)=>res.json())
         .then((rte)=>{
-            console.log(rte);
+           console.log(rte);
            setTritems(rte.myitem[0]);
-
-          console.log(lobbydes);
+           console.log(lobbydes);
         })
     },[]);
+    const giorno=polldes
+    const dio= lobbydes
+    console.log('giorno',giorno)
+    console.log('dio',dio)
+    const lname=dio.lobbyName
+    const lid=dio.lobbyId
+    console.log(lname)
+    console.log(lid)
+    const excel = async () =>{
+        console.log(dio)
+        const res = await fetch("/excel", {
+            method: "POST",
+            headers: {
+                "Content-type": "application/json",
+            },
+            body: JSON.stringify({
+                 lname:lobbydes.lobbyName,
+                 lid:lobbydes.lobbyId,
+                 giorno:polldes,
+                 dio:lobbydes,
+            }),
+            
+        });
+        const data= await res.json();
+        if (res.status===200||res.status===201)
+        {
+            console.log('success');
+            fetch("/download",{
+                method:"GET",
+                headers: {},            
+            })
+            window.open('/download?foo=bar&xxx=yyy');
+        }
+
+    }
 
     return (
         <div className='actuallythepage'>
@@ -79,6 +117,7 @@ function Closepoll() {
             </div>
             <div className='fire'>
                 <h1>stats?</h1>
+                <button onClick={downloadd}>CLICK ME</button>
             </div>
         </div>
     )
