@@ -342,7 +342,7 @@ function LivepollT() {
                                     <div className="activeIteml">
                                             {usa.name=='teacher'?<div></div>:
                                             <div>
-                                                <Dialog fullScreen open={open} onClose={handleClose} TransitionComponent={Transition}><AppBar style={{backgroundColor:"whitsmoke"}} sx={{ position: 'relative' }}><Toolbar><IconButton edge="start" color="inherit" onClick={handleClose} aria-label="close"><CloseIcon /></IconButton> 
+                                                <Dialog fullScreen open={open} onClose={handleClose} TransitionComponent={Transition}><AppBar style={{backgroundColor:"whitesmoke"}} sx={{ position: 'relative' }}><Toolbar><IconButton edge="start" color="inherit" onClick={handleClose} aria-label="close"><CloseIcon style={{color:"#f4511e"}}/></IconButton> 
                                                         </Toolbar>
                                                         </AppBar>
                                                 <div className={classes.firstDialog}>
@@ -350,7 +350,7 @@ function LivepollT() {
                                                 <Button className={classes.copys} size="large" variant="contained" onClick={handleClickOp}>View Details</Button> 
                                                 </div>
                                                 </Dialog>
-                                                <Dialog fullScreen open={op} onClose={handleCl} TransitionComponent={Transition}><AppBar sx={{ position: 'relative' }} style={{backgroundColor:"whitsmoke"}}><Toolbar><IconButton edge="start" color="inherit" onClick={handleCl} aria-label="close"><CloseIcon /></IconButton> 
+                                                <Dialog fullScreen open={op} onClose={handleCl} TransitionComponent={Transition}><AppBar sx={{ position: 'relative' }} style={{backgroundColor:"whitesmoke"}}><Toolbar><IconButton edge="start" color="inherit" onClick={handleCl} aria-label="close"><CloseIcon style={{color:"#f4511e"}}/></IconButton> 
                                                         </Toolbar>
                                                         </AppBar>
                                              
