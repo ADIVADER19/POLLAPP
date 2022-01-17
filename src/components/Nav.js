@@ -134,7 +134,6 @@ function Nav() {
               if (res.status === 200) {
                   window.alert("LOGGED OUT SUCCESSFULLY")
                   window.location.reload();
-                  console.log("LOGGED OUT")
               }
               else
               {
@@ -163,9 +162,7 @@ function Nav() {
 				credentials: "include",
 			});
 			const data =await res.json();
-            console.log("Hello",data);
                 setUserInfo(data);
-                console.log("Hi",userInfo);
         }, [])
     return (
         <>

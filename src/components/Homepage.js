@@ -9,6 +9,17 @@ import Popup from './Popup';
 import { GoogleLogin } from 'react-google-login';
 import CircularProgress from '@mui/material/CircularProgress';
 const  useStyles = makeStyles({
+    pops:{
+        backgroundColor:"whitesmoke"
+    },
+    log:{
+        width:"30%",
+        marginLeft:"2%",
+    },
+    sign:{
+        width:"30%",
+        marginLeft:"2%",
+    },
     homeMain:{
         display:"flex",
         width:"100%",
@@ -105,8 +116,7 @@ function HomePage() {
 		
             
 			if (res.status === 200 || res.status===201) {
-				console.log("DATA retrieved from token")
-                console.log(data);
+			
                 setUserInfo(data);
                 setLoading(true);
 			}
@@ -125,24 +135,19 @@ function HomePage() {
             
             }
 		} catch (err) {
-			console.log(err);
 		}
 	};
     const responseGoogle = async (response) => {
         
-        console.log(response);
         const mail=response.profileObj.email
         const name=response.profileObj.name
         const givenName=response.profileObj.givenName
-        console.log(mail);
-        console.log(name);
-        console.log(givenName);
+   
         if (
 			!mail ||
 			!name ||
 			!givenName 
 		) {
-			console.log("Please fill all the credentials");
 		} else {
 			const res = await fetch("/login", {
 				method: "POST",
@@ -158,19 +163,16 @@ function HomePage() {
             const data= await res.json();
 			if (res.status === 400 || !data) {
                 window.alert('Something went wrong')
-				console.log("USER REGISTRATION FAILED");
 			} else if (res.status === 200 || res.status === 201) {
                 window.alert("SUCCESSFULLY LOGGED IN")
                 //props.setTrigger(false)
                 window.location.reload();
                 setTimedPopup(false);
                 userd()
-				console.log("ZA WARUDOO!!!!");
 			} 
             else if(res.status === 422)
                 {
                 window.alert("USER DOES NOT EXSIST")
-				console.log("Invalid User Creation");
 			}
             else
             {
@@ -180,19 +182,15 @@ function HomePage() {
 	};
     const responseeGoogle = async (response) => {
         
-        console.log(response);
         const mail=response.profileObj.email
         const name=response.profileObj.name
         const givenName=response.profileObj.givenName
-        console.log(mail);
-        console.log(name);
-        console.log(givenName);
+        
         if (
 			!mail ||
 			!name ||
 			!givenName 
 		) {
-			console.log("Please fill all the credentials");
 		} else {
 			const res = await fetch("/u", {
 				method: "POST",
@@ -208,29 +206,21 @@ function HomePage() {
             const data= await res.json();
 			if (res.status === 400 || !data) {
                 window.alert('Something went wrong')
-				console.log("USER REGISTRATION FAILED");
 			} else if (res.status === 200 || res.status === 201) {
                 window.alert("SUCCESSFULLY SIGNED UP")
                 document.getElementByClassName("sign").style.visibility="hidden";
-				console.log("ZA WARUDOO!!!!");
-                
 			} 
             else if(res.status === 422)
             {
                 window.alert("USER ALREADY EXISTS");
             }
             else {
-				console.log("Invalid User Creation");
 			}
 		}
 	};
 	
 	var usern = userInfo;
-	console.log('variable',usern);
-    console.log('data',usern._id);
     var userIds = usern._id;
-    console.log('user',userIds);
-    console.log("Type",typeof(userIds));
     useEffect(() => {
         setLoading(false);
         userd();
@@ -272,7 +262,6 @@ function HomePage() {
             window.alert("Please enter all the details");
         }
         else{
-            console.log("UserData",Lobby);
             const{lobbyId,lobbyName,lobbyDescription,studentformId,pollId,userId} = Lobby;
             const res = await fetch("/createnewlobby", {
                 method: "POST",
@@ -380,8 +369,9 @@ function HomePage() {
                 </div>
             </div>
             </div>
-            <Popup id="popup" trigger={timedPopup} setTrigger={setTimedPopup}>
-                <h3 className={classes.poptit}>SIGN UP OR LOGIN TO CONTINUE</h3>
+            <Popup className={classes.pops} id="popup" trigger={timedPopup} setTrigger={setTimedPopup}>
+                <h3 align="center" className={classes.poptit}>SIGN UP OR LOGIN TO CONTINUE</h3>
+                <div style={{display:"flex",width:"100%",alignItems:"center",justifyContent:"center"}}>
                 <GoogleLogin id="log" className={classes.log}  
                             clientId="399611436919-fo4n24pr7bpmslat5vamj5u8rc5q0v6f.apps.googleusercontent.com"
                             buttonText="LOGIN IN"
@@ -398,6 +388,7 @@ function HomePage() {
                             cookiePolicy={'single_host_origin'}
                             color="primary"
                         />
+                </div>
             </Popup>
             
             </div>

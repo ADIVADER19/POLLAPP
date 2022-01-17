@@ -239,7 +239,6 @@ function LivepollT() {
                 if (data.error) {
                   M.toast({ html: data.error });
                 } else {
-                  console.log(close)
                   socket.emit('closepoll',{lobbyuuid:stuid},(error)=>{
                     if(error){alert(error);}
                   });
@@ -250,7 +249,6 @@ function LivepollT() {
                 }
               })
               .catch((error) => {
-                console.log(error);
           });
           navigate("/vpoll/");
         };
@@ -271,12 +269,10 @@ function LivepollT() {
     
     useEffect(() => {
         socket.on("LobbyData", ({ users }) => {
-          console.log(users)  
           setUsers(users);
           
         });
         socket.on("PollData", ({ poll }) => {
-            console.log(poll[0].option[0].votes)
             setPolls(poll);
             
           });
@@ -292,12 +288,10 @@ function LivepollT() {
         body: JSON.stringify({data:lobbyuuid})
     }).then((res) => res.json())
         .then((ret) => {
-          console.log(ret);
           socket.emit('polls',{ret,lobbyuuid},(error)=>{
             if(error){alert(error);}
           });
           setItems(ret.myitem);
-          console.log(polldes);
         })
     }, []);
 
@@ -309,14 +303,11 @@ function LivepollT() {
         body: JSON.stringify({data:lobbyuuid})
     }).then((res)=>res.json())
         .then((rte)=>{
-            console.log(rte);
            setTritems(rte.myitem[0]);
 
-          console.log(lobbydes);
         })
     },[]);
 
-    console.log(pain);
     return (
         <div className='actuallythepagel'>
             <header className={classes.main}>
@@ -341,18 +332,17 @@ function LivepollT() {
                     <div style={{display:"flex",alignItems:"center",justifyContent:"center",width:"50%"}}>
                         <div className="activeContainerl">
                         <div>
-                            {users.map((usa) => (
-                                    <div className="activeIteml">
-                                            {usa.name=='teacher'?<div></div>:
                                             <div>
                                                 <Dialog fullScreen open={open} onClose={handleClose} TransitionComponent={Transition}><AppBar style={{backgroundColor:"whitesmoke"}} sx={{ position: 'relative' }}><Toolbar><IconButton edge="start" color="inherit" onClick={handleClose} aria-label="close"><CloseIcon style={{color:"#f4511e"}}/></IconButton> 
                                                         </Toolbar>
                                                         </AppBar>
-                                                <div className={classes.firstDialog}>
-                                                <h1 style={{fontWeight:"normal",marginLeft:"1%",fontFamily: "Roboto,Arial,sans-serif"}}>{usa.name}</h1>
+                                                
+                                                {users.map((usa,x) => (
+                                                <div className="activeIteml">
+                                                    {usa.name=='teacher'?<div></div>:
+                                                   <div className={classes.firstDialog}>
+                                                <h1 style={{fontWeight:"normal",marginLeft:"1%",fontFamily: "Roboto,Arial,sans-serif"}}> {x+1}. {usa.name}</h1>
                                                 <Button className={classes.copys} size="large" variant="contained" onClick={handleClickOp}>View Details</Button> 
-                                                </div>
-                                                </Dialog>
                                                 <Dialog fullScreen open={op} onClose={handleCl} TransitionComponent={Transition}><AppBar sx={{ position: 'relative' }} style={{backgroundColor:"whitesmoke"}}><Toolbar><IconButton edge="start" color="inherit" onClick={handleCl} aria-label="close"><CloseIcon style={{color:"#f4511e"}}/></IconButton> 
                                                         </Toolbar>
                                                         </AppBar>
@@ -365,9 +355,12 @@ function LivepollT() {
                                                     </div>
                                                 ))}
                                                 </Dialog>
-                                            </div>}
-                                    </div>
-                            ))}
+                                                </div>}
+                                                </div>
+                                                ))}
+                                                </Dialog>
+                                                
+                                            </div>
                         </div>
                         </div>
                     </div>

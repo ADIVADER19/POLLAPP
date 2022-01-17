@@ -25,7 +25,6 @@ export default function Profile() {
 				credentials: "include",
 			});
 			const data = await res.json();
-			console.log(data);
 			setUserInfo(data);
 
 			if (!res.status === 200) {
@@ -33,7 +32,6 @@ export default function Profile() {
 				navigate('/');
 			}
 		} catch (err) {
-			console.log(err);
 			navigate("/");
 		}
 	};
@@ -43,7 +41,6 @@ export default function Profile() {
     }
   
 	var usern = userInfo.username;
-	console.log(usern);
 
 	useEffect(() => {
 		callProfilePage();

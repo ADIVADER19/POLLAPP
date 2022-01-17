@@ -13,6 +13,7 @@ import './Nav.css';
 import { useNavigate } from 'react-router';
 import PollIcon from '@material-ui/icons/Poll';
 import MenuIcon from '@mui/icons-material/Menu';
+import SaveIcon from '@mui/icons-material/Save';
 const  useStyles = makeStyles({
     root:{
         margin:"0",
@@ -147,6 +148,19 @@ const  useStyles = makeStyles({
     add_question_bottom_left:{
         width: "100%",
     },
+    delBtn:{
+        background:"#992525",
+        color:"white",
+        border:"1px solid #701a1a",
+        "&:hover":{
+          background:"#701a1a",
+          border:"1px solid #992525",
+      },
+      ['@media (max-width:752px)']: {
+        width:"100%",
+        marginTop:"1%",
+      }
+      },
     main:{
         boxSizing:"border-box",
         fontFamily: "Roboto,Arial,sans-serif",
@@ -270,7 +284,6 @@ function CreatePoll2() {
     }
     const currentPathName = window.location.pathname;
     const lobbyuuid = currentPathName.slice(6);
-    console.log(lobbyuuid);
     const [polldes, setItems] = useState([]);
      const [lobbydes, setTritems] = useState([]);
      let f = polldes.length+1;
@@ -284,10 +297,8 @@ function CreatePoll2() {
         body: JSON.stringify({data:lobbyuuid})
     }).then((res) => res.json())
         .then((ret) => {
-          console.log(ret.myitem[0].pollOption);
            setItems(ret.myitem);
 
-          console.log(polldes);
         })
     }, []);
     useEffect(()=>{
@@ -298,9 +309,7 @@ function CreatePoll2() {
         body: JSON.stringify({data:lobbyuuid})
     }).then((res) => res.json())
             .then((rte)=>{
-                console.log("Hi",rte);
                 setTritems(rte.myitem[0]);
-                console.log("Hello",lobbydes);
         })
     },[]);
     
@@ -326,39 +335,31 @@ function CreatePoll2() {
         var newPollQuestion = [...poll];
         newPollQuestion.pollQuestion = question;
         setPoll(newPollQuestion);
-        console.log(newPollQuestion);
     }
     function ChangePollOption(option,place){
         var newOption = [...opt];
         newOption[place].optionValue = option;
         setopt(newOption);
-        console.log(opt);
     }
     function removeOption(i){
-        console.log(i);
         if(i!=0){
         var removeOpt = [...opt];
         removeOpt.splice(i,1);
         setopt(removeOpt);
-        console.log(opt);
         }
     }
     function addOption(i){
-        console.log(i);
         var j = i+1;
         var addOption = [...opt];
         if(opt.length < 5){
             addOption[i] = [{optionValue: "",optionArray:[],optionCorrect:false}];
         } else{
-          console.log("Max  5 options ");  
         }
         setopt(addOption);
-        console.log(opt);
       }
     function selectCorrectOption(corOpt,i){
         var selectedOption =[...opt];
         var j = selectedOption.length;
-        console.log(j);
         for(let k = 0;k<j;k++){
             if(k==i){
                 selectedOption[i].optionCorrect=true;
@@ -367,35 +368,55 @@ function CreatePoll2() {
                 selectedOption[k].optionCorrect=false; 
             }
         }
-        console.log(opt);
     }
     const CreatePoll = async(e)=>{
         var options = [...opt];
         var question = [...poll];
-        console.log(question);
         for(let i=0;i<options.length;i++){
             question[0].pollOption[i].optionValue = options[i].optionValue;
             question[0].pollOption[i].optionCorrect = options[i].optionCorrect;
         }
-        console.log(question);
         setPoll(question);
         const pollOption = [{optionValue: "",optionArray:[],optionCorrect:false}]
         for(let j=0;j<5;j++){
             pollOption[j] = poll[0].pollOption[j];
         }
-        console.log(pollOption);
         const lobbyUniqueId = poll[0].lobbyUniqueId;
         var pollQuestion = poll.pollQuestion;
-        console.log(poll);
-        console.log(pollQuestion);
         
         if(options.length<2){
             window.alert("Atleast 2 options required");
+            var setPollQuestion = [...poll];
+            setPollQuestion.pollQuestion = "";
+            setPoll(setPollQuestion);
+            setopt([{
+                optionValue:"",
+                optionArray:[],
+                optionCorrect:false,
+            }]);
+            for(let i=0;i<options.length;i++){
+                question[0].pollOption[i].optionValue = "";
+                question[0].pollOption[i].optionCorrect = false;
+            }
+            setPoll(question);
+            window.location.reload();
         }
         else if(pollQuestion==undefined || options[0].optionValue=="" || options[1].optionValue==""){
-            console.log(pollQuestion);
-            console.log(options.length);
             window.alert("Please fill all the details");
+            var setPollQuestion = [...poll];
+            setPollQuestion.pollQuestion = "";
+            setPoll(setPollQuestion);
+            setopt([{
+                optionValue:"",
+                optionArray:[],
+                optionCorrect:false,
+            }]);
+            for(let i=0;i<options.length;i++){
+                question[0].pollOption[i].optionValue = "";
+                question[0].pollOption[i].optionCorrect = false;
+            }
+            setPoll(question);
+            window.location.reload();
         }
         else{
             const res = await fetch("/createnewpoll", {
@@ -414,7 +435,6 @@ function CreatePoll2() {
             var setPollQuestion = [...poll];
             setPollQuestion.pollQuestion = "";
             setPoll(setPollQuestion);
-            console.log(poll);
             setopt([{
                 optionValue:"",
                 optionArray:[],
@@ -469,6 +489,8 @@ function CreatePoll2() {
                 <div className={classes.add_footer}>
                     <Button className={classes.crtBtn} endIcon={<AddCircleOutlineIcon/>} onClick={CreatePoll}>Create Poll</Button>
                 </div>
+                <br/>
+                <Button className={classes.delBtn}  onClick={navicon} size="large" variant="contained" endIcon={<SaveIcon/>} style={{fontFamily: "Roboto,Arial,sans-serif"}}>SAVE LOBBY</Button>
                 </div>
             </div>
             <div style={{width:"100%",backgroundColor:"white"}}>

@@ -60,12 +60,12 @@
     color:#333;
 }
 .poldet:hover .polh3 h2{
-    color:whitesmoke;
+    color:#333;
 }
 .poldet:hover{
     margin-top:0;
     color:white;
-    background-color:#e6977e;
+    background-color:#f7bdab;
     box-shadow:5px 5px 25px 5px grey; 
 }
 .viewpoller{

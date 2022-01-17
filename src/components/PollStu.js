@@ -1,13 +1,25 @@
 import {useEffect,useState}  from 'react'
 import './PollStu.css';
-import Popup from './Popup'
+import Popup from './Popup';
 import { GoogleLogin } from 'react-google-login';
 import {makeStyles} from '@material-ui/core'
 import M from "materialize-css";
 import io from 'socket.io-client';
 
 let socket;
-
+const useStyles=makeStyles({
+    pops:{
+        backgroundColor:"whitesmoke"
+    },
+    log:{
+        width:"30%",
+        marginLeft:"2%",
+    },
+    sign:{
+        width:"30%",
+        marginLeft:"2%",
+    },   
+});
 function PollStu() {
     const [timedPopup, setTimedPopup] = useState(false);
     const [userInfo, setUserInfo] = useState({});
@@ -18,27 +30,7 @@ function PollStu() {
     const [check, setBitems] = useState(Boolean);
     const ENDPOINT = 'localhost:5000';
     
-    const useStyles=makeStyles({
-          log:
-    {
-        marginLeft:100,
-        margrinRight:150,
-        width:150,
-        height:50
-
-    },
-    sign:{
-        marginLeft:150,
-        margrinRight:150,
-        width:150,
-        height:50
-    },
-    poptit:{
-        fontSize:25,
-        marginLeft:130,
-        fontWeight:20
-    }   
-    });
+    
 
 
     
@@ -56,8 +48,6 @@ function PollStu() {
 		
 
 			if (res.status === 200) {
-				console.log("DATA retrieved from token")
-                console.log(data);
                 setUserInfo(data);
                 
                 socket.emit('join',{data,lobbyuuid},(error)=>{
@@ -77,24 +67,19 @@ function PollStu() {
             
             }
 		} catch (err) {
-			console.log(err);
 		}
 	};
     const responseGoogle = async (response) => {
         
-        console.log(response);
         const mail=response.profileObj.email
         const name=response.profileObj.name
         const givenName=response.profileObj.givenName
-        console.log(mail);
-        console.log(name);
-        console.log(givenName);
+
         if (
 			!mail ||
 			!name ||
 			!givenName 
 		) {
-			console.log("Please fill all the credentials");
 		} else {
 			const res = await fetch("/slogin", {
 				method: "POST",
@@ -110,17 +95,14 @@ function PollStu() {
             const data= await res.json();
 			if (res.status === 400 || !data) {
                 window.alert('Something went wrong')
-				console.log("USER REGISTRATION FAILED");
 			} else if (res.status === 200 || res.status === 201) {
                 window.alert("SUCCESSFULLY LOGGED IN")
                 setTimedPopup(false);
                 suserd()
-				console.log("ZA WARUDOO!!!!");
 			} 
             else if(res.status === 422)
                 {
                 window.alert("USER DOES NOT EXSIST")
-				console.log("Invalid User Creation");
 			}
             else
             {
@@ -130,19 +112,15 @@ function PollStu() {
 	};
     const responseeGoogle = async (response) => {
         
-        console.log(response);
         const mail=response.profileObj.email
         const name=response.profileObj.name
         const givenName=response.profileObj.givenName
-        console.log(mail);
-        console.log(name);
-        console.log(givenName);
+    
         if (
 			!mail ||
 			!name ||
 			!givenName 
 		) {
-			console.log("Please fill all the credentials");
 		} else {
 			const res = await fetch("/su", {
 				method: "POST",
@@ -158,11 +136,9 @@ function PollStu() {
             const data= await res.json();
 			if (res.status === 400 || !data) {
                 window.alert('Something went wrong')
-				console.log("USER REGISTRATION FAILED");
 			} else if (res.status === 200 || res.status === 201) {
                 window.alert("SUCCESSFULLY SIGNED UP")
                 document.getElementByclassName("sign").style.display="none";
-				console.log("ZA WARUDOO!!!!");
                 
 			} 
             else if(res.status === 422)
@@ -170,13 +146,10 @@ function PollStu() {
                 window.alert("USER ALREADY EXISTS");
             }
             else {
-				console.log("Invalid User Creation");
 			}
 		}
 	};
     var usern = userInfo.name;
-	console.log('variable',usern);
-    console.log('data',userInfo.mail);
     useEffect(()=>
     {
         suserd();
@@ -184,7 +157,6 @@ function PollStu() {
 
     useEffect(()=>{
         socket = io(ENDPOINT)
-        console.log(socket)
         return()=>{
             socket.emit('disconnect');
             socket.off();
@@ -208,12 +180,10 @@ const socker=(question,option)=>{
         body: JSON.stringify({data:lobbyuuid})
     }).then((res) => res.json())
         .then((ret) => {
-        console.log(ret.myitem[0].pollOption);
         setItems(ret.myitem);
         socket.emit('polls',{ret,lobbyuuid},(error)=>{
             if(error){alert(error);}
         });
-        console.log(polldes);
         })
     });
 
@@ -225,10 +195,7 @@ const socker=(question,option)=>{
         body: JSON.stringify({data:lobbyuuid})
     }).then((res)=>res.json())
         .then((rte)=>{
-            console.log(rte);
         setTritems(rte.myitem[0]);
-
-        console.log(lobbydes);
         })
     });
 
@@ -240,11 +207,8 @@ const socker=(question,option)=>{
         body: JSON.stringify({data:lobbyuuid})
     }).then((res)=>res.json())
         .then((rat)=>{
-            console.log(rat.myitem[0].close);
             setBitems(rat.myitem[0].close);
-            console.log(check);
             if(rat.myitem[0].close){
-                console.log("closed");
                 return;
             }
             else{
@@ -272,7 +236,6 @@ const socker=(question,option)=>{
               if (data.error) {
                 M.toast({ html: data.error });
               } else {
-                console.log("value")
                 M.toast({
                   html: "Successfully Updated!",
                   classes: "#2e7d32 green darken-3",
@@ -280,7 +243,6 @@ const socker=(question,option)=>{
               }
             })
             .catch((err) => {
-              console.log(err);
             });
     }
 
@@ -294,7 +256,6 @@ const socker=(question,option)=>{
         body: JSON.stringify({data:lobbyuuid})
     }).then((res)=>res.json())
         .then((rat)=>{
-            console.log(rat.myitem[0].close);
             if(!rat.myitem[0].close){
                 selectthis(puid,opuid);
                 socker(question,option);
@@ -345,9 +306,10 @@ const socker=(question,option)=>{
                 ))}
                 
             </div>
-            <Popup id="popup" trigger={timedPopup} setTrigger={setTimedPopup}>
-                <h3 className="poptit">SIGN UP OR LOGIN TO CONTINUE</h3>
-                <GoogleLogin id="log" className="log"  
+            <Popup className={classes.pops} id="popup" trigger={timedPopup} setTrigger={setTimedPopup}>
+                <h3 align="center" className={classes.poptit}>SIGN UP OR LOGIN TO CONTINUE</h3>
+                <div style={{display:"flex",width:"100%",alignItems:"center",justifyContent:"center"}}>
+                <GoogleLogin id="log" className={classes.log}  
                             clientId="399611436919-fo4n24pr7bpmslat5vamj5u8rc5q0v6f.apps.googleusercontent.com"
                             buttonText="LOGIN IN"
                             onSuccess={responseGoogle}
@@ -355,7 +317,7 @@ const socker=(question,option)=>{
                             cookiePolicy={'single_host_origin'}
                             color="primary"
                         />
-                <GoogleLogin id="sign" className="sign"  
+                   <GoogleLogin id="sign" className={classes.sign} 
                             clientId="399611436919-fo4n24pr7bpmslat5vamj5u8rc5q0v6f.apps.googleusercontent.com"
                             buttonText="SIGN UP"
                             onSuccess={responseeGoogle}
@@ -363,6 +325,7 @@ const socker=(question,option)=>{
                             cookiePolicy={'single_host_origin'}
                             color="primary"
                         />
+                </div>
             </Popup></>
             )}
         </div>

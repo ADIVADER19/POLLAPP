@@ -248,21 +248,17 @@ function Vpoll() {
 			});
 			const data = await res.json();      
 			if (res.status === 200 || res.status===201) {
-				console.log("DATA retrieved from token")
-                console.log(data._id);
+	
                 setUserInfo(data);
                 openlobbies(data._id);
                 closelobbies(data._id);
         }
         else if (res.status === 422) {
-          console.log("res 442 status");
         }
               else
               {
-                 console.log("something went wrong");
               }
       } catch (err) {
-        console.log(err);
       }
     };
     
@@ -279,8 +275,6 @@ function Vpoll() {
   },[ENDPOINT, 'vpoll'])
 
     var usern = userInfo;
-	console.log('variable',usern);
-    console.log('data',usern._id);
     var userIds = usern._id;
     const openlobbies = async (tata)=> {await fetch("/usrlobbies", {
       method: "POST",
@@ -288,7 +282,7 @@ function Vpoll() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({tata:tata}),
-    }).then(res=>res.json()).then(data=>{setLobbies(data);console.log(data); setLoading(true);})
+    }).then(res=>res.json()).then(data=>{setLobbies(data); setLoading(true);})
     };
 
     const closelobbies = async(tata)=> {fetch("/clsrlobbies", {
@@ -300,7 +294,6 @@ function Vpoll() {
     }).then(res=>res.json()).then(data=>{setClobbies(data);setLoading(true);})
     };
     const DeleteLobby = async(delid)=>{
-      console.log("hello",delid);
       const res = await fetch("/delete", {
         method: "POST",
         headers: {
@@ -314,8 +307,6 @@ function Vpoll() {
       window.location.reload();
 }
     }
-    //console.log('variable',usern);
-    //console.log('data',userInfo._id);
     function navicon() {
       navigate('/')
   }
@@ -331,14 +322,11 @@ function Vpoll() {
     }
 
     function Livelobby(stuid){
-        console.log(stuid);
         navigate("/LivepollT/"+stuid);
     }
     function func1(){
-      console.log("1");
     }
     function func2(){
-      console.log("2");
       setLoads(true);
       setLinktxt("Link Copied");
     }
@@ -358,7 +346,6 @@ function Vpoll() {
             if (data.error) {
               M.toast({ html: data.error });
             } else {
-              console.log(close)
               socket.emit('closepoll',{lobbyuuid:stuid},(error)=>{
                 if(error){alert(error);}
               });
@@ -370,7 +357,6 @@ function Vpoll() {
             window.location.reload();
           })
           .catch((err) => {
-            console.log(err);
       });
     };
     const [open, setOpen] = React.useState(false);
@@ -404,7 +390,6 @@ function Vpoll() {
             window.alert("Please enter all the details");
         }
         else{
-            console.log("UserData",Lobby);
             const{lobbyId,lobbyName,lobbyDescription,studentformId,pollId,userId} = Lobby;
             const res = await fetch("/createnewlobby", {
                 method: "POST",
