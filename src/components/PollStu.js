@@ -307,21 +307,23 @@ const socker=(question,option)=>{
 
     return (
         
-        <div className='actuallythepage'>
+        <div className='actuallythepagep'>
             {check == true &&(
-                            <h3>this room is no longer accepting responses</h3>
+                            <div style={{display:"flex",alignItems:"center",justifyContent:"center",width:"100%",padding:"1%",marginTop:"20%"}}>
+                                <div className='endp'><h1>This room is no longer accepting responses</h1></div>
+                            </div>
             )}
             {check == false &&(
             <>                  
-            <div className='ice2'>
-                <div className='poltle'>
-                    <h1>Poll Title: {lobbydes.lobbyName}</h1>
-                    <h2>Poll description: {lobbydes.lobbyDescription}</h2>
+            <div className='ice2p'>
+                <div className='poltlep'>
+                    <h1>{lobbydes.lobbyName}</h1>
+                    <h2>{lobbydes.lobbyDescription}</h2>
                 </div>
                 {polldes.map((lob,x)=>(
-                <div className='quests' key={lob}>
-                    <div className='question'>
-                        <h3>{x+1}. {lob.pollQuestion}</h3>
+                <div className='questsp' key={lob}>
+                    <div className='questionp'>
+                        <h1>{x+1}. {lob.pollQuestion}</h1>
                     </div>
                     {lob.pollOption.map((oop)=>(
                         <>{oop.optionValue == "" &&(
@@ -329,7 +331,7 @@ const socker=(question,option)=>{
                         )}
                         {!oop.optionValue == "" &&(
                         <div id= "catrina">
-                            <div className= "options" >
+                            <div className= "optionsp" >
                                 <input type="radio" value={oop.optionValue} name={lob.pollQuestion} id="gywshb" 
                                 onClick={()=>nowdigonthis(lob._id,oop._id,lob.pollQuestion,oop.optionValue)}
                                 ></input>
