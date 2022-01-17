@@ -341,7 +341,7 @@ function LivepollT() {
                                                 <div className="activeIteml">
                                                     {usa.name=='teacher'?<div></div>:
                                                    <div className={classes.firstDialog}>
-                                                <h1 style={{fontWeight:"normal",marginLeft:"1%",fontFamily: "Roboto,Arial,sans-serif"}}> {x+1}. {usa.name}</h1>
+                                                <h1 style={{fontWeight:"normal",marginLeft:"1%",fontFamily: "Roboto,Arial,sans-serif"}}> {x}. {usa.name}</h1>
                                                 <Button className={classes.copys} size="large" variant="contained" onClick={handleClickOp}>View Details</Button> 
                                                 <Dialog fullScreen open={op} onClose={handleCl} TransitionComponent={Transition}><AppBar sx={{ position: 'relative' }} style={{backgroundColor:"whitesmoke"}}><Toolbar><IconButton edge="start" color="inherit" onClick={handleCl} aria-label="close"><CloseIcon style={{color:"#f4511e"}}/></IconButton> 
                                                         </Toolbar>

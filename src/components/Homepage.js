@@ -8,6 +8,7 @@ import img from './img_05.svg';
 import Popup from './Popup';
 import { GoogleLogin } from 'react-google-login';
 import CircularProgress from '@mui/material/CircularProgress';
+import CodeIcon from '@mui/icons-material/Code';
 const  useStyles = makeStyles({
     pops:{
         backgroundColor:"whitesmoke"
@@ -366,6 +367,9 @@ function HomePage() {
                         </h3>
                         <p>Authenticated with google which makes POLLAPP more secured.</p>
                     </div>
+                </div>
+                <div className='footers'>
+                    <CodeIcon fontSize='large'style={{color:"whitesmoke"}}/><h1 align="center" style={{fontSize:"1.5em",color:"whitesmoke",fontWeight:"normal"}}>  by  Advait,Soham and Hridayesh</h1>
                 </div>
             </div>
             </div>
