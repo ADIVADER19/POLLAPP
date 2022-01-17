@@ -273,6 +273,9 @@ function Vpoll() {
 
     useEffect(()=>{
       socket = io(ENDPOINT)
+      return()=>{
+        socket.off();
+    }
   },[ENDPOINT, 'vpoll'])
 
     var usern = userInfo;

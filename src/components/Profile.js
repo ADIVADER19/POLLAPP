@@ -90,7 +90,7 @@ export default function Profile() {
 			<Box className="form">
 				<div className="title">
 					<AccountCircleIcon
-						style={{ fontSize: 55, marginRight: 10 }}
+						style={{ fontSize: 55, marginRight: 10, marginTop: -3}}
 						className="icon"
 					/>
 					<Typography style={{ fontSize: 40 }} className="text" variant="h2">
@@ -101,7 +101,7 @@ export default function Profile() {
 
 				<div className="detail">
 					<Typography
-						style={{ marginRight: 80 }}
+						style={{ marginRight: 80, marginTop: 10}}
 						className="label"
 						variant="h5"
 					>
@@ -119,7 +119,7 @@ export default function Profile() {
 				</div>
 				<div className="detail">
 					<Typography
-						style={{ marginRight: 140 }}
+						style={{ marginRight: 140 , marginTop: 10}}
 						className="label"
 						variant="h5"
 					>
@@ -137,7 +137,7 @@ export default function Profile() {
 				</div>
                 <div className="detail">
 					<Typography
-						style={{ marginRight: 140 }}
+						style={{ marginRight: 140, marginTop: 10 }}
 						className="label"
 						variant="h5"
 					>

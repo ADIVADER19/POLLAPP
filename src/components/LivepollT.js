@@ -240,6 +240,9 @@ function LivepollT() {
                   M.toast({ html: data.error });
                 } else {
                   console.log(close)
+                  socket.emit('closepoll',{lobbyuuid:stuid},(error)=>{
+                    if(error){alert(error);}
+                  });
                   M.toast({
                     html: "Successfully Updated!",
                     classes: "#2e7d32 green darken-3",
@@ -312,7 +315,7 @@ function LivepollT() {
           console.log(lobbydes);
         })
     },[]);
-   // console.log(users[0])
+
     console.log(pain);
     return (
         <div className='actuallythepagel'>
