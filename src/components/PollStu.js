@@ -165,7 +165,7 @@ function PollStu() {
     },[ENDPOINT, lobbyuuid])
 
 const socker=(question,option)=>{
-    socket.emit('sendPoll', {lobbyuuid,question,option}, (error) => {
+    socket.emit('sendPoll', {lobbyuuid,question,option,usern}, (error) => {
         if(error) {
             alert(error);
         }
