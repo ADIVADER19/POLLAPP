@@ -342,9 +342,10 @@ function CreatePoll2() {
         setopt(newOption);
     }
     function removeOption(i){
-        if(i!=0){
+        if(i!=0){    
         var removeOpt = [...opt];
         removeOpt.splice(i,1);
+        setopt({optionValue: "",optionArray:[],optionCorrect:false})
         setopt(removeOpt);
         }
     }
@@ -352,7 +353,7 @@ function CreatePoll2() {
         var j = i+1;
         var addOption = [...opt];
         if(opt.length < 5){
-            addOption[i] = [{optionValue: "",optionArray:[],optionCorrect:false}];
+            addOption[i] = {optionValue: "",optionArray:[],optionCorrect:false};
         } else{
         }
         setopt(addOption);
