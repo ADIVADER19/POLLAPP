@@ -199,7 +199,7 @@ function LivepollT() {
     const close = true;
     let navigate = useNavigate();
     function navicon() {
-        navigate('/')
+        navigate('/vpoll')
     }
     function toggle(value){
         return !value;
@@ -269,6 +269,7 @@ function LivepollT() {
     
     useEffect(() => {
         socket.on("LobbyData", ({ users }) => {
+          console.log(users);  
           setUsers(users);
           
         });
@@ -338,10 +339,10 @@ function LivepollT() {
                                                         </AppBar>
                                                 
                                                 {users.map((usa,x) => (
-                                                <div className="activeIteml">
-                                                    {usa.name=='teacher'?<div></div>:
+                                                <div className="activeIteml" >
+                                                    
                                                    <div className={classes.firstDialog}>
-                                                <h1 style={{fontWeight:"normal",marginLeft:"1%",fontFamily: "Roboto,Arial,sans-serif"}}> {x}. {usa.name}</h1>
+                                                <h1 style={{fontWeight:"normal",marginLeft:"1%",fontFamily: "Roboto,Arial,sans-serif"}}> {x+1}. {usa.name}</h1>
                                                 <Button className={classes.copys} size="large" variant="contained" onClick={handleClickOp}>View Details</Button> 
                                                 <Dialog fullScreen open={op} onClose={handleCl} TransitionComponent={Transition}><AppBar sx={{ position: 'relative' }} style={{backgroundColor:"whitesmoke"}}><Toolbar><IconButton edge="start" color="inherit" onClick={handleCl} aria-label="close"><CloseIcon style={{color:"#f4511e"}}/></IconButton> 
                                                         </Toolbar>
@@ -349,13 +350,13 @@ function LivepollT() {
                                              
                                                 {usa.poll.map((texas,y)=>(
                                                     <div style={{display:"flex",width:"100%",
-                                                    flexDirection:"column",paddingBottom:"1%",paddingTop:"1%",alignItems:"flex-start",justifyContent:"space-evenly",borderBottom:"1px solid #f4511e",fontFamily: "Roboto,Arial,sans-serif"}} key={texas}>
+                                                    flexDirection:"column",paddingBottom:"1%",paddingTop:"1%",alignItems:"flex-start",justifyContent:"space-evenly",borderBottom:"1px solid #f4511e",fontFamily: "Roboto,Arial,sans-serif"}}>
                                                         <h1 style={{fontWeight:"normal",marginLeft:"1%"}}>{y+1}. {texas.question}</h1>
                                                         <h2 style={{fontWeight:"normal",marginLeft:"1%"}}>Option Selected: {texas.option}</h2>
                                                     </div>
                                                 ))}
                                                 </Dialog>
-                                                </div>}
+                                                </div>
                                                 </div>
                                                 ))}
                                                 </Dialog>
