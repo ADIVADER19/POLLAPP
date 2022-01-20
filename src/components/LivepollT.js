@@ -185,6 +185,8 @@ function LivepollT() {
     const classes=useStyles();
     const currentPathName = window.location.pathname;
     const lobbyuuid = currentPathName.slice(11);
+    const str1 = window.location.href;
+    const str2 = str1.slice(0,str1.indexOf('LivepollT'));
     const [checked, setChecked] = useState(false);
     const [polldes, setItems] = useState([]);
     const [lobbydes, setTritems] = useState([]);
@@ -204,6 +206,10 @@ function LivepollT() {
     function toggle(value){
         return !value;
       }
+      function copy(e){
+          e.preventDefault();
+          navigator.clipboard.writeText(str2+'pollstu/'+lobbyuuid)
+        }
     function addpoll(e){
         e.preventDefault();
         navigate("/poll/"+lobbyuuid);
@@ -317,6 +323,7 @@ function LivepollT() {
                <nav className="checks">
                    <ul>
                        <li><a href="#" onClick={(e)=>{addpoll(e)}}>Add Poll</a></li>
+                       <li><a href="#" onClick={(e)=>{copy(e)}}>Copy Link</a></li>
                        <li ><button onClick={()=>CloseLobby()}>Stop Responses</button></li>
                        <li ><a href="#" onClick={(e)=>{handleClickOpen(e)}}>See Voters</a></li>
                    </ul>
@@ -343,9 +350,7 @@ function LivepollT() {
                                                    <div className={classes.firstDialog}>
                                                 <h1 style={{fontWeight:"normal",marginLeft:"1%",fontFamily: "Roboto,Arial,sans-serif"}}> {x}. {usa.name}</h1>
                                                 <Button className={classes.copys} size="large" variant="contained" onClick={handleClickOp}>View Details</Button> 
-                                                <Dialog fullScreen open={op} onClose={handleCl} TransitionComponent={Transition}><AppBar sx={{ position: 'relative' }} style={{backgroundColor:"whitesmoke"}}><Toolbar><IconButton edge="start" color="inherit" onClick={handleCl} aria-label="close"><CloseIcon style={{color:"#f4511e"}}/></IconButton> 
-                                                        </Toolbar>
-                                                        </AppBar>
+                                               
                                              
                                                 {usa.poll.map((texas,y)=>(
                                                     <div style={{display:"flex",width:"100%",
@@ -354,7 +359,6 @@ function LivepollT() {
                                                         <h2 style={{fontWeight:"normal",marginLeft:"1%"}}>Option Selected: {texas.option}</h2>
                                                     </div>
                                                 ))}
-                                                </Dialog>
                                                 </div>}
                                                 </div>
                                                 ))}

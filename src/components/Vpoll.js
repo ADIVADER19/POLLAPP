@@ -214,6 +214,8 @@ function Vpoll() {
   const classes=useStyles();
     let navigate = useNavigate();
     const createid=uuidv4();
+    const str1 = window.location.href;
+    const str2 = str1.slice(0,str1.indexOf('vpoll'));
     const close = true;
     const [userInfo, setUserInfo] = useState({});
     const [lobbies,setLobbies] = useState([]);
@@ -449,7 +451,7 @@ function Vpoll() {
                   <p className='polh3' style={{fontFamily: "Roboto,Arial,sans-serif"}}><h1 className='polu'>Lobby description:</h1><h2>{lob.lobbyDescription}</h2></p>
                   <br/>
                   <div className={classes.futons}>
-                  <Button className={classes.copys} onClick={() => {navigator.clipboard.writeText('http://localhost:3000/pollStu/'+lob.lobbyId)}}size="large" variant="contained" endIcon={<ContentCopyIcon/>} style={{fontFamily: "Roboto,Arial,sans-serif"}}>Copy Link</Button>
+                  <Button className={classes.copys} onClick={() => {navigator.clipboard.writeText(str2+'pollstu/'+lob.lobbyId)}}size="large" variant="contained" endIcon={<ContentCopyIcon/>} style={{fontFamily: "Roboto,Arial,sans-serif"}}>Copy Link</Button>
                   <div className={classes.futonTt}>
                   <Button className={classes.btns} onClick={()=>Livelobby(lob.lobbyId)} size="large" variant="contained" endIcon={<VisibilityIcon/>} style={{fontFamily: "Roboto,Arial,sans-serif"}}>VIEW LOBBY</Button>
                   <Button className={classes.delBtn} onClick={()=>Closepoll(lob.lobbyId)} size="large" variant="contained" endIcon={<DeleteOutlined/>} style={{fontFamily: "Roboto,Arial,sans-serif"}}>END LOBBY</Button>
