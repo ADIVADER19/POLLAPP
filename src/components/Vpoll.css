@@ -41,7 +41,7 @@
     flex-direction:column;
     align-items:flex-start;
     justify-content:space-around;
-    boxShadow: 0 5px 10px grey;
+    box-shadow: 0 5px 10px grey;
     padding:3%;
     margin:1%;
     min-height:50vh;

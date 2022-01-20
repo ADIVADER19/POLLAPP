@@ -13,6 +13,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { useNavigate } from 'react-router';
 import PollIcon from '@material-ui/icons/Poll';
 import M from "materialize-css";
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 let socket;
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -24,7 +25,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
         fontFamily: "Roboto,Arial,sans-serif",
         textTransform:"capitalize",
         position:"fixed",
-        zIndex:"2",
+        zIndex:"5",
         top:"0",
         left:"0",
         right:"0",
@@ -81,8 +82,10 @@ const Transition = React.forwardRef(function Transition(props, ref) {
                         justifyContent:"center",
                         padding:"3vh",
                         color:"#333",
+                        transition:"0.2s",
                         '&:hover':{
                             color:"#f4511e",
+                            textDecoration: "underline"
                         }
                     },
                     '& button':{
@@ -185,8 +188,6 @@ function LivepollT() {
     const classes=useStyles();
     const currentPathName = window.location.pathname;
     const lobbyuuid = currentPathName.slice(11);
-    const str1 = window.location.href;
-    const str2 = str1.slice(0,str1.indexOf('LivepollT'));
     const [checked, setChecked] = useState(false);
     const [polldes, setItems] = useState([]);
     const [lobbydes, setTritems] = useState([]);
@@ -200,16 +201,18 @@ function LivepollT() {
     const[op,setOp]=useState(false);
     const close = true;
     let navigate = useNavigate();
+    const str1 = window.location.href;
+    const str2 = str1.slice(0,str1.indexOf('LivepollT'));
+    function copy(e){
+        e.preventDefault();
+        navigator.clipboard.writeText(str2+'pollstu/'+lobbyuuid);
+      }
     function navicon() {
-        navigate('/')
+        navigate('/vpoll/');
     }
     function toggle(value){
         return !value;
       }
-      function copy(e){
-          e.preventDefault();
-          navigator.clipboard.writeText(str2+'pollstu/'+lobbyuuid)
-        }
     function addpoll(e){
         e.preventDefault();
         navigate("/poll/"+lobbyuuid);
@@ -275,6 +278,7 @@ function LivepollT() {
     
     useEffect(() => {
         socket.on("LobbyData", ({ users }) => {
+          console.log(users);  
           setUsers(users);
           
         });
@@ -317,7 +321,7 @@ function LivepollT() {
     return (
         <div className='actuallythepagel'>
             <header className={classes.main}>
-               <a href="#" style={{display:"flex",color:"#f4511e"}}><PollIcon style={{cursor:"pointer"}} fontSize='medium' onClick={navicon}/><h2 onClick={navicon}>POLLAPP</h2></a>
+               <a href="#" style={{display:"flex",color:"#f4511e"}}><ArrowBackIosIcon style={{cursor:"pointer"}} fontSize='medium' onClick={navicon}/><h2 onClick={navicon}>BACK</h2></a>
                <input type="checkbox" name="toggle" id="toggle" checked={checked}onChange={e => setChecked(toggle)}/>
                <label for="toggle">{!checked?<MenuIcon/>:<CloseIcon/>}</label>
                <nav className="checks">
@@ -331,10 +335,12 @@ function LivepollT() {
             </header> 
             <div className='icel'>
                 <div className='poltlel'>
-                    <div style={{width:"100%",marginLeft:"2%"}}>
-                    <h1 style={{fontSize:"4em",marginBottom:"1%"}}>{lobbydes.lobbyName}</h1>
-                    <h2 style={{fontSize:"3em",marginBottom:"1%"}}>{lobbydes.lobbyDescription}</h2>
+                    <div className='header' >
+                    <h1 className='lobby'>Lobby Title: {lobbydes.lobbyName}
+                    <span>Lobby Description: {lobbydes.lobbyDescription}</span></h1>
                     </div>
+                    </div>
+                    <div className='styles'></div>
                     {users?(
                     <div style={{display:"flex",alignItems:"center",justifyContent:"center",width:"50%"}}>
                         <div className="activeContainerl">
@@ -345,21 +351,27 @@ function LivepollT() {
                                                         </AppBar>
                                                 
                                                 {users.map((usa,x) => (
-                                                <div className="activeIteml">
-                                                    {usa.name=='teacher'?<div></div>:
+                                                <div className="activeIteml" >
+                                                    
                                                    <div className={classes.firstDialog}>
-                                                <h1 style={{fontWeight:"normal",marginLeft:"1%",fontFamily: "Roboto,Arial,sans-serif"}}> {x}. {usa.name}</h1>
-                                                <Button className={classes.copys} size="large" variant="contained" onClick={handleClickOp}>View Details</Button> 
+                                                <h1 style={{fontWeight:"normal",marginLeft:"1%",fontFamily: "Roboto,Arial,sans-serif"}}> {x+1}. {usa.name}</h1>
+                                                
                                                
-                                             
-                                                {usa.poll.map((texas,y)=>(
-                                                    <div style={{display:"flex",width:"100%",
-                                                    flexDirection:"column",paddingBottom:"1%",paddingTop:"1%",alignItems:"flex-start",justifyContent:"space-evenly",borderBottom:"1px solid #f4511e",fontFamily: "Roboto,Arial,sans-serif"}} key={texas}>
+                                                <div className="dropdown" style={{float:"right",marginRight:"3vw"}}>
+                                                    
+                                                    <button className="dropbtn"><span>See Details </span></button>
+                                                    <div className="dropdown-content">
+                                                       
+                                                    {usa.poll.map((texas,y)=>(
+                                                    <a href="#">
                                                         <h1 style={{fontWeight:"normal",marginLeft:"1%"}}>{y+1}. {texas.question}</h1>
                                                         <h2 style={{fontWeight:"normal",marginLeft:"1%"}}>Option Selected: {texas.option}</h2>
-                                                    </div>
+                                                        </a>
                                                 ))}
-                                                </div>}
+                                                    </div>
+                                                </div>
+                                                
+                                                </div>
                                                 </div>
                                                 ))}
                                                 </Dialog>
@@ -371,12 +383,11 @@ function LivepollT() {
                     )
                     : null
                 }
-                </div>
-                <div style={{display:"flex",width:"100%",flexWrap:"wrap",alignItems:"center",justifyContent:"space-around"}}>
+                <div className='polldiv'>
                 {polls.map((lob, x)=>(
                 <div className='questsl' key={lob}>
                     <div className='question1l'>
-                        <h1>{x+1}. {lob.question}</h1>
+                        <h2><span>{x+1}.</span> {lob.question}</h2>
                     </div>
                     {lob.option.map((oop, y)=>(
                     <>{oop.value == "" &&(
@@ -385,9 +396,12 @@ function LivepollT() {
                       {!oop.value == "" &&(
                       <>
                       <div className='optl'>
-                          <h2>{y+1}. {oop.value}</h2>
-                          <h3>{oop.votes} votes</h3>
-                      </div>                          
+                          <div>
+                          <h3>{y+1}. {oop.value}</h3>
+                          </div>
+                          <h4>{oop.votes} votes</h4> 
+                      </div>
+                                               
                       </>
                     )}
                     </>    
