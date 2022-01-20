@@ -10,6 +10,8 @@ import PollIcon from '@material-ui/icons/Poll';
 import MenuIcon from '@mui/icons-material/Menu';
 import CloseIcon from '@mui/icons-material/Close';
 import Slide from '@mui/material/Slide';
+import zIndex from '@material-ui/core/styles/zIndex';
+import { maxWidth } from '@mui/system';
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
   });
@@ -168,6 +170,8 @@ function Closepoll() {
     const [polldes, setItems] = useState([]);
     const [lobbydes, setTritems] = useState([]);
     const [checked, setChecked] = useState(false);
+    const [sum,setSum] = useState([]);
+
     const userd = async () => {
         try {
               const res = await fetch("/userdata", {
@@ -274,9 +278,19 @@ function Closepoll() {
         body: JSON.stringify({data:lobbyuuid})
     }).then((res) => res.json())
         .then((ret) => {
-       
            setItems(ret.myitem);
-
+            let vederichi=[] 
+            for(var r=0;r<ret.myitem.length;r++){
+                let arri=0
+                for(var s=0;s<ret.myitem[r].pollOption.length;s++){
+                   if(ret.myitem[r].pollOption[s].optionValue!==""){
+                    arri+=ret.myitem[r].pollOption[s].optionArray.length;
+                    }
+                }
+                vederichi.push(arri);
+            }
+           console.log("arri",vederichi);
+           setSum(vederichi); 
         })
     }, []);
 
@@ -372,10 +386,11 @@ function Closepoll() {
                         )}
                         {!oop.optionValue == "" &&(
                         <>
-                            <div className='opt'>
-                          <h2>{y+1}. {oop.optionValue}</h2>
-                          <h3>{oop.optionArray.length} votes</h3>
-                      </div> 
+                            <div className='opt' style={{width:"100%",zIndex:"1"}}>
+                                <h2>{y+1}. {oop.optionValue}</h2>
+                                <div value={oop.optionArray.length*100/sum[x]} style={{width:`calc(${oop.optionArray.length}*100%/${sum[x]})`,height:"100%",zIndex:"-1",position: "absolute", maxWidth:"89%",borderRadius: "10px"}}>{Math.round(oop.optionArray.length*100/sum[x])}</div>
+                                <h3 style={{borderLeft:"2px solid white", height:"100%", paddingRight:"1%", paddingLeft:"0.4%"}}>{oop.optionArray.length} votes</h3>
+                            </div> 
                         </>
                         )}
                         </>    
