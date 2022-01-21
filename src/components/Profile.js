@@ -6,6 +6,8 @@ import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import Box from "@material-ui/core/Box";
+import Avatar from "@material-ui/core/Avatar";
+import {deepPurple} from '@mui/material/colors';
 import ArrowRightAltIcon from "@material-ui/icons/ArrowRightAlt";
 import { ToastContainer, toast } from "react-toastify";
 import { unstable_renderSubtreeIntoContainer } from "react-dom";
@@ -13,7 +15,10 @@ import { unstable_renderSubtreeIntoContainer } from "react-dom";
 export default function Profile() {
 	const navigate = useNavigate();
 	const [data, setData] = useState("");
+	const [paa, setPaa] = useState("");
+	const [colorr, setColorr] = useState();
 	const [userInfo, setUserInfo] = useState({});
+	const colorarr=["red","blue","yellow","orange","purple","cyan","lightblue","lightgreen","lightyellow","darkblue","crimson","lightorange","darkorange","darkyellow","darkcyan","darkgreen","whitesmoke","white","black","pink"]
 	const callProfilePage = async () => {
 		try {
 			const res = await fetch("/userdata", {
@@ -34,17 +39,19 @@ export default function Profile() {
 		} catch (err) {
 			navigate("/");
 		}
-	};
-    
+	}
     function goBack() {
         navigate("/");
     }
-  
-	var usern = userInfo.username;
-
 	useEffect(() => {
-		callProfilePage();
-	}, []);
+       callProfilePage();
+        }, []);
+
+
+	setTimeout(() => {
+		avatarr();
+	},1000);
+
 	/*To comment*/
 	// const PostData = async (e) => {
 	// 	console.log("submitted");
@@ -82,15 +89,42 @@ export default function Profile() {
 	// };
 	/*To comment*/
 	/*Remove update button, remove onChange attr, make value as placeholder and/or textfield disabled*/
+	function avatarr()
+	{
+		
+		fname=userInfo.givenName[0];
+		firstchar=fname;
+		console.log(firstchar);
+		console.log(userInfo.name)
+		console.log(userInfo.name.length)
+		for (var a=0;a<userInfo.name.length;a++)
+		{
+			if (userInfo.name[a]==" ")
+			{
+				setColorr(a)
+				lastchar=userInfo.name[a+1];
+				console.log(lastchar);
+			}
+		}
+		
+		console.log(firstchar+lastchar);
+		setPaa(firstchar+lastchar);
+	}
+ 
+	var firstchar;
+	var fname;
+	var lastchar;
 	return (
+		
 		<div>
 			<Box className="form">
 				<div className="title">
-					<AccountCircleIcon
+					{/* <AccountCircleIcon
 						style={{ fontSize: 55, marginRight: 10, marginTop: -3}}
 						className="icon"
-					/>
-					<Typography style={{ fontSize: 40 }} className="text" variant="h2">
+					/> */}
+					<Avatar style={{backgroundColor:`${colorarr[colorr]}`}} className="iconn" >{paa}</Avatar>
+					<Typography style={{fontSize:40}} className="text" variant="h2">
 						{" "}
 						Welcome Back, {userInfo.givenName}!
 					</Typography>
