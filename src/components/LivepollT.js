@@ -11,8 +11,12 @@ import Slide from '@mui/material/Slide';
 import './Nav.css';
 import MenuIcon from '@mui/icons-material/Menu';
 import { useNavigate } from 'react-router';
-import PollIcon from '@material-ui/icons/Poll';
+import AddIcon from '@mui/icons-material/Add';
+import LinkIcon from '@mui/icons-material/Link';
 import M from "materialize-css";
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import StopIcon from '@mui/icons-material/Stop';
 let socket;
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -24,12 +28,11 @@ const Transition = React.forwardRef(function Transition(props, ref) {
         fontFamily: "Roboto,Arial,sans-serif",
         textTransform:"capitalize",
         position:"fixed",
-        zIndex:"2",
+        zIndex:"5",
         top:"0",
         left:"0",
         right:"0",
         backgroundColor:"whitesmoke",
-        boxShadow:"0 5px 10px rgba(0,0,0,.1)",
         padding:"0px 2%",
         display:"flex",
         alignItems:"center",
@@ -81,6 +84,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
                         justifyContent:"center",
                         padding:"3vh",
                         color:"#333",
+                        transition:"0.2s",
                         '&:hover':{
                             color:"#f4511e",
                         }
@@ -96,7 +100,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
                         backgroundColor:"whitesmoke",
                         outline:"none",
                         '&:hover':{
-                            color:"#f4511e",
+                            color:"red",
                         }
                     }
                 }
@@ -141,15 +145,10 @@ const Transition = React.forwardRef(function Transition(props, ref) {
     firstDialog:{
         display:"flex",width:"100%",alignItems:"center",justifyContent:"space-between",borderBottom:"1px solid #f4511e",fontFamily: "Roboto,Arial,sans-serif",flexWrap:"wrap",
         paddingBottom:"1%",paddingTop:"1%",
-        '& h1':{
-            fontSize:"3em",
-            ['@media (max-width:752px)']: {
-                fontSize:"2em",
-              },
-              ['@media (max-width:440px)']: {
-                fontSize:"1.5em",
-              }
-        }
+        ['@media (max-width:400px)']: {
+            flexDirection:"column",
+            alignItems:"flex-start"
+          }
     },
     btns:{
         background:"#678e23",
@@ -194,12 +193,20 @@ function LivepollT() {
     const [spain, setspain] = useState(0)
     const data = {name:'teacher'};
     const ENDPOINT = 'localhost:5000';
+    const [sum,setSum] = useState([]);
     const [open, setOpen] = useState(false);
     const[op,setOp]=useState(false);
     const close = true;
+    
     let navigate = useNavigate();
+    const str1 = window.location.href;
+    const str2 = str1.slice(0,str1.indexOf('LivepollT'));
+    function copy(e){
+        e.preventDefault();
+        navigator.clipboard.writeText(str2+'pollstu/'+lobbyuuid);
+      }
     function navicon() {
-        navigate('/vpoll')
+        navigate('/vpoll/');
     }
     function toggle(value){
         return !value;
@@ -269,13 +276,25 @@ function LivepollT() {
     
     useEffect(() => {
         socket.on("LobbyData", ({ users }) => {
-          console.log(users);  
+          console.log("Hello",users);  
           setUsers(users);
           
         });
         socket.on("PollData", ({ poll }) => {
+            console.log("Ok",poll);
             setPolls(poll);
-            
+            let vederichi=[] 
+            for(var r=0;r<poll.length;r++){
+                let arri=0
+                for(var s=0;s<poll[r].option.length;s++){
+                   if(poll[r].option[s].value!==""){
+                    arri+=poll[r].option[s].user.length;
+                    }
+                }
+                vederichi.push(arri);
+            }
+        console.log("arri",vederichi);
+        setSum(vederichi);
           });
     }, []);
 
@@ -293,6 +312,7 @@ function LivepollT() {
             if(error){alert(error);}
           });
           setItems(ret.myitem);
+          
         })
     }, []);
 
@@ -312,23 +332,28 @@ function LivepollT() {
     return (
         <div className='actuallythepagel'>
             <header className={classes.main}>
-               <a href="#" style={{display:"flex",color:"#f4511e"}}><PollIcon style={{cursor:"pointer"}} fontSize='medium' onClick={navicon}/><h2 onClick={navicon}>POLLAPP</h2></a>
+               <a href="#" style={{display:"flex",color:"#f4511e"}}><ArrowBackIosIcon style={{cursor:"pointer"}} fontSize='medium' onClick={navicon}/><h2 onClick={navicon}>BACK</h2></a>
                <input type="checkbox" name="toggle" id="toggle" checked={checked}onChange={e => setChecked(toggle)}/>
                <label for="toggle">{!checked?<MenuIcon/>:<CloseIcon/>}</label>
                <nav className="checks">
                    <ul>
-                       <li><a href="#" onClick={(e)=>{addpoll(e)}}>Add Poll</a></li>
-                       <li ><button onClick={()=>CloseLobby()}>Stop Responses</button></li>
-                       <li ><a href="#" onClick={(e)=>{handleClickOpen(e)}}>See Voters</a></li>
+                       <li><a href="#" onClick={(e)=>{addpoll(e)}}>Add Poll <AddIcon/></a></li>
+                       <li><a href="#" onClick={(e)=>{copy(e)}}>Copy Link <LinkIcon/></a></li>
+                       <li ><button onClick={()=>{if(window.confirm('Are you sure you want to stop the responses?')){ CloseLobby();}}}>Stop Responses <StopIcon/></button></li>
+                       <li ><a href="#" onClick={(e)=>{handleClickOpen(e)}}>See Voters <VisibilityIcon/></a></li>
                    </ul>
                 </nav>
             </header> 
             <div className='icel'>
                 <div className='poltlel'>
-                    <div style={{width:"100%",marginLeft:"2%"}}>
-                    <h1 style={{fontSize:"4em",marginBottom:"1%"}}>{lobbydes.lobbyName}</h1>
-                    <h2 style={{fontSize:"3em",marginBottom:"1%"}}>{lobbydes.lobbyDescription}</h2>
+                    <div className='header' >
+                    <h1 className='lobby'>Lobby Title: {lobbydes.lobbyName}
+                    <span>Lobby Description: {lobbydes.lobbyDescription}</span></h1>
                     </div>
+                    </div>
+                    <div className='styles'></div>
+                    <div class="triangle-right"></div>
+                    <div className="triangle-left"></div>
                     {users?(
                     <div style={{display:"flex",alignItems:"center",justifyContent:"center",width:"50%"}}>
                         <div className="activeContainerl">
@@ -342,20 +367,23 @@ function LivepollT() {
                                                 <div className="activeIteml" >
                                                     
                                                    <div className={classes.firstDialog}>
-                                                <h1 style={{fontWeight:"normal",marginLeft:"1%",fontFamily: "Roboto,Arial,sans-serif"}}> {x+1}. {usa.name}</h1>
-                                                <Button className={classes.copys} size="large" variant="contained" onClick={handleClickOp}>View Details</Button> 
-                                                <Dialog fullScreen open={op} onClose={handleCl} TransitionComponent={Transition}><AppBar sx={{ position: 'relative' }} style={{backgroundColor:"whitesmoke"}}><Toolbar><IconButton edge="start" color="inherit" onClick={handleCl} aria-label="close"><CloseIcon style={{color:"#f4511e"}}/></IconButton> 
-                                                        </Toolbar>
-                                                        </AppBar>
-                                             
-                                                {usa.poll.map((texas,y)=>(
-                                                    <div style={{display:"flex",width:"100%",
-                                                    flexDirection:"column",paddingBottom:"1%",paddingTop:"1%",alignItems:"flex-start",justifyContent:"space-evenly",borderBottom:"1px solid #f4511e",fontFamily: "Roboto,Arial,sans-serif"}}>
-                                                        <h1 style={{fontWeight:"normal",marginLeft:"1%"}}>{y+1}. {texas.question}</h1>
-                                                        <h2 style={{fontWeight:"normal",marginLeft:"1%"}}>Option Selected: {texas.option}</h2>
-                                                    </div>
+                                                <h2 style={{fontWeight:"normal",marginLeft:"1%",fontFamily: "Roboto,Arial,sans-serif"}}> {x+1}. {usa.name}</h2>
+                                                
+                                               
+                                                <div className="dropdown">
+                                                    
+                                                    <button className="dropbtn"><span>See Details </span></button>
+                                                    <div className="dropdown-content">
+                                                       
+                                                    {usa.poll.map((texas,y)=>(
+                                                    <a href="#">
+                                                        <h2 style={{fontWeight:"normal",marginLeft:"1%"}}>{y+1}. {texas.question}</h2>
+                                                        <h3 style={{fontWeight:"normal",marginLeft:"1%"}}>Option Selected: {texas.option}</h3>
+                                                        </a>
                                                 ))}
-                                                </Dialog>
+                                                    </div>
+                                                </div>
+                                                
                                                 </div>
                                                 </div>
                                                 ))}
@@ -368,13 +396,12 @@ function LivepollT() {
                     )
                     : null
                 }
-                </div>
-                <div style={{display:"flex",width:"100%",flexWrap:"wrap",alignItems:"center",justifyContent:"space-around"}}>
+                <div className='polldiv'>
                 {polls.map((lob, x)=>(
                 <div className='questsl' key={lob}>
-                    <div className='question1l'>
-                        <h1>{x+1}. {lob.question}</h1>
-                    </div>
+                <div className='shapes'></div>
+                <h2 className='sequence'>{x+1}</h2>
+                <h2 className='question1l'>{lob.question}</h2>
                     {lob.option.map((oop, y)=>(
                     <>{oop.value == "" &&(
                         <></>
@@ -382,9 +409,16 @@ function LivepollT() {
                       {!oop.value == "" &&(
                       <>
                       <div className='optl'>
-                          <h2>{y+1}. {oop.value}</h2>
-                          <h3>{oop.votes} votes</h3>
-                      </div>                          
+                          <div>
+                          <h3>{y+1}. {oop.value}</h3>
+                          <div className='progressBar'>
+                          <h4>{oop.votes} votes</h4>
+                          {/* fakt width ghaal ithee */}
+                          <div className='actualshifting'>100%</div>
+                          </div>
+                          </div> 
+                      </div>
+                                               
                       </>
                     )}
                     </>    

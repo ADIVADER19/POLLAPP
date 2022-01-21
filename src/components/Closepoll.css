@@ -61,11 +61,10 @@
     font-weight:normal;
 }
 .opt{
-    border-radius: 7px;
+    border-radius: 10px;
     border: 1px solid #f4511e;
-    padding: 4% 2%;
+    margin-bottom: 1%;
     background-color:white;
-    margin:1%;
     position: relative;
     display:flex;
     justify-content:space-between;
@@ -78,7 +77,6 @@
     background-color: #A1509B;
     border-radius: 12px;
     height: 100%;
-    width: 50% ;
     top: 0em;
     left: 0em;
     min-width: 3%;
@@ -106,7 +104,7 @@
     font-weight:normal;
 }
 .quests>.opt:nth-child(2){
-    border: 1px solid #328fa5;
+    border: 1px solid #328fa5 ;
     
 }
 .quests>.opt:nth-child(3){
@@ -142,6 +140,21 @@
 .quests>.opt:nth-child(6)  h3{
     color:#534caf;
     
+}
+.quests>.opt:nth-child(2)  div{
+   background-color:#328fa56b;
+}
+.quests>.opt:nth-child(3)  div{
+   background-color:#f54967;
+}
+.quests>.opt:nth-child(4)  div{
+   background-color:#4caf50;
+}
+.quests>.opt:nth-child(5)  div{
+    background-color:#af7c4c;
+}
+.quests>.opt:nth-child(6)  div{
+   background-color:#534caf;    
 }
 @media only screen and (max-width: 750px){
     .quests{

@@ -300,7 +300,7 @@ function CreatePoll2() {
            setItems(ret.myitem);
 
         })
-    }, []);
+    }, [polldes]);
     useEffect(()=>{
         fetch("/ross", {method: "POST",
         headers: {
@@ -311,7 +311,7 @@ function CreatePoll2() {
             .then((rte)=>{
                 setTritems(rte.myitem[0]);
         })
-    },[]);
+    },[lobbydes]);
     
     const [opt, setopt] = useState([{
         optionValue:"",
@@ -370,6 +370,9 @@ function CreatePoll2() {
             }
         }
     }
+    function Livelobby(){
+        navigate("/LivepollT/"+lobbyuuid);
+    }
     const CreatePoll = async(e)=>{
         var options = [...opt];
         var question = [...poll];
@@ -384,11 +387,11 @@ function CreatePoll2() {
         }
         const lobbyUniqueId = poll[0].lobbyUniqueId;
         var pollQuestion = poll.pollQuestion;
-        
+        console.log(poll);
         if(options.length<2){
             window.alert("Atleast 2 options required");
             var setPollQuestion = [...poll];
-            setPollQuestion.pollQuestion = "";
+            console.log(setPollQuestion);
             setPoll(setPollQuestion);
             setopt([{
                 optionValue:"",
@@ -400,12 +403,11 @@ function CreatePoll2() {
                 question[0].pollOption[i].optionCorrect = false;
             }
             setPoll(question);
-            window.location.reload();
         }
         else if(pollQuestion==undefined || options[0].optionValue=="" || options[1].optionValue==""){
             window.alert("Please fill all the details");
             var setPollQuestion = [...poll];
-            setPollQuestion.pollQuestion = "";
+            setPollQuestion[0].pollQuestion = "";
             setPoll(setPollQuestion);
             setopt([{
                 optionValue:"",
@@ -417,7 +419,6 @@ function CreatePoll2() {
                 question[0].pollOption[i].optionCorrect = false;
             }
             setPoll(question);
-            window.location.reload();
         }
         else{
             const res = await fetch("/createnewpoll", {
@@ -446,7 +447,6 @@ function CreatePoll2() {
                 question[0].pollOption[i].optionCorrect = false;
             }
             setPoll(question);
-            window.location.reload();
         }
     }
     return (
@@ -491,7 +491,7 @@ function CreatePoll2() {
                     <Button className={classes.crtBtn} endIcon={<AddCircleOutlineIcon/>} onClick={CreatePoll}>Create Poll</Button>
                 </div>
                 <br/>
-                <Button className={classes.delBtn}  onClick={navicon} size="large" variant="contained" endIcon={<SaveIcon/>} style={{fontFamily: "Roboto,Arial,sans-serif"}}>SAVE LOBBY</Button>
+                <Button className={classes.delBtn}  onClick={Livelobby} size="large" variant="contained" endIcon={<SaveIcon/>} style={{fontFamily: "Roboto,Arial,sans-serif"}}>SAVE LOBBY</Button>
                 </div>
             </div>
             <div style={{width:"100%",backgroundColor:"white"}}>
