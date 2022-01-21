@@ -325,11 +325,11 @@ function Closepoll() {
         if (res.status===200||res.status===201)
         {
             
-            fetch("/download",{
+            fetch("/download/"+lobbyuuid,{
                 method:"GET",
                 headers: {},            
             })
-            window.open('/download?foo=bar&xxx=yyy');
+            window.open('/download/'+lobbyuuid);
         }
 
     }
