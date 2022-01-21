@@ -288,7 +288,7 @@ function LivepollT() {
                 let arri=0
                 for(var s=0;s<poll[r].option.length;s++){
                    if(poll[r].option[s].value!==""){
-                    arri+=poll[r].option[s].user.length;
+                    arri+=poll[r].option[s].votes;
                     }
                 }
                 vederichi.push(arri);
@@ -414,7 +414,7 @@ function LivepollT() {
                           <div className='progressBar'>
                           <h4>{oop.votes} votes</h4>
                           {/* fakt width ghaal ithee */}
-                          <div className='actualshifting'>100%</div>
+                          <div className='actualshifting' style={{width:`calc(${oop.votes}*100%/${sum[x]})`,left:"-0.3%",zIndex:"-1",position: "absolute", maxWidth:"98.35%",borderRadius: "15px", minWidth:"8.5%",transition:"500ms ease-in-out",height:"62.5%",top:"-1%"}}></div>
                           </div>
                           </div> 
                       </div>
