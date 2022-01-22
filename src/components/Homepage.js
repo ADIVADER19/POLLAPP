@@ -103,6 +103,7 @@ function HomePage() {
     const [data, setData] = useState("");
 	const [userInfo, setUserInfo] = useState({});
     const[loading,setLoading]=useState(true);
+    const[newid,setRid]=useState();
     const userd = async () => {
 		try {
 			const res = await fetch("/userdata", {
@@ -233,6 +234,39 @@ function HomePage() {
 
     // },[])
     const createid=uuidv4();
+    useEffect(()=>{
+        
+        const d = new Date();
+        let timex = d.toLocaleString();
+        console.log(timex);
+        var xemit="";
+			for(var a=0;a<timex.length;a++){
+				if(timex[a]==':'||timex[a]==','||timex[a]=='/'){
+                    if(timex[a]==','){
+                        xemit=xemit+'t';    
+                    }
+                    else{
+                        xemit=xemit+'-';
+                    }
+                }
+				else{
+                    if(timex[a]==" "||timex[a]=="P"||timex[a]=="A"||timex[a]=="M"){
+                        xemit=xemit+'';
+                    }
+                    else{
+					xemit=xemit+timex[a];
+					console.log(xemit);
+                    }
+                }
+			}
+        var finalid=createid+xemit;
+        // var lobster = {...Lobby};
+        // lobster.lobbyId = finalid;
+        // setLobby(lobster)
+        Lobby.lobbyId=finalid
+        console.log(finalid);    
+    },[])
+
     const [open, setOpen] = React.useState(false);
     const handleClickOpen = () => {
         setOpen(true);
@@ -241,7 +275,7 @@ function HomePage() {
         setOpen(false);
     };
     const [Lobby, setLobby] = useState({
-        lobbyId:createid,
+        lobbyId:'',
         lobbyName:"",
         lobbyDescription:"",
         studentformId:[],
