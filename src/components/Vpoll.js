@@ -23,6 +23,7 @@ import LinkIcon from '@mui/icons-material/Link';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import Modal from 'react-modal';
+import LinearProgress from '@mui/material/LinearProgress';
 let socket;
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -523,8 +524,8 @@ function Vpoll() {
                     {query === 'success' ? (<Typography>Link Copied</Typography>) : (
                     <>
                     {query==='idle'? (<Typography>Copy Link</Typography>):""}
-                    <Fade in={query === 'progress'} style={{ transitionDelay: query === 'progress' ? '800ms' : '0ms',}}unmountOnExit>
-                      <CircularProgress style={{color:"white"}}/>
+                    <Fade in={query === 'progress'} style={{ transitionDelay: query === 'progress' ? '200ms' : '0ms',}}unmountOnExit>
+                      <LinearProgress style={{color:"white",marginTop:"10px"}}/>
                     </Fade>
                     </>)}
                   </Box>

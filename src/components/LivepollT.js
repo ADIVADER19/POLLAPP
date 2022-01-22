@@ -189,8 +189,6 @@ function LivepollT() {
     const [lobbydes, setTritems] = useState([]);
     const [users, setUsers] = useState([]);
     const [polls, setPolls] = useState([]);
-    const [pain, setpain] = useState(0)
-    const [spain, setspain] = useState(0)
     const data = {name:'teacher'};
     const ENDPOINT = 'localhost:5000';
     const [sum,setSum] = useState([]);
@@ -368,7 +366,7 @@ function LivepollT() {
                                                     
                                                    <div className={classes.firstDialog}>
                                                 <h2 style={{fontWeight:"normal",marginLeft:"1%",fontFamily: "Roboto,Arial,sans-serif"}}> {x+1}. {usa.name}</h2>
-                                                
+                                                <h2 style={{fontWeight:"normal",marginLeft:"1%",fontFamily: "Roboto,Arial,sans-serif"}}>Polls Attempted: {usa.poll.length}/{polls.length}</h2>
                                                
                                                 <div className="dropdown">
                                                     

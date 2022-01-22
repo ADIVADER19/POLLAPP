@@ -85,7 +85,7 @@
     transition:0.5s;
 }
 .poldet:hover{
-transform: scale(1.15);
+transform: scale(1.05);
   box-shadow: 5px 5px 15px grey;
 }
 .tooltip {
@@ -113,13 +113,15 @@ transform: scale(1.15);
     bottom: 80%;
     left: 50%;
     margin-left: -60px;
+    height: 0%;
+    transition: 100ms ;
   }
   
   .tooltip .tooltiptext::after {
     content: "";
     position: absolute;
     top: 100%;
-    left: 50%;
+    left: 47%;
     margin-left: -5px;
     border-width: 5px;
     border-style: solid;
@@ -128,6 +130,7 @@ transform: scale(1.15);
   
   .tooltip:hover .tooltiptext {
     visibility: visible;
+    height: 22px;
   }
 
   .tooltip1 {
@@ -145,6 +148,7 @@ transform: scale(1.15);
   .tooltip1 .tooltiptext {
     visibility: hidden;
     width: 120px;
+    height: 0%;
     background-color: black;
     color: #fff;
     text-align: center;
@@ -155,6 +159,7 @@ transform: scale(1.15);
     bottom: 80%;
     left: 50%;
     margin-left: -60px;
+    transition: 100ms ;
   }
   
   .tooltip1 .tooltiptext::after {
@@ -170,6 +175,7 @@ transform: scale(1.15);
   
   .tooltip1:hover .tooltiptext {
     visibility: visible;
+    height: 18px;
   }
 .viewpoller{
     background-color: black !important;
