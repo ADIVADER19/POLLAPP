@@ -7,6 +7,42 @@
     justify-content:center;
     position:relative;
     top:20vh;
+    background:whitesmoke;
+    padding-bottom:2%;
+}
+.polh2{
+    width:100%;
+    overflow:visible;
+    height:15vh;
+    background-image:white;
+
+    display:flex;
+    color:#333;
+    align-items:center;
+    border-radius:15px 15px 0px 0px;
+}
+.pollsCreated{
+    position:absolute;
+    margin-left:75%;
+    margin-bottom:30%;
+    padding:2%;
+    text-align:center;
+    background-color: #d1d1d1;
+    font-family: Roboto,Arial,sans-serif;
+    color:#333;
+    width:125px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    border:2px solid #f4511e;
+    border-radius:50px;
+    z-index:2;
+}
+.polp{
+    width:100%;
+    overflow:hidden;
+    background-image:linear-gradient(to bottom right,#DBDBDB 50%,#bababa 50%);
+    height:23vh;
 }
 .clooll{
     width:100%;
@@ -16,6 +52,7 @@
     justify-content:center;
     position:relative;
     top:10vh;
+    background:whitesmoke;
 }
 .pollstaAlign,.collstaAlign{
     width:100%;
@@ -26,48 +63,114 @@
     color:black;
 }
 .polsta,.closta{
-    width:48%;
+    width:25%;
+    margin:3%;
     display:flex;
+    height:fit-content;
     align-items:center;
     justify-content:center;
+    transition: 0.5s ease;
 }
-
 .poldet{
     border-radius: 15px;
-    background-color:whitesmoke;
+    background:white;
     width:100%;
     display:flex;
     position:relative;
     flex-direction:column;
     align-items:flex-start;
-    justify-content:space-around;
     box-shadow: 0 5px 10px grey;
-    padding:3%;
     margin:1%;
-    min-height:50vh;
+    min-height:42vh;
     transition:0.5s;
 }
-.polu{
-    font-size:3vw;
-    font-weight:normal;
-}
-.polh3 h2{
-    font-size:2vw;
-    font-weight:normal;
-    color:#333;
-}
-.poldet:hover .polu{
-    color:#333;
-}
-.poldet:hover .polh3 h2{
-    color:#333;
-}
 .poldet:hover{
-    margin-top:0;
-    color:white;
-    background-color:#f7bdab;
-    box-shadow:5px 5px 25px 5px grey; 
+transform: scale(1.15);
+  box-shadow: 5px 5px 15px grey;
 }
+.tooltip {
+    position: relative;
+    display: inline-flex;
+    justify-content:center;
+    width:33.33%;
+    background:red;
+    height:100%;
+    padding-bottom:3%;
+    padding-top:3%;
+    color:white;
+  }
+  
+  .tooltip .tooltiptext {
+    visibility: hidden;
+    width: 120px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 15px 5px;
+    position: absolute;
+    z-index: 1;
+    bottom: 80%;
+    left: 50%;
+    margin-left: -60px;
+  }
+  
+  .tooltip .tooltiptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: black transparent transparent transparent;
+  }
+  
+  .tooltip:hover .tooltiptext {
+    visibility: visible;
+  }
+
+  .tooltip1 {
+    position: relative;
+    display: inline-flex;
+    justify-content:center;
+    width:50%;
+    background:red;
+    height:100%;
+    padding-bottom:3%;
+    padding-top:3%;
+    color:white;
+  }
+  
+  .tooltip1 .tooltiptext {
+    visibility: hidden;
+    width: 120px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: 80%;
+    left: 50%;
+    margin-left: -60px;
+  }
+  
+  .tooltip1 .tooltiptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: black transparent transparent transparent;
+  }
+  
+  .tooltip1:hover .tooltiptext {
+    visibility: visible;
+  }
 .viewpoller{
     background-color: black !important;
     color: white !important;
@@ -82,6 +185,46 @@
 .cpoll{
     background-color: black !important;
     color: white !important;
+}
+
+.modaltitle {
+    display: inline-block;
+    text-align: center;
+    font-family: Roboto,Arial,sans-serif;
+    color:#333;
+    margin-top: 10px;
+    width:100%;
+  }
+  .modalfooter {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .modalfooter button {
+    width: 150px;
+    height: 45px;
+    margin: 10px;
+    border: none;
+    background-color: cornflowerblue;
+    color: white;
+    border-radius: 8px;
+    font-size: 20px;
+    cursor: pointer;
+  }
+  #modalcancelBtn {
+    background-color: crimson;
+  }
+@media  only screen and (max-width: 1093px){
+    .pollsCreated{
+        margin-left:70%;
+        margin-bottom:38%;  
+    }
+}
+
+@media  only screen and (max-width: 950px){
+    .polsta{
+        width:35%;  
+    }
 }
 @media  only screen and (max-width: 748px){
     .polu{
@@ -99,12 +242,31 @@
         flex-direction:column;
     }
     .polsta,.closta{
-        width:90%;
+        width:60%;
+    }
+    .pollsCreated{
+        margin-left:83%;
+        margin-bottom:25%;  
     }
     .poldet{
         min-height:40vh;
     }
     .actoll,.clooll{
         align-items:center;
+    }
+}
+@media  only screen and (max-width: 550px){
+    .pollsCreated{
+        margin-left:75%;
+        margin-bottom:35%;  
+    }
+}
+@media  only screen and (max-width: 400px){
+    .polsta,.closta{
+        width:90%;
+    }
+    .pollsCreated{
+        margin-left:55%;
+        margin-bottom:34%;  
     }
 }

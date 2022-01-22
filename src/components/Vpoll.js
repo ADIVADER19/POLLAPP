@@ -9,6 +9,7 @@ import { Delete, DeleteOutlined, Visibility } from '@material-ui/icons';
 import M from "materialize-css";
 import CircularProgress from '@mui/material/CircularProgress';
 import './Nav.css';
+import Chip from '@mui/material/Chip';
 import PollIcon from '@material-ui/icons/Poll';
 import MenuIcon from '@mui/icons-material/Menu';
 import CloseIcon from '@mui/icons-material/Close';
@@ -16,7 +17,12 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import DoneAllIcon from '@mui/icons-material/DoneAll';
 import Slide from '@mui/material/Slide';
 import io from 'socket.io-client';
-
+import Box from '@mui/material/Box';
+import Fade from '@mui/material/Fade';
+import LinkIcon from '@mui/icons-material/Link';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
+import Modal from 'react-modal';
 let socket;
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -28,7 +34,7 @@ const  useStyles = makeStyles({
     fontFamily: "Roboto,Arial,sans-serif",
     textTransform:"capitalize",
     position:"fixed",
-    zIndex:"2",
+    zIndex:"3",
     top:"0",
     left:"0",
     right:"0",
@@ -127,7 +133,7 @@ const  useStyles = makeStyles({
 },
   loader:{
   position:"absolute",
-  zIndex:"3",
+  zIndex:"4",
   top:"0",
   width:"100vw",
   height:"100vh",
@@ -140,7 +146,7 @@ const  useStyles = makeStyles({
 futons:{
   display:"flex",
   width:"100%",
-  alignItems:"center",
+  backgroundColor:"red",
   justifyContent:"space-evenly",
   ['@media (max-width:1180px)']: {
     justifyContent:"space-between",
@@ -219,7 +225,39 @@ function Vpoll() {
     const close = true;
     const [userInfo, setUserInfo] = useState({});
     const [lobbies,setLobbies] = useState([]);
-    const [clobbies,setClobbies] = useState([])
+    const [clobbies,setClobbies] = useState([]);
+    const [load, setLoad] = React.useState(false);
+    const [query, setQuery] = React.useState('idle');
+    const timerRef = React.useRef();
+    const [endLobbyMessage, setendLobbyMessage] = useState(false);
+    const [createLob, setcreateLob] = useState(false);
+    const [loadss, setloadss] = useState(true);
+    useEffect(() => () => {
+      clearTimeout(timerRef.current);
+    },
+    [timerRef],
+  );
+
+  const handleClickLoading = () => {
+    setLoad((prevLoading) => !prevLoading);
+  };
+
+  const handleClickQuery = () => {
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+    }
+
+   
+    setQuery('progress');
+    timerRef.current = window.setTimeout(() => {
+      setQuery('success');
+      window.setTimeout(() => {
+      setQuery('idle');
+    }, 4000);
+    }, 2000);
+   
+  };
+
     const[loading,setLoading]=useState(true);
     const [checked, setChecked] = useState(false);
     const[loads,setLoads]=useState(false);
@@ -227,7 +265,10 @@ function Vpoll() {
     const [op, setOp] = React.useState(false);
     const data = {name:'teacher'};
     const ENDPOINT = 'localhost:5000';
-
+    const [modal, setmodal] = useState(false);
+    const[deletelobid,setDeletelobid]=useState('');
+    const[delMessage,setdelMessage]=useState(false);
+    const [widthofy, setwidthofy] = useState("0%");
   const handleClickOp = () => {
     setOp(true);
   };
@@ -284,7 +325,7 @@ function Vpoll() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({tata:tata}),
-    }).then(res=>res.json()).then(data=>{setLobbies(data); setLoading(true);})
+    }).then(res=>res.json()).then(data=>{setLobbies(data); setLoading(true); console.log(lobbies);})
     };
 
     const closelobbies = async(tata)=> {fetch("/clsrlobbies", {
@@ -293,20 +334,35 @@ function Vpoll() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({tata:tata}),
-    }).then(res=>res.json()).then(data=>{setClobbies(data);setLoading(true);})
+    }).then(res=>res.json()).then(data=>{
+      setClobbies(data);
+      setLoading(true);
+      setloadss(false);
+      window.setTimeout(() => {
+        setloadss(true);
+        setdelMessage(false);
+      }, 2000);
+      window.setTimeout(() => {
+        setloadss(true);
+        setendLobbyMessage(false);
+      }, 2000);
+      
+      })
     };
-    const DeleteLobby = async(delid)=>{
+    const DeleteLobby = async()=>{
+      console.log(deletelobid);
       const res = await fetch("/delete", {
         method: "POST",
         headers: {
             "Content-type": "application/json",
         },
-        body: JSON.stringify({delid})
+        body: JSON.stringify({deletelobid})
     }); 
     const data= await res.json();	
-    if (res.status === 200 ) {
-      window.alert("Lobby Deleted Successfully");
-      window.location.reload();
+    if (res.status === 200 ) { 
+      userd();
+      setmodal(false);
+      setdelMessage(true);
 }
     }
     function navicon() {
@@ -356,7 +412,8 @@ function Vpoll() {
                 classes: "#2e7d32 green darken-3",
               });
             }
-            window.location.reload();
+            setendLobbyMessage(true);
+            userd();
           })
           .catch((err) => {
       });
@@ -404,9 +461,10 @@ function Vpoll() {
 			if (res.status === 400 || !data) {
                 window.alert("Lobby Creation Failed");
 			} else if (res.status === 200 || res.status === 201) {
-                window.alert("Lobby Created Successfully");
+      setcreateLob(true);
+        window.alert("Lobby Created Successfully");
 			} 
-            navigate("/poll/"+Lobby.lobbyId);
+      navigate("/poll/"+Lobby.lobbyId); 
         }
     } 
     return (
@@ -429,76 +487,115 @@ function Vpoll() {
                   <DialogTitle>Create New LOBBY</DialogTitle>
                   <DialogContent>
                     <DialogContentText>
-                    <TextField sx={{width:"30em"}} name="lobbyName" value={Lobby.lobbyName} autoFocus margin="dense" id="name" label="Enter Lobby Name" type="text" fullWidth variant="standard" onChange={handleInputs}/>
-                    <TextField 	name="lobbyDescription"	value={Lobby.lobbyDescription}margin="dense" id="outlined-multiline-static" label="Lobby Description" type="text" fullWidth  multiline rows={2} onChange={handleInputs}/>
+                    <TextField sx={{width:"30em"}} name="lobbyName" value={Lobby.lobbyName} autoFocus margin="dense" id="name" label="Enter Lobby Name" type="text" fullWidth variant="standard" onChange={handleInputs} inputProps={{maxLength: 40}}/>
+                    <TextField 	name="lobbyDescription"	value={Lobby.lobbyDescription}margin="dense" id="outlined-multiline-static" label="Lobby Description" type="text" fullWidth  multiline rows={2} onChange={handleInputs} inputProps={{maxLength: 100}}/>
                     </DialogContentText>
                   </DialogContent>
                   <DialogActions>
                     <Button className={classes.cpoll} onClick={handleClose} >Cancel</Button>
                     <Button className={classes.cpoll} onClick={Lob}>Create</Button>
                   </DialogActions>
+                  
                 </Dialog>
       <div className='actoll' style={{top:"10vh"}}>
-        <h1 style={{fontFamily: "Roboto,Arial,sans-serif",marginLeft:"2%",marginTop:"2%",marginBottom:"2%",color:"#f4511e",fontSize:"5vw"}}>Active Lobby</h1>
+        <h1 style={{fontFamily: "Roboto,Arial,sans-serif",marginLeft:"2%",marginTop:"2%",marginBottom:"2%",color:"#f4511e",fontSize:"30px"}}>Active Lobby</h1>
           {lobbies.length == 0 &&(
-          <h2 style={{fontFamily: "Roboto,Arial,sans-serif",marginLeft:"2%",marginTop:"2%",marginBottom:"2%",color:"#f4511e",fontSize:"5vw"}}>No Active Lobby</h2>)}
+          <div style={{display:"flex",flexDirection:"column",marginLeft:"2%",marginTop:"2%",marginBottom:"2%"}}>
+            <h2 style={{fontFamily: "Roboto,Arial,sans-serif",fontSize:"25px",color:"#333"}}>You haven't created lobby yet.</h2><br/><br/>
+            <button className="button" onClick={handleClickOpen}><span>Create New Lobby </span></button>
+          </div>
+          )}
           <div className='pollstaAlign'>
-          {lobbies.map(lob=>(
+          {lobbies.map((lob, x)=>(
             <div className='polsta'>
               <div className='poldet' key={lob._id} style={{fontFamily: "Roboto,Arial,sans-serif"}}>
-                  <p className='polh3' style={{fontFamily: "Roboto,Arial,sans-serif"}}><h1 className='polu'>Lobby title:</h1><h2>{lob.lobbyName}</h2></p>
-                  <br/>
-                  <p className='polh3' style={{fontFamily: "Roboto,Arial,sans-serif"}}><h1 className='polu'>Lobby description:</h1><h2>{lob.lobbyDescription}</h2></p>
-                  <br/>
-                  <div className={classes.futons}>
-                  <Button className={classes.copys} onClick={() => {navigator.clipboard.writeText(str2+'pollstu/'+lob.lobbyId)}}size="large" variant="contained" endIcon={<ContentCopyIcon/>} style={{fontFamily: "Roboto,Arial,sans-serif"}}>Copy Link</Button>
-                  <div className={classes.futonTt}>
+                  <div className='polh2'>
+                  <div className='pollsCreated'><div><Chip style={{backgroundColor:"#d1d1d1"}} icon={<PeopleAltIcon/>} label={lob.studentformId.length} /></div><div style={{borderLeft:"1px solid #f4511e",width:"50%",height:"80%"}}>Polls: {lob.pollId.length}</div></div>
+                    <h2 style={{fontFamily: "Roboto,Arial,sans-serif",fontWeight:"normal",overflow:"hidden",fontSize: "25px",marginLeft:"1%"}}>{lob.lobbyName}</h2></div>
+                  <div className='polp'>
+                  <h3 style={{fontFamily: "Roboto,Arial,sans-serif",fontWeight:"normal",overflow:"hidden",marginLeft:"1%",color:"#333"}}>Description</h3>
+                    <p style={{fontFamily: "Roboto,Arial,sans-serif",fontWeight:"normal",overflow:"hidden",fontSize: "17px",margin:"1%",color:"#333"}}>{lob.lobbyDescription}</p></div>
+                  <div style={{width:"100%",position:"absolute",bottom:"0",borderRadius:"0px 0px 15px 15px"}}>
+                  <div className='tooltip' style={{borderRadius:"0px 0px 0px 15px",background: "#07c5ff"}} onClick={() => {navigator.clipboard.writeText(str2+'pollstu/'+lob.lobbyId);handleClickQuery()}}><ContentCopyIcon />
+
+                  <span className='tooltiptext'>
+                  <Box >
+                    {query === 'success' ? (<Typography>Link Copied</Typography>) : (
+                    <>
+                    {query==='idle'? (<Typography>Copy Link</Typography>):""}
+                    <Fade in={query === 'progress'} style={{ transitionDelay: query === 'progress' ? '800ms' : '0ms',}}unmountOnExit>
+                      <CircularProgress style={{color:"white"}}/>
+                    </Fade>
+                    </>)}
+                  </Box>
+                  </span>
+                  </div>
+                  <div className='tooltip' style={{background: "#ffb507"}} onClick={()=>Livelobby(lob.lobbyId)} ><VisibilityIcon/>
+                  <span className='tooltiptext'>View Lobby</span>
+                  </div>
+                  <div className='tooltip' style={{borderRadius:"0px 0px 15px 0px",background: "#ff0739"}} onClick={()=>Closepoll(lob.lobbyId)}><DeleteOutlined/>
+                  <span className='tooltiptext'>End Lobby</span>
+                  </div>
+                  </div>
+                  {/* <div className={classes.futons}>
+                  <Button className={classes.copys} size="large" variant="contained" endIcon={<ContentCopyIcon/>} style={{fontFamily: "Roboto,Arial,sans-serif"}}>Copy Link</Button>
                   <Button className={classes.btns} onClick={()=>Livelobby(lob.lobbyId)} size="large" variant="contained" endIcon={<VisibilityIcon/>} style={{fontFamily: "Roboto,Arial,sans-serif"}}>VIEW LOBBY</Button>
                   <Button className={classes.delBtn} onClick={()=>Closepoll(lob.lobbyId)} size="large" variant="contained" endIcon={<DeleteOutlined/>} style={{fontFamily: "Roboto,Arial,sans-serif"}}>END LOBBY</Button>
-                  </div>
-                  </div>
+                  </div> */}
               </div>
             </div>
                 ))}
               </div>
             </div>
             <div id='closed' className='clooll'>
-                <h1 style={{fontFamily: "Roboto,Arial,sans-serif",marginLeft:"2%",marginTop:"2%",marginBottom:"2%",color:"#f4511e",fontSize:"5vw"}}>Closed Lobby</h1>
+                <h1 style={{fontFamily: "Roboto,Arial,sans-serif",marginLeft:"2%",marginTop:"2%",marginBottom:"2%",color:"#f4511e",fontSize:"30px"}}>Closed Lobby</h1>
                 {clobbies.length == 0 &&(
-                <h2 style={{fontFamily: "Roboto,Arial,sans-serif",marginLeft:"2%",marginTop:"2%",marginBottom:"2%",color:"#f4511e",fontSize:"5vw"}}>No Closed Lobby</h2>
+                <h2 style={{fontFamily: "Roboto,Arial,sans-serif",marginLeft:"2%",marginTop:"2%",marginBottom:"2%",fontSize:"17px",color:"#333"}}>No closed lobbies are there.<br/></h2>
                 )}
                 <div className='collstaAlign'>
                 {clobbies.map(Clob=>(
                 <div className='closta'>
                     <div className='poldet'key={Clob._id} style={{fontFamily: "Roboto,Arial,sans-serif"}}>
-                    <p className='polh3' style={{fontFamily: "Roboto,Arial,sans-serif"}}><h1 className='polu'>Lobby title:</h1><h2>{Clob.lobbyName}</h2></p>
-                  <br/>
-                  <p className='polh3' style={{fontFamily: "Roboto,Arial,sans-serif"}}><h1 className='polu'>Lobby description:</h1><h2>{Clob.lobbyDescription}</h2></p>
-                  <br/>
-                  <div className={classes.futons}>
+                    <div className='polh2'>
+                    <div className='pollsCreated'><div><Chip style={{backgroundColor:"#d1d1d1"}} icon={<PeopleAltIcon/>} label={Clob.studentformId.length} /></div><div style={{borderLeft:"1px solid #f4511e",width:"50%",height:"80%"}}>Polls: {Clob.pollId.length}</div></div>
+                      <h2 style={{fontFamily: "Roboto,Arial,sans-serif",fontWeight:"normal",overflow:"hidden",fontSize: "25px",marginLeft:"1%"}}>{Clob.lobbyName}</h2></div>
+                    <div className='polp'>
+                  <h3 style={{fontFamily: "Roboto,Arial,sans-serif",fontWeight:"normal",overflow:"hidden",marginLeft:"1%",color:"#333"}}>Description</h3>
+                    <p style={{fontFamily: "Roboto,Arial,sans-serif",fontWeight:"normal",overflow:"hidden",fontSize: "17px",margin:"1%",color:"#333"}}>{Clob.lobbyDescription}</p></div>
+                  <div style={{width:"100%",position:"absolute",bottom:"0",borderRadius:"0px 0px 15px 15px"}}>
+                  <div className='tooltip1' style={{borderRadius:"0px 0px 0px 15px",background: "#6203fc"}} onClick={()=>Closelobby(Clob.lobbyId)}><VisibilityIcon/>
+                  <span className='tooltiptext'>View Stats</span>
+                  </div>
+                  <div className='tooltip1' style={{borderRadius:"0px 0px 15px 0px",background: "#fc0303"}} onClick={()=>{setmodal(true);setDeletelobid(Clob.lobbyId)}}><Delete/>
+                  <span className='tooltiptext'>Delete Lobby</span>
+                 
+                  </div>
+                  </div>
+                  {/* <div className={classes.futons}>
                   <Button className={classes.btns} onClick={()=>Closelobby(Clob.lobbyId)} size="large" variant="contained" endIcon={<VisibilityIcon/>} style={{fontFamily: "Roboto,Arial,sans-serif"}}>VIEW LOBBY</Button>
                   <Button className={classes.delBtn} onClick={()=>{if(window.confirm('Are you sure to delete this record?')){ DeleteLobby(Clob.lobbyId);}} } size="large" variant="contained" endIcon={<DeleteOutlined/>} style={{fontFamily: "Roboto,Arial,sans-serif"}}>DELETE LOBBY</Button>
-                  <Dialog
-        open={op}
-        TransitionComponent={Transition}
-        keepMounted
-        onClose={handleClose}
-        aria-describedby="alert-dialog-slide-description"
-      >
-        <DialogTitle>{"Use Google's location service?"}</DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-slide-description">
-            Let Google help apps determine location. This means sending anonymous
-            location data to Google, even when no apps are running.
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCl}>Disagree</Button>
-          <Button onClick={()=>DeleteLobby(Clob.lobbyId)}>Agree</Button>
-        </DialogActions>
-      </Dialog>
+                    </div> */}
                     </div>
+                    <Modal style={{overlay: {zIndex:10,width:"100%",height:"100%",backgroundColor:'rgba(255, 255, 255, 0.1)'},content:{display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",width:"50vw",height:"25vh",top:"25vh",left:"25vw"}}} isOpen={modal} onRequestClose={()=>setmodal(false)}>
+                    <div className="modaltitle">
+                      <h2>Are You Sure You Want to Delete The Lobby ?</h2>
                     </div>
+                    <div className="modalfooter">
+                      <button onClick={()=>setmodal(false)} id="modalcancelBtn">Cancel</button>
+                      <button onClick={()=>{DeleteLobby()}}>Continue</button>
+                    </div>
+                    </Modal>
+                    <Modal isOpen={delMessage} style={{overlay:{zIndex:11,display:"flex",alignItems:"center",justifyContent:"center",width:"100%",height:"100%",backgroundColor: 'rgba(255, 255, 255, 0.05)'},content:{width:"fit-content",height:"fit-content",top:"10px",borderRadius:"50px",borderColor:"red",transition:"1000ms all"}}}>
+                      <div style={{width:"100%",fontFamily: "Roboto,Arial,sans-serif",fontWeight:"normal",color:"red",display:"flex",alignItems:"center",justifyContent:"center"}}>{loadss===false ?<div style={{display:"flex",alignItems:"center",justifyContent:"center",width:"100%"}}><h2 style={{color:"green",fontFamily: "Roboto,Arial,sans-serif",fontWeight:"normal"}}>Lobby Deleted</h2><CheckCircleIcon style={{color:"green",fontSize:40}}/></div>:<div style={{display:"flex",alignItems:"center",justifyContent:"center",width:"100%"}}><h2 style={{fontFamily: "Roboto,Arial,sans-serif",fontWeight:"normal",}}>Deleting Lobby</h2><CircularProgress style={{color:"red"}}/></div>}</div>
+                    </Modal>
+                    <Modal isOpen={endLobbyMessage} style={{overlay:{zIndex:11,display:"flex",alignItems:"center",justifyContent:"center",width:"100%",height:"100%",backgroundColor: 'rgba(255, 255, 255, 0.05)'},content:{width:"fit-content",height:"fit-content",top:"10px",borderRadius:"50px",borderColor:"red",transition:"1000ms all",}}}>
+                      <div style={{width:"100%",color:"red",display:"flex",alignItems:"center",justifyContent:"center"}}>
+                        {loadss===false ?<div style={{display:"flex",alignItems:"center",justifyContent:"center",width:"100%"}}><CheckCircleIcon style={{color:"green",fontSize:40}}/><h2 style={{color:"green",fontFamily: "Roboto,Arial,sans-serif",fontWeight:"normal"}}>Response Stopped</h2></div>:<div style={{display:"flex",alignItems:"center",justifyContent:"center",width:"100%"}}><CircularProgress style={{color:"red"}}/><h2 style={{fontFamily: "Roboto,Arial,sans-serif",fontWeight:"normal",}}>Stopping Responses</h2></div>} 
+                      </div>
+                    </Modal>
+                    <Modal isOpen={createLob} style={{overlay:{zIndex:11,display:"flex",alignItems:"center",justifyContent:"center",width:"100%",height:"100%",backgroundColor: 'rgba(255, 255, 255, 0)'},content:{width:"fit-content",height:"fit-content",top:"10px",borderRadius:"50px",borderColor:"green",transition:"1000ms all"}}}>
+                      <div style={{width:"100%",fontFamily: "Roboto,Arial,sans-serif",fontWeight:"normal",color:"green",display:"flex",alignItems:"center",justifyContent:"center"}}>Lobby Created Successfully</div>
+                    </Modal>
                 </div>
                 ))}
                 </div>
