@@ -190,7 +190,7 @@ function LivepollT() {
     const [users, setUsers] = useState([]);
     const [polls, setPolls] = useState([]);
     const data = {name:'teacher'};
-    const ENDPOINT = 'localhost:5000';
+    const ENDPOINT = 'localhost:2000';
     const [sum,setSum] = useState([]);
     const [open, setOpen] = useState(false);
     const[op,setOp]=useState(false);
@@ -267,7 +267,7 @@ function LivepollT() {
         });    
         return()=>{
             socket.emit('disconnect');
-            socket.off();
+            socket.close();
         }
         
     },[ENDPOINT, lobbyuuid])

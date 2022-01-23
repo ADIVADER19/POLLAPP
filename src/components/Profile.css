@@ -8,6 +8,25 @@
     /* align-items: center; */
 }
 
+.triangle-left1 {
+    width: 0;
+    height: 0;
+    border-top: 23vw solid transparent;
+    border-right: 100vw solid whitesmoke;
+    border-bottom: 23vw solid transparent;
+    position:absolute;
+    z-index:-1;
+}
+.triangle-right1 {
+    width: 0;
+    height: 0;
+    border-top: 23vw solid transparent;
+    border-left: 100vw solid white;
+    border-bottom: 23vw solid transparent;
+    position:absolute;
+    z-index:-1;
+}
+
 .detail
 {
     display:flex;

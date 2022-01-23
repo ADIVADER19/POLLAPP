@@ -28,7 +28,7 @@ function PollStu() {
     const [polldes, setItems] = useState([]);
     const [lobbydes, setTritems] = useState([]);
     const [check, setBitems] = useState(Boolean);
-    const ENDPOINT = 'localhost:5000';
+    const ENDPOINT = 'localhost:2000';
     
     
 
@@ -159,7 +159,7 @@ function PollStu() {
         socket = io(ENDPOINT)
         return()=>{
             socket.emit('disconnect');
-            socket.off();
+            socket.close();
         }
         
     },[ENDPOINT, lobbyuuid])

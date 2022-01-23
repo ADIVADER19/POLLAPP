@@ -265,7 +265,7 @@ function Vpoll() {
     const[linktxt,setLinktxt]=useState("Share Link");
     const [op, setOp] = React.useState(false);
     const data = {name:'teacher'};
-    const ENDPOINT = 'localhost:5000';
+    const ENDPOINT = 'localhost:2000';
     const [modal, setmodal] = useState(false);
     const[deletelobid,setDeletelobid]=useState('');
     const[delMessage,setdelMessage]=useState(false);

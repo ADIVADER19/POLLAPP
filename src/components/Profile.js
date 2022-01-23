@@ -116,7 +116,9 @@ export default function Profile() {
 	var lastchar;
 	return (
 		
-		<div>
+		<div style={{ overflow: "hidden" }}>
+			<div class="triangle-right1"></div>
+            <div className="triangle-left1"></div>
 			<Box className="form">
 				<div className="title">
 					{/* <AccountCircleIcon
