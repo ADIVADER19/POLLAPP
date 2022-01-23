@@ -156,7 +156,7 @@ function PollStu() {
     },[])
 
     useEffect(()=>{
-        socket = io(ENDPOINT)
+        socket = io(`ws:${ENDPOINT}`,{transports:['websocket']})
         return()=>{
             socket.emit('disconnect');
             socket.off();
