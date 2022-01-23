@@ -28,7 +28,7 @@ function PollStu() {
     const [polldes, setItems] = useState([]);
     const [lobbydes, setTritems] = useState([]);
     const [check, setBitems] = useState(Boolean);
-    const ENDPOINT = 'localhost:5000';
+    const ENDPOINT = 'https://pollapp281907.herokuapp.com/ ';
     
     
 

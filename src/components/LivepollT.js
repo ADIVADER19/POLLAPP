@@ -190,7 +190,7 @@ function LivepollT() {
     const [users, setUsers] = useState([]);
     const [polls, setPolls] = useState([]);
     const data = {name:'teacher'};
-    const ENDPOINT = 'localhost:5000';
+    const ENDPOINT = 'https://pollapp281907.herokuapp.com/';
     const [sum,setSum] = useState([]);
     const [open, setOpen] = useState(false);
     const[op,setOp]=useState(false);
