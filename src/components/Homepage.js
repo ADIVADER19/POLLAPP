@@ -145,7 +145,7 @@ function HomePage() {
         const mail=response.profileObj.email
         const name=response.profileObj.name
         const givenName=response.profileObj.givenName
-   
+        console.log(mail)
         if (
 			!mail ||
 			!name ||
@@ -188,7 +188,7 @@ function HomePage() {
         const mail=response.profileObj.email
         const name=response.profileObj.name
         const givenName=response.profileObj.givenName
-        
+        console.log(mail)
         if (
 			!mail ||
 			!name ||
