@@ -123,7 +123,7 @@ function Nav() {
       }
       const logout = async (e) => {
           e.preventDefault();
-          await fetch("/logout", {
+          await fetch("https://pollapp281907.herokuapp.com/logout", {
               method: "GET",
               headers: {
                   "Content-type": "application/json",
@@ -153,7 +153,7 @@ function Nav() {
         navigate("/vpoll/");
     }
     useEffect(async() => {
-        const res = await fetch("/userdata", {
+        const res = await fetch("https://pollapp281907.herokuapp.com/userdata", {
 				method: "GET",
 				headers: {
 					Accept: "application/json",

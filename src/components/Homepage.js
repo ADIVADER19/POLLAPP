@@ -106,7 +106,7 @@ function HomePage() {
     const[newid,setRid]=useState();
     const userd = async () => {
 		try {
-			const res = await fetch("https://pollapp281907/userdata.herokuapp.com", {
+			const res = await fetch("https://pollapp281907.herokuapp.com/userdata", {
 				method: "GET",
 				headers: {
 					Accept: "application/json",
@@ -151,7 +151,7 @@ function HomePage() {
 			!givenName 
 		) {
 		} else {
-			const res = await fetch("/login", {
+			const res = await fetch("https://pollapp281907.herokuapp.com/login", {
 				method: "POST",
 				headers: {
 					"Content-type": "application/json",
@@ -194,7 +194,7 @@ function HomePage() {
 			!givenName 
 		) {
 		} else {
-			const res = await fetch("/u", {
+			const res = await fetch("https://pollapp281907.herokuapp.com/u", {
 				method: "POST",
 				headers: {
 					"Content-type": "application/json",
@@ -298,7 +298,7 @@ function HomePage() {
         }
         else{
             const{lobbyId,lobbyName,lobbyDescription,studentformId,pollId,userId} = Lobby;
-            const res = await fetch("/createnewlobby", {
+            const res = await fetch("https://pollapp281907.herokuapp.com/createnewlobby", {
                 method: "POST",
                 headers: {
                     "Content-type": "application/json",
