@@ -106,7 +106,7 @@ function HomePage() {
     const[newid,setRid]=useState();
     const userd = async () => {
 		try {
-			const res = await fetch("https://pollapp281907.herokuapp.com/userdata", {
+			const res = await fetch("https://pollapp281907/userdata.herokuapp.com", {
 				method: "GET",
 				headers: {
 					Accept: "application/json",
