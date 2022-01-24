@@ -288,9 +288,10 @@ function CreatePoll2() {
      const [lobbydes, setTritems] = useState([]);
      let f = polldes.length+1;
     const [num,setNum]=useState([{value:f}]);
+    const link="https://pollapp281907.herokuapp.com/"
     const classes = useStyles();
     useEffect(() => {
-        fetch("/bobs", {method: "POST",
+        fetch(`${link}bobs`, {method: "POST",
         headers: {
             "Content-type": "application/json",
         },
@@ -302,7 +303,7 @@ function CreatePoll2() {
         })
     }, [polldes]);
     useEffect(()=>{
-        fetch("/ross", {method: "POST",
+        fetch(`${link}ross`, {method: "POST",
         headers: {
             "Content-type": "application/json",
         },
@@ -421,7 +422,7 @@ function CreatePoll2() {
             setPoll(question);
         }
         else{
-            const res = await fetch("/createnewpoll", {
+            const res = await fetch(`${link}createnewpoll`, {
                 method: "POST",
                 headers: {
                     "Content-type": "application/json",

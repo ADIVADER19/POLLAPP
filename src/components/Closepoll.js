@@ -171,10 +171,11 @@ function Closepoll() {
     const [lobbydes, setTritems] = useState([]);
     const [checked, setChecked] = useState(false);
     const [sum,setSum] = useState([]);
+    const link="https://pollapp281907.herokuapp.com/"
 
     const userd = async () => {
         try {
-              const res = await fetch("/userdata", {
+              const res = await fetch(`${link}userdata`, {
                   method: "GET",
                   headers: {
                       Accept: "application/json",
@@ -245,7 +246,7 @@ function Closepoll() {
         else{
             
             const{lobbyId,lobbyName,lobbyDescription,studentformId,pollId,userId} = Lobby;
-            const res = await fetch("/createnewlobby", {
+            const res = await fetch(`${link}createnewlobby`, {
                 method: "POST",
                 headers: {
                     "Content-type": "application/json",
@@ -271,7 +272,7 @@ function Closepoll() {
     }
     
     useEffect(() => {
-        fetch("/bobs", {method: "POST",
+        fetch(`${link}bobs`, {method: "POST",
         headers: {
             "Content-type": "application/json",
         },
@@ -296,7 +297,7 @@ function Closepoll() {
 
 
     useEffect(()=>{
-        fetch("/ross",{method:"POST",
+        fetch(`${link}ross`,{method:"POST",
         headers: {
             "Content-type": "application/json",
         },
@@ -310,7 +311,7 @@ function Closepoll() {
     },[]);
 
     const excel = async () =>{
-        const res = await fetch("/excel", {
+        const res = await fetch(`${link}excel`, {
             method: "POST",
             headers: {
                 "Content-type": "application/json",

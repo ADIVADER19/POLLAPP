@@ -28,15 +28,14 @@ function PollStu() {
     const [polldes, setItems] = useState([]);
     const [lobbydes, setTritems] = useState([]);
     const [check, setBitems] = useState(Boolean);
-    const ENDPOINT = 'localhost:2000';
-    
-    
+    const ENDPOINT = ' https://pollapp281907.herokuapp.com/';
+    const link="https://pollapp281907.herokuapp.com/"
 
 
     
     const suserd = async () => {
 		try {
-			const res = await fetch("/suserdata", {
+			const res = await fetch(`${link}suserdata`, {
 				method: "GET",
 				headers: {
 					Accept: "application/json",
@@ -81,7 +80,7 @@ function PollStu() {
 			!givenName 
 		) {
 		} else {
-			const res = await fetch("/slogin", {
+			const res = await fetch(`${link}slogin`, {
 				method: "POST",
 				headers: {
 					"Content-type": "application/json",
@@ -122,7 +121,7 @@ function PollStu() {
 			!givenName 
 		) {
 		} else {
-			const res = await fetch("/su", {
+			const res = await fetch(`${link}/su`, {
 				method: "POST",
 				headers: {
 					"Content-type": "application/json",
@@ -173,7 +172,7 @@ const socker=(question,option)=>{
 }      
 
     const polls =(() => {
-        fetch("/bobs", {method: "POST",
+        fetch(`${link}bobs`, {method: "POST",
         headers: {
             "Content-type": "application/json",
         },
@@ -188,7 +187,7 @@ const socker=(question,option)=>{
     });
 
     const lobby =(()=>{
-        fetch("/ross",{method:"POST",
+        fetch(`${link}ross`,{method:"POST",
         headers: {
             "Content-type": "application/json",
         },
@@ -200,7 +199,7 @@ const socker=(question,option)=>{
     });
 
     useEffect(()=>{
-        fetch("/check",{method:"POST",
+        fetch(`${link}check`,{method:"POST",
         headers: {
             "Content-type": "application/json",
         },
@@ -219,7 +218,7 @@ const socker=(question,option)=>{
     },[])
 
     const selectthis=(puid,opuid)=>{
-        fetch("/select", {
+        fetch(`${link}select`, {
             method: "PUT",
             headers: {
               "Content-Type": "application/json",
@@ -249,7 +248,7 @@ const socker=(question,option)=>{
     const classes=useStyles();
     
     const nowdigonthis=(puid,opuid,question,option)=>{
-        fetch("/check",{method:"POST",
+        fetch(`${link}check`,{method:"POST",
         headers: {
             "Content-type": "application/json",
         },

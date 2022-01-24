@@ -195,7 +195,7 @@ function LivepollT() {
     const [open, setOpen] = useState(false);
     const[op,setOp]=useState(false);
     const close = true;
-    
+    const link="https://pollapp281907.herokuapp.com/"
     let navigate = useNavigate();
     const str1 = window.location.href;
     const str2 = str1.slice(0,str1.indexOf('LivepollT'));
@@ -229,7 +229,7 @@ function LivepollT() {
         };
         const CloseLobby=()=>{
             const stuid = lobbyuuid;
-            fetch("/close", {
+            fetch(`${link}close`, {
               method: "put",
               headers: {
                 "Content-Type": "application/json",
@@ -299,7 +299,7 @@ function LivepollT() {
 
 
     useEffect(() => {
-        fetch("/bobs", {method: "POST",
+        fetch(`${link}bobs`, {method: "POST",
         headers: {
             "Content-type": "application/json",
         },
@@ -315,7 +315,7 @@ function LivepollT() {
     }, []);
 
     useEffect(()=>{
-        fetch("/ross",{method:"POST",
+        fetch(`${link}ross`,{method:"POST",
         headers: {
             "Content-type": "application/json",
         },

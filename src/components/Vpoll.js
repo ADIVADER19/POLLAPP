@@ -233,6 +233,7 @@ function Vpoll() {
     const [endLobbyMessage, setendLobbyMessage] = useState(false);
     const [createLob, setcreateLob] = useState(false);
     const [loadss, setloadss] = useState(true);
+    const link="https://pollapp281907.herokuapp.com/"
     useEffect(() => () => {
       clearTimeout(timerRef.current);
     },
@@ -282,7 +283,7 @@ function Vpoll() {
       }
     const userd = async () => {
       try {
-			const res = await fetch("/userdata", {
+			const res = await fetch(`${link}userdata`, {
 				method: "GET",
 				headers: {
 					Accept: "application/json",
@@ -320,7 +321,7 @@ function Vpoll() {
 
     var usern = userInfo;
     var userIds = usern._id;
-    const openlobbies = async (tata)=> {await fetch("/usrlobbies", {
+    const openlobbies = async (tata)=> {await fetch(`${link}usrlobbies`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -329,7 +330,7 @@ function Vpoll() {
     }).then(res=>res.json()).then(data=>{setLobbies(data); setLoading(true); console.log(lobbies);})
     };
 
-    const closelobbies = async(tata)=> {fetch("/clsrlobbies", {
+    const closelobbies = async(tata)=> {fetch(`${link}clsrlobbies`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -352,7 +353,7 @@ function Vpoll() {
     };
     const DeleteLobby = async()=>{
       console.log(deletelobid);
-      const res = await fetch("/delete", {
+      const res = await fetch(`${link}delete`, {
         method: "POST",
         headers: {
             "Content-type": "application/json",
@@ -390,7 +391,7 @@ function Vpoll() {
       setLinktxt("Link Copied");
     }
     const Closepoll = (stuid) => {
-        fetch("/close", {
+        fetch(`${link}close`, {
           method: "put",
           headers: {
             "Content-Type": "application/json",
