@@ -228,12 +228,6 @@ function HomePage() {
         setLoading(false);
         userd();
         }, [])
-    // useEffect(() => {
-    //     setTimeout(()=>{
-    //         setTimedPopup(true);
-    //     },1000);
-
-    // },[])
     const createid=uuidv4();
     useEffect(()=>{
         
