@@ -116,7 +116,7 @@ function HomePage() {
 				credentials: "include",
 			});
 			const data = await res.json();
-		
+		    console.log(data);
             
 			if (res.status === 200 || res.status===201) {
 			
