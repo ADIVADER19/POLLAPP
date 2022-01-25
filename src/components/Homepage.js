@@ -116,7 +116,6 @@ function HomePage() {
 				credentials: "include",
 			});
 			const data = await res.json();
-		    console.log(data);
             
 			if (res.status === 200 || res.status===201) {
 			
@@ -164,6 +163,7 @@ function HomePage() {
 				}),
 			});
             const data= await res.json();
+            console.log(data);
 			if (res.status === 400 || !data) {
                 window.alert('Something went wrong')
 			} else if (res.status === 200 || res.status === 201) {
