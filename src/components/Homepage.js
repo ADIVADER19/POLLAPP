@@ -164,13 +164,14 @@ function HomePage() {
 			});
             const data= await res.json();
             const tok=data.message;
-            document.cookie=`jwtoken=${tok}; max-age=4800)`;
+            
 			if (res.status === 400 || !data) {
                 window.alert('Something went wrong')
 			} else if (res.status === 200 || res.status === 201) {
                 console.log(data);
                 console.log(tok);
                 window.alert("SUCCESSFULLY LOGGED IN")
+                document.cookie=`jwtoken=${tok}; max-age=4800;secure;Path="/")`;
                 //props.setTrigger(false)
                 window.location.reload();
                 setTimedPopup(false);
