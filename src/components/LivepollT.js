@@ -205,6 +205,7 @@ function LivepollT() {
       }
     function navicon() {
         navigate('/vpoll/');
+        window.location.reload()
     }
     function toggle(value){
         return !value;
