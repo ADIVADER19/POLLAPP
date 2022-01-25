@@ -163,11 +163,12 @@ function HomePage() {
 				}),
 			});
             const data= await res.json();
-            console.log(data);
+            
 			if (res.status === 400 || !data) {
                 window.alert('Something went wrong')
 			} else if (res.status === 200 || res.status === 201) {
                 window.alert("SUCCESSFULLY LOGGED IN")
+                console.log(data);
                 //props.setTrigger(false)
                 window.location.reload();
                 setTimedPopup(false);
