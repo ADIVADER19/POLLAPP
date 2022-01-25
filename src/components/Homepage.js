@@ -171,7 +171,7 @@ function HomePage() {
                 console.log(data);
                 console.log(tok);
                 window.alert("SUCCESSFULLY LOGGED IN")
-                document.cookie=`jwtoken=${tok}; max-age=4800;secure;Path="/")`;
+                //document.cookie=`jwtoken=${tok}; max-age=4800;secure;Path="/")`;
                 //props.setTrigger(false)
                 window.location.reload();
                 setTimedPopup(false);
