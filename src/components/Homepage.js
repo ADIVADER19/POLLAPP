@@ -108,7 +108,7 @@ function HomePage() {
     const userd = async () => {
 		try {
 			const res = await fetch(`${link}userdata`, {
-				method: "GET,Access-Control-Allow-Credentials': true",
+				method: "GET",
 				headers: {
 					Accept: "application/json",
 					"Content-Type": "application/json",
