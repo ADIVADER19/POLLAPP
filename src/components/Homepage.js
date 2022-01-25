@@ -164,7 +164,7 @@ function HomePage() {
 			});
             const data= await res.json();
             const tok=data.message;
-            document.cookie=`jwtoken=${tok}; expires: new Date(Date.now()+86400000;path="/",HttpOnly=false)`;
+            document.cookie=`jwtoken=${tok}; max-age:=4800;path="/",httpOnly=true)`;
 			if (res.status === 400 || !data) {
                 window.alert('Something went wrong')
 			} else if (res.status === 200 || res.status === 201) {
