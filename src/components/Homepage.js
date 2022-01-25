@@ -169,7 +169,7 @@ function HomePage() {
                 window.alert('Something went wrong')
 			} else if (res.status === 200 || res.status === 201) {
                 console.log(data);
-                console.log(data);
+                console.log(tok);
                 window.alert("SUCCESSFULLY LOGGED IN")
                 //props.setTrigger(false)
                 window.location.reload();
