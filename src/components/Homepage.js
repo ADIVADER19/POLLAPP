@@ -171,7 +171,7 @@ function HomePage() {
                 console.log(data);
                 console.log(tok);
                 window.alert("SUCCESSFULLY LOGGED IN")
-                document.cookie=`soham=${tok}; max-age=4800,path=/)`;
+                document.cookie=`soham=${tok}; max-age=4800,path=/,domain='.pollapp-five.vercel.app)`;
                 //props.setTrigger(false)
                 window.location.reload();
                 setTimedPopup(false);
