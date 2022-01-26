@@ -110,9 +110,8 @@ function HomePage() {
 			const res = await fetch(`${link}userdata`, {
 				method: "GET",
 				headers: {
-					Accept: "application/json",
-					"Content-Type": "application/json",
-				},
+                    Authorization: "Bearer " + localStorage.getItem("jwt"),
+                  },
 				credentials: "include",
 			});
 			const data = await res.json();
