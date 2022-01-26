@@ -107,6 +107,7 @@ function HomePage() {
     const link="https://pollapp281907.herokuapp.com/"
     const userd = async () => {
 		try {
+            console.log(localStorage.getItem("jwt"));
 			const res = await fetch(`${link}userdata`, {
 				method: "GET",
 				headers: {
