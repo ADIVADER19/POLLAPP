@@ -117,6 +117,7 @@ function HomePage() {
 				headers: {
                     Authorization: "Bearer " + localStorage.getItem("jwt"),
                   },
+				credentials: "include",
 			});
 			const data = await res.json();
 			if (res.status === 200 || res.status===201) {
