@@ -156,11 +156,10 @@ function Nav() {
     useEffect(async() => {
         const res = await fetch(`${link}userdata`, {
 				method: "GET",
-				headers: {
-					Accept: "application/json",
-					"Content-Type": "application/json",
-				},
-				credentials: "include",
+                headers: {
+                    Authorization: "Bearer " + localStorage.getItem("jwt"),
+                  },
+				//credentials: "include",
 			});
 			const data =await res.json();
             setUserInfo(data);

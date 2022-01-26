@@ -109,13 +109,15 @@ function HomePage() {
 		try {
             const test=localStorage.getItem("jwt");
             console.log('suham',test);
+            if (test === null){
+                break;
+            }
 			const res = await fetch(`${link}userdata`, {
 				method: "GET",
 				headers: {
-					Accept: "application/json",
-					"Content-Type": "application/json",
-				},
-				credentials: "include",
+                    Authorization: "Bearer " + localStorage.getItem("jwt"),
+                  },
+				//credentials: "include",
 			});
 			const data = await res.json();
 			if (res.status === 200 || res.status===201) {
