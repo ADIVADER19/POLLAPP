@@ -278,14 +278,23 @@ const socker=(question,option)=>{
             <>                  
             <div className='ice2p'>
                 <div className='poltlep'>
-                    <h1>{lobbydes.lobbyName}</h1>
-                    <h2>{lobbydes.lobbyDescription}</h2>
+                <div className='header' >
+                    <h1 className='lobby'>Lobby Title: {lobbydes.lobbyName}
+                    <span>Lobby Description: {lobbydes.lobbyDescription}</span></h1>
+                    </div>
                 </div>
+                <div className='styles'></div>
+                    <div class="triangle-right"></div>
+                    <div className="triangle-left"></div>
+                <div className='polldiv'>
                 {polldes.map((lob,x)=>(
                 <div className='questsp' key={lob}>
-                    <div className='questionp'>
+                    {/* <div className='questionp'>
                         <h1>{x+1}. {lob.pollQuestion}</h1>
-                    </div>
+                    </div> */}
+                    <div className='shapes'></div>
+                    <h2 className='sequence'>{x+1}</h2>
+                    <h2 className='question1l'>{lob.pollQuestion}</h2>
                     {lob.pollOption.map((oop)=>(
                         <>{oop.optionValue == "" &&(
                             <></>
@@ -295,7 +304,7 @@ const socker=(question,option)=>{
                             <div className= "optionsp" >
                                 <input type="radio" value={oop.optionValue} name={lob.pollQuestion} id="gywshb" 
                                 onClick={()=>nowdigonthis(lob._id,oop._id,lob.pollQuestion,oop.optionValue)}
-                                ></input>
+                                ></input>&nbsp;
                                 <h3 id="muda">{oop.optionValue}</h3>
                             </div>
                         </div>
@@ -304,7 +313,7 @@ const socker=(question,option)=>{
                         ))}
                 </div>
                 ))}
-                
+                </div>
             </div>
             <Popup className={classes.pops} id="popup" trigger={timedPopup} setTrigger={setTimedPopup}>
                 <h3 align="center" className={classes.poptit}>SIGN UP OR LOGIN TO CONTINUE</h3>
