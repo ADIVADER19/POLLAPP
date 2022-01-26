@@ -285,11 +285,9 @@ function Vpoll() {
       try {
 			const res = await fetch(`${link}userdata`, {
 				method: "GET",
-				headers: {
-					Accept: "application/json",
-					"Content-Type": "application/json",
-				},
-				credentials: "include",
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("jwt"),
+        }
 			});
 			const data = await res.json();      
 			if (res.status === 200 || res.status===201) {
