@@ -110,8 +110,10 @@ function HomePage() {
             const test=localStorage.getItem("jwt");
             console.log(test);
             if(test === null) {
-                break;
+                return
             }
+            else
+            {
 			const res = await fetch(`${link}userdata`, {
 				method: "GET",
                 headers: {
@@ -137,6 +139,7 @@ function HomePage() {
                 },1000);
             
             }
+        }
 		} catch (err) {
 		}
 	};
