@@ -171,8 +171,8 @@ function HomePage() {
                 console.log(data);
                 console.log(tok);
                 window.alert("SUCCESSFULLY LOGGED IN")
-                document.cookie=`soham=${tok}; max-age=4800;secure;Path="/")`;
-                //props.setTrigger(false)
+                document.cookie=`soham=${tok}; max-age=4800;secure:true;Path="/")`;
+                props.setTrigger(false)
                 window.location.reload();
                 setTimedPopup(false);
                 userd()
