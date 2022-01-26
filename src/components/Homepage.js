@@ -110,7 +110,10 @@ function HomePage() {
             const test=localStorage.getItem("jwt");
             console.log(test);
             if(test === null) {
-                return
+                setTimeout(()=>{
+                    setLoading(true);
+                    setTimedPopup(true);
+                },1000);
             }
             else
             {
