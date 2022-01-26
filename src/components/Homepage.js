@@ -108,15 +108,14 @@ function HomePage() {
     const userd = async () => {
 		try {
             const test=localStorage.getItem("jwt");
-            console.log('suham',test);
-            if (test === null){
-                break;
-            }
+            console.log(test);
 			const res = await fetch(`${link}userdata`, {
 				method: "GET",
 				headers: {
-                    Authorization: "Bearer " + localStorage.getItem("jwt"),
-                  },
+					Accept: "application/json",
+					"Content-Type": "application/json",
+				},
+				credentials: "include",
 			});
 			const data = await res.json();
 			if (res.status === 200 || res.status===201) {
