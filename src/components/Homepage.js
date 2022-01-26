@@ -171,9 +171,9 @@ function HomePage() {
                 console.log(data);
                 console.log(tok);
                 window.alert("SUCCESSFULLY LOGGED IN")
+                window.location.reload();
                 setTimedPopup(false);
                 //props.setTrigger(false)
-                window.location.reload();
                 userd()
                 
 
