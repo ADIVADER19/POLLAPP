@@ -173,6 +173,7 @@ function HomePage() {
                 window.alert("SUCCESSFULLY LOGGED IN")
                 setTimedPopup(false);
                 userd()
+                window.location.reload();
                 //document.cookie=`soham=${tok}; max-age=4800,path=/,domain='.pollapp-five.vercel.app)`;
                 //props.setTrigger(false)
                 
