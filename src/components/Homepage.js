@@ -174,7 +174,6 @@ function HomePage() {
                 setTimedPopup(false);
                 //props.setTrigger(false)
                 userd()
-                window.location.reload();
                 
 
                 
