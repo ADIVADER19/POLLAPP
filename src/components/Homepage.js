@@ -107,13 +107,13 @@ function HomePage() {
     const link="https://pollapp281907.herokuapp.com/"
     const userd = async () => {
 		try {
-            console.log(localStorage.getItem("jwt"));
 			const res = await fetch(`${link}userdata`, {
 				method: "GET",
 				headers: {
-                    Authorization: "Bearer " + localStorage.getItem("jwt"),
-                  },
-				//credentials: "include",
+					Accept: "application/json",
+					"Content-Type": "application/json",
+				},
+				credentials: "include",
 			});
 			const data = await res.json();
 			if (res.status === 200 || res.status===201) {
@@ -168,7 +168,7 @@ function HomePage() {
 			} else if (res.status === 200 || res.status === 201) {
                 console.log(data);
                 console.log(tok);
-                localStorage.setItem("jwt", tok);
+                document.cookie(`jwt:${tok};max-age:60000;secure;httpOnly=true`);
                 window.alert("SUCCESSFULLY LOGGED IN")
                 window.location.reload();
                 setTimedPopup(false);
