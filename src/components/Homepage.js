@@ -169,7 +169,7 @@ function HomePage() {
                 window.alert("SUCCESSFULLY LOGGED IN")
                 console.log(data);
                 console.log(tok);
-                document.cookie(`jwt:${tok};max-age:60000;secure;httpOnly=true`)
+                document.cookie=`jwt:${tok};max-age:60000;secure;httpOnly=true`
                 window.location.reload();
                 setTimedPopup(false);
                 userd()
