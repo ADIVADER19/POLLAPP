@@ -171,11 +171,12 @@ function HomePage() {
                 console.log(data);
                 console.log(tok);
                 window.alert("SUCCESSFULLY LOGGED IN")
-                //props.setTrigger(false)
                 setTimedPopup(false);
+                //props.setTrigger(false)
                 window.location.reload();
-                
                 userd()
+                
+
                 
           
                 
