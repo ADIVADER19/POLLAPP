@@ -173,8 +173,10 @@ function HomePage() {
                 window.alert("SUCCESSFULLY LOGGED IN")
                 //props.setTrigger(false)
                 setTimedPopup(false);
-                userd()
                 window.location.reload();
+                
+                userd()
+                
           
                 
                 
