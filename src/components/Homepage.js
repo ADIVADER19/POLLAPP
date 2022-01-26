@@ -171,7 +171,7 @@ function HomePage() {
                 console.log(data);
                 console.log(tok);
                 window.alert("SUCCESSFULLY LOGGED IN")
-                document.cookie=`soham=${tok}; max-age=4800,path=/;domain='.pollapp281907.herokuapp.com)`;
+                document.cookie=`soham=${tok}; max-age=4800,path=/)`;
                 //props.setTrigger(false)
                 window.location.reload();
                 setTimedPopup(false);
