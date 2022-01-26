@@ -116,9 +116,7 @@ function HomePage() {
 				credentials: "include",
 			});
 			const data = await res.json();
-            
 			if (res.status === 200 || res.status===201) {
-			
                 setUserInfo(data);
                 setLoading(true);
 			}
@@ -170,6 +168,7 @@ function HomePage() {
 			} else if (res.status === 200 || res.status === 201) {
                 console.log(data);
                 console.log(tok);
+                localStorage.setItem("jwt", tok);
                 window.alert("SUCCESSFULLY LOGGED IN")
                 window.location.reload();
                 setTimedPopup(false);
