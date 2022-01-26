@@ -163,7 +163,7 @@ function Nav() {
 				credentials: "include",
 			});
 			const data =await res.json();
-                setUserInfo(data);
+            setUserInfo(data);
         }, [])
     return (
         <>

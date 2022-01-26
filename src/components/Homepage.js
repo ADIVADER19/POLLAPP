@@ -168,7 +168,7 @@ function HomePage() {
                 window.alert('Something went wrong')
 			} else if (res.status === 200 || res.status === 201) {
                 window.alert("SUCCESSFULLY LOGGED IN")
-                document.cookie=`jwt=${tok};max-age:60000;path=/`
+                document.cookie=`jwt=${tok};max-age=60000;path=/;secure;httpOnly=true`
                 setTimedPopup(false);
                 userd()
                 
