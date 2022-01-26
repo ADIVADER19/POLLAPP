@@ -107,6 +107,8 @@ function HomePage() {
     const link="https://pollapp281907.herokuapp.com/"
     const userd = async () => {
 		try {
+            const test=localStorage.getItem("jwt");
+            console.log('suham',test);
 			const res = await fetch(`${link}userdata`, {
 				method: "GET",
 				headers: {
@@ -168,7 +170,7 @@ function HomePage() {
                 window.alert('Something went wrong')
 			} else if (res.status === 200 || res.status === 201) {
                 window.alert("SUCCESSFULLY LOGGED IN")
-                document.cookie=`jwt=${tok};max-age=60000;path=/`
+                localStorage.setItem("jwt", tok);
                 setTimedPopup(false);
                 userd()
                 
