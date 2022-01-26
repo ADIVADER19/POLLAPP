@@ -155,7 +155,7 @@ function Nav() {
     }
     useEffect(async() => {
         const res = await fetch(`${link}userdata`, {
-				method: "POST",
+				method: "GET",
 				headers: {
 					Accept: "application/json",
 					"Content-Type": "application/json",

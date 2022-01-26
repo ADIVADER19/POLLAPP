@@ -110,7 +110,7 @@ function HomePage() {
             const test=localStorage.getItem("jwt");
             console.log('suham',test);
 			const res = await fetch(`${link}userdata`, {
-				method: "POST",
+				method: "GET",
 				headers: {
 					Accept: "application/json",
 					"Content-Type": "application/json",
