@@ -172,9 +172,11 @@ function HomePage() {
                 console.log(tok);
                 window.alert("SUCCESSFULLY LOGGED IN")
                 //props.setTrigger(false)
+                setTimedPopup(false);
                 userd()
                 window.location.reload();
-                setTimedPopup(false);
+          
+                
                 
 			} 
             else if(res.status === 422)
