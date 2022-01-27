@@ -122,28 +122,13 @@ function Nav() {
       function navicon() {
           navigate('/')
       }
-      const logout = async (e) => {
+      function logout(e){
           e.preventDefault();
-          await fetch(`${link}logout`, {
-              method: "GET",
-              headers: {
-                Authorization: "Bearer " + localStorage.getItem("jwt"),
-              }
-          }).then((res)=>{
-  
-              if (res.status === 200) {
-                  window.alert("LOGGED OUT SUCCESSFULLY")
-                  window.location.reload();
-              }
-              else
-              {
-                  window.alert("SOMETHING WENT WRONG")
-              }
-  
-          })
+          localStorage.removeItem('jwt');
+          window.alert('LOGGED OUT SUCCESSFULLY');
+          window.location.reload();
+          }
        
-  
-      };
       function profile(e){
         e.preventDefault();
           navigate("/profile");
