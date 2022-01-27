@@ -35,12 +35,12 @@ function PollStu() {
     
     const suserd = async () => {
         const test=localStorage.getItem("sjwt");
-            console.log(test);
+        console.log(test);
 		try {
 			const res = await fetch(`${link}suserdata`, {
 				method: "GET",
                 headers: {
-                    Authorization: "Bearer " + localStorage.getItem("jwt"),
+                    Authorization: "Bearer " + localStorage.getItem("sjwt"),
                   }
 			});
 			const data = await res.json();

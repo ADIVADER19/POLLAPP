@@ -266,7 +266,7 @@ function Vpoll() {
     const[linktxt,setLinktxt]=useState("Share Link");
     const [op, setOp] = React.useState(false);
     const data = {name:'teacher'};
-    const ENDPOINT = 'localhost:2000';
+    const ENDPOINT = 'https://pollapp281907.herokuapp.com';
     const [modal, setmodal] = useState(false);
     const[deletelobid,setDeletelobid]=useState('');
     const[delMessage,setdelMessage]=useState(false);
