@@ -134,7 +134,7 @@ function PollStu() {
 			!givenName 
 		) {
 		} else {
-			const res = await fetch(`${link}/su`, {
+			const res = await fetch(`${link}su`, {
 				method: "POST",
 				headers: {
 					"Content-type": "application/json",
@@ -150,7 +150,6 @@ function PollStu() {
                 window.alert('Something went wrong')
 			} else if (res.status === 200 || res.status === 201) {
                 window.alert("SUCCESSFULLY SIGNED UP")
-                document.getElementByclassName("sign").style.display="none";
                 
 			} 
             else if(res.status === 422)
