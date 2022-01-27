@@ -92,11 +92,14 @@ function PollStu() {
 				}),
 			});
             const data= await res.json();
+            const tok=data.message;
+            console.log(data);
+            console.log(tok);
 			if (res.status === 400 || !data) {
                 window.alert('Something went wrong')
 			} else if (res.status === 200 || res.status === 201) {
                 window.alert("SUCCESSFULLY LOGGED IN")
-                
+                localStorage.setItem("sjwt", tok);
                 setTimedPopup(false);
                 suserd()
 			} 
