@@ -328,11 +328,11 @@ function Closepoll() {
         if (res.status===200||res.status===201)
         {
             
-            fetch("/download/"+lobbyuuid+"/"+lobbydes.lobbyName,{
+            fetch(`${link}download/`+lobbyuuid+"/"+lobbydes.lobbyName,{
                 method:"GET",
                 headers: {},            
             })
-            window.open('/download/'+lobbyuuid+"/"+lobbydes.lobbyName);
+            window.open(`${link}download/`+lobbyuuid+"/"+lobbydes.lobbyName);
         }
 
     }
