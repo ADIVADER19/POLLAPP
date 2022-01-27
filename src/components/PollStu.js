@@ -37,6 +37,14 @@ function PollStu() {
         const test=localStorage.getItem("sjwt");
             console.log(test);
 		try {
+            if(test === null) {
+                setTimeout(()=>{
+                    setLoading(true);
+                    setTimedPopup(true);
+                },1000);
+            }
+            else
+            {
 			const res = await fetch(`${link}suserdata`, {
 				method: "GET",
                 headers: {
@@ -65,7 +73,7 @@ function PollStu() {
                 },1000);
             
             }
-		} catch (err) {
+		} }catch (err) {
 		}
 	};
     const responseGoogle = async (response) => {
