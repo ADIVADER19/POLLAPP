@@ -180,6 +180,7 @@ function HomePage() {
                 localStorage.setItem("jwt", tok);
                 setTimedPopup(false);
                 userd()
+                window.location.reload();
                 
                 
 			} 
