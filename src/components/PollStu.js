@@ -56,7 +56,6 @@ function PollStu() {
 
 			if (res.status === 200 || res.status===201) {
                 setUserInfo(data);
-                console.log(data);
                 socket.emit('join',{data,lobbyuuid},(error)=>{
                     if(error){alert(error);}
                 });
