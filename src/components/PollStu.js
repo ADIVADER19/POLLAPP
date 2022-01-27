@@ -28,7 +28,7 @@ function PollStu() {
     const [polldes, setItems] = useState([]);
     const [lobbydes, setTritems] = useState([]);
     const [check, setBitems] = useState(Boolean);
-    const ENDPOINT = ' https://pollapp281907.herokuapp.com';
+    const ENDPOINT = ' https://pollapp281907.herokuapp.com/';
     const link="https://pollapp281907.herokuapp.com/"
 
 
@@ -40,7 +40,7 @@ function PollStu() {
 			const res = await fetch(`${link}suserdata`, {
 				method: "GET",
                 headers: {
-                    Authorization: "Bearer " + localStorage.getItem("sjwt"),
+                    Authorization: "Bearer " + localStorage.getItem("jwt"),
                   }
 			});
 			const data = await res.json();
@@ -96,7 +96,7 @@ function PollStu() {
                 window.alert('Something went wrong')
 			} else if (res.status === 200 || res.status === 201) {
                 window.alert("SUCCESSFULLY LOGGED IN")
-                localStorage.setItem("sjwt", tok);
+                
                 setTimedPopup(false);
                 suserd()
 			} 
