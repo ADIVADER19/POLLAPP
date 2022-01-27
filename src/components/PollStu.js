@@ -40,7 +40,6 @@ function PollStu() {
             console.log(test);
             if(test === null) {
                 setTimeout(()=>{
-                    setLoading(true);
                     setTimedPopup(true);
                 },1000);
             }
@@ -55,7 +54,7 @@ function PollStu() {
 			const data = await res.json();
 		
 
-			if (res.status === 200) {
+			if (res.status === 200 || res.status===201) {
                 setUserInfo(data);
                 socket.emit('join',{data,lobbyuuid},(error)=>{
                     if(error){alert(error);}
@@ -74,8 +73,7 @@ function PollStu() {
             
             }
 		} 
-    }
-    catch (err) {
+    }catch (err) {
         console.log(err);
 		}
 	};
