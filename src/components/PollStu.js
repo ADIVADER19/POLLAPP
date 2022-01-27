@@ -38,14 +38,14 @@ function PollStu() {
 		try {
             const test=localStorage.getItem("sjwt");
             console.log(test);
-            // if(test === null) {
-            //     setTimeout(()=>{
-            //         setLoading(true);
-            //         setTimedPopup(true);
-            //     },1000);
-            // }
-            // else
-            // {
+            if(test === null) {
+                setTimeout(()=>{
+                    setLoading(true);
+                    setTimedPopup(true);
+                },1000);
+            }
+             else
+             {
 			const res = await fetch(`${link}suserdata`, {
 				method: "GET",
                 headers: {
@@ -74,7 +74,9 @@ function PollStu() {
             
             }
 		} 
+    }
     catch (err) {
+        console.log(err);
 		}
 	};
     const responseGoogle = async (response) => {

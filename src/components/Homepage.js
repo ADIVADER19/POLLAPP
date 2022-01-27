@@ -144,6 +144,7 @@ function HomePage() {
             }
         }
 		} catch (err) {
+            console.log(err);
 		}
 	};
     const responseGoogle = async (response) => {
