@@ -127,9 +127,8 @@ function Nav() {
           await fetch(`${link}logout`, {
               method: "GET",
               headers: {
-                  "Content-type": "application/json",
-              },
-              credentials: "include",
+                Authorization: "Bearer " + localStorage.getItem("jwt"),
+              }
           }).then((res)=>{
   
               if (res.status === 200) {
