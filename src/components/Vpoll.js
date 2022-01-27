@@ -450,7 +450,7 @@ function Vpoll() {
         }
         else{
             const{lobbyId,lobbyName,lobbyDescription,studentformId,pollId,userId} = Lobby;
-            const res = await fetch("/createnewlobby", {
+            const res = await fetch(`${link}createnewlobby`, {
                 method: "POST",
                 headers: {
                     "Content-type": "application/json",
