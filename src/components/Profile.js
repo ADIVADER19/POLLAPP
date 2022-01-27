@@ -25,8 +25,10 @@ export default function Profile() {
 			const res = await fetch(`${link}userdata`, {
 				method: "GET",
 				headers: {
-                    Authorization: "Bearer " + localStorage.getItem("jwt"),
-                  }
+					Accept: "application/json",
+					"Content-Type": "application/json",
+				},
+				credentials: "include",
 			});
 			const data = await res.json();
 			setUserInfo(data);
