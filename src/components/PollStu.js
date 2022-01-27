@@ -300,7 +300,7 @@ const socker=(question,option)=>{
                             <></>
                         )}
                         {!oop.optionValue == "" &&(
-                        <div id= "catrina">
+                        <div id= "catrina" className='viki'>
                             <div className= "optionsp" >
                                 <input type="radio" value={oop.optionValue} name={lob.pollQuestion} id="gywshb" 
                                 onClick={()=>nowdigonthis(lob._id,oop._id,lob.pollQuestion,oop.optionValue)}

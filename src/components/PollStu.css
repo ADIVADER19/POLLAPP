@@ -71,6 +71,7 @@
 
 .optionsp{
     margin-top: 2%;
+    margin-bottom: 2%;
     border-radius: 15px;
     padding: 1.5% 3% 1.5% 3%;
     position: relative;
@@ -131,7 +132,7 @@ input[type='radio']:checked:after>.optionsp{
 }
 #muda{
     margin: 0;
-    margin-left: 2%;
+    margin-left: 4%;
     font-weight: normal;
 }
 @media only screen and (max-width: 750px){
@@ -172,7 +173,7 @@ input[type='radio']:checked:after>.optionsp{
     width: 0;
     height: 0;
     border-top: 75vw solid transparent;
-    border-right: 100vw solid whitesmoke;
+    border-right: 94.9vw solid whitesmoke;
     border-bottom: 75vw solid transparent;
     position:absolute;
     z-index:1;
@@ -181,13 +182,13 @@ input[type='radio']:checked:after>.optionsp{
     width: 0;
     height: 0;
     border-top: 75vw solid transparent;
-    border-left: 100vw solid white;
+    border-left: 94vw solid white;
     border-bottom: 75vw solid transparent;
     position:absolute;
     z-index:1;
   }
   .styles{
-    width:110vw;
+    width:102vw;
     background:whitesmoke;
     position:absolute;
     top:12vh;
@@ -224,6 +225,23 @@ input[type='radio']:checked:after>.optionsp{
     background: #f4511e;
 }
 
-#catrina{
-    border: 2px black solid;
+.viki{
+    border-radius: 15px;
 }
+
+.questsp>.viki:nth-child(4){
+  border:1px solid #328fa5;
+}
+.questsp>.viki:nth-child(5){
+  border:1px solid #f54967;
+}
+.questsp>.viki:nth-child(6){
+  border:1px solid #4caf50;
+}
+.questsp>.viki:nth-child(7){
+  border:1px solid #af7c4c;      
+}
+.questsp>.viki:nth-child(8){
+    border:1px solid #534caf;      
+}
+  
