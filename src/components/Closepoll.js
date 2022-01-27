@@ -178,8 +178,10 @@ function Closepoll() {
               const res = await fetch(`${link}userdata`, {
                   method: "GET",
                   headers: {
-                    Authorization: "Bearer " + localStorage.getItem("jwt"),
-                  }
+                      Accept: "application/json",
+                      "Content-Type": "application/json",
+                  },
+                  credentials: "include",
               });
               const data = await res.json();      
               if (res.status === 200 || res.status===201) {
@@ -187,10 +189,18 @@ function Closepoll() {
                   setUserInfo(data);
           }
           else if (res.status === 422) {
+            setTimeout(()=>{
+                setLoading(true);
+                setTimedPopup(true);
+            },1000);
         
           }
                 else
                 {
+                    setTimeout(()=>{
+                        setLoading(true);
+                        setTimedPopup(true);
+                    },1000);
                    
                 }
         } catch (err) {
