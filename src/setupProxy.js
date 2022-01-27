@@ -140,12 +140,13 @@ module.exports = function(app) {
   }
   ));
 
-  app.use('/download',
+  app.use('/deletePoll',
   createProxyMiddleware({
     target: 'http://localhost:2000',
     changeOrigin:true,
   }
-  ))
+  ));
+  
 
 };
 

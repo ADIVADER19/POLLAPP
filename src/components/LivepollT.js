@@ -2,7 +2,7 @@ import React from 'react'
 import './LivepollT.css';
 import { useState,useEffect } from 'react';
 import io from 'socket.io-client';
-import {Typography,Button,makeStyles,IconButtons,Dialog}  from '@material-ui/core'
+import {Typography,Fade,makeStyles,Box,Dialog}  from '@material-ui/core'
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
@@ -17,8 +17,9 @@ import M from "materialize-css";
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import StopIcon from '@mui/icons-material/Stop';
+import LinearProgress from '@mui/material/LinearProgress';
+import Modal from 'react-modal';
 let socket;
-
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
   });
@@ -195,10 +196,28 @@ function LivepollT() {
     const [open, setOpen] = useState(false);
     const[op,setOp]=useState(false);
     const close = true;
-    
+    const [modal, setmodal] = useState(false);
     let navigate = useNavigate();
     const str1 = window.location.href;
     const str2 = str1.slice(0,str1.indexOf('LivepollT'));
+    const [load, setLoad] = React.useState(false);
+    const [query, setQuery] = React.useState('idle');
+    const timerRef = React.useRef();
+    const handleClickQuery = () => {
+        if (timerRef.current) {
+          clearTimeout(timerRef.current);
+        }
+    
+       
+        setQuery('progress');
+        timerRef.current = window.setTimeout(() => {
+          setQuery('success');
+          window.setTimeout(() => {
+          setQuery('idle');
+        }, 4000);
+        }, 2000);
+       
+      };
     function copy(e){
         e.preventDefault();
         navigator.clipboard.writeText(str2+'pollstu/'+lobbyuuid);
@@ -269,7 +288,6 @@ function LivepollT() {
             socket.emit('disconnect');
             socket.off();
         }
-        
     },[ENDPOINT, lobbyuuid])
     
     useEffect(() => {
@@ -336,8 +354,18 @@ function LivepollT() {
                <nav className="checks">
                    <ul>
                        <li><a href="#" onClick={(e)=>{addpoll(e)}}>Add Poll <AddIcon/></a></li>
-                       <li><a href="#" onClick={(e)=>{copy(e)}}>Copy Link <LinkIcon/></a></li>
-                       <li ><button onClick={()=>{if(window.confirm('Are you sure you want to stop the responses?')){ CloseLobby();}}}>Stop Responses <StopIcon/></button></li>
+                       <li><a href="#" className="toolti" onClick={(e)=>{copy(e);handleClickQuery()}}>Copy Link <LinkIcon/><span class="tooltiptex">
+                       <Box >
+                    {query === 'success' ? (<Typography>Link Copied</Typography>) : (
+                    <>
+                    {query==='idle'? (<Typography>Copy Link</Typography>):""}
+                    <Fade in={query === 'progress'} style={{ transitionDelay: query === 'progress' ? '200ms' : '0ms',}}unmountOnExit>
+                      <LinearProgress style={{color:"white",marginTop:"10px"}}/>
+                    </Fade>
+                    </>)}
+                  </Box>
+                           </span></a></li>
+                       <li ><button onClick={()=>{setmodal(true);}}>Stop Responses <StopIcon/></button></li>
                        <li ><a href="#" onClick={(e)=>{handleClickOpen(e)}}>See Voters <VisibilityIcon/></a></li>
                    </ul>
                 </nav>
@@ -363,8 +391,8 @@ function LivepollT() {
                                                 
                                                 {users.map((usa,x) => (
                                                 <div className="activeIteml" >
-                                                    
-                                                   <div className={classes.firstDialog}>
+                                                   {usa.length===0?<div style={{width:"100%",height:"100%",justifyContent:"center",alignItems:"center"}}>No voters registerd</div>:<>
+                                                    <div className={classes.firstDialog}>
                                                 <h2 style={{fontWeight:"normal",marginLeft:"1%",fontFamily: "Roboto,Arial,sans-serif"}}> {x+1}. {usa.name}</h2>
                                                 <h2 style={{fontWeight:"normal",marginLeft:"1%",fontFamily: "Roboto,Arial,sans-serif"}}>Polls Attempted: {usa.poll.length}/{polls.length}</h2>
                                                
@@ -374,15 +402,22 @@ function LivepollT() {
                                                     <div className="dropdown-content">
                                                        
                                                     {usa.poll.map((texas,y)=>(
-                                                    <a href="#">
+                                                       <>
+                                                        {texas===null?<a href="#">No voters registerd</a>:<>
+                                                            <a href="#">
                                                         <h2 style={{fontWeight:"normal",marginLeft:"1%"}}>{y+1}. {texas.question}</h2>
                                                         <h3 style={{fontWeight:"normal",marginLeft:"1%"}}>Option Selected: {texas.option}</h3>
                                                         </a>
+                                                            </>
+                                                        }
+                                                       </>
                                                 ))}
                                                     </div>
                                                 </div>
                                                 
                                                 </div>
+                                                   </>}
+                                                   
                                                 </div>
                                                 ))}
                                                 </Dialog>
@@ -392,7 +427,7 @@ function LivepollT() {
                         </div>
                     </div>
                     )
-                    : null
+                    : <div>No Users yet done</div>
                 }
                 <div className='polldiv'>
                 {polls.map((lob, x)=>(
@@ -416,7 +451,15 @@ function LivepollT() {
                           </div>
                           </div> 
                       </div>
-                                               
+                      <Modal style={{overlay: {zIndex:10,width:"100%",height:"100%",backgroundColor:'rgba(255, 255, 255, 0.1)'},content:{display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",width:"50vw",height:"25vh",top:"25vh",left:"25vw"}}} isOpen={modal} onRequestClose={()=>setmodal(false)}>
+                    <div className="modaltitle">
+                      <h2>Are You Sure You Want to Stop Responses ?</h2>
+                    </div>
+                    <div className="modalfooter">
+                      <button onClick={()=>setmodal(false)} id="modalcancelBtn">Cancel</button>
+                      <button onClick={()=>{CloseLobby();}}>Continue</button>
+                    </div>
+                    </Modal>                    
                       </>
                     )}
                     </>    
