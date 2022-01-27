@@ -112,7 +112,7 @@ function HomePage() {
             if(test === null) {
                 setTimeout(()=>{
                     setLoading(true);
-                    setTimedPopup(true);
+                    setTimedPopup(true); 
                 },1000);
             }
             else
@@ -180,6 +180,7 @@ function HomePage() {
                 localStorage.setItem("jwt", tok);
                 setTimedPopup(false);
                 userd()
+                window.location.reload();
                 
                 
 			} 

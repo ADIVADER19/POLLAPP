@@ -34,14 +34,14 @@ function PollStu() {
 
     
     const suserd = async () => {
+        const test=localStorage.getItem("sjwt");
+            console.log(test);
 		try {
 			const res = await fetch(`${link}suserdata`, {
 				method: "GET",
-				headers: {
-					Accept: "application/json",
-					"Content-Type": "application/json",
-				},
-				credentials: "include",
+                headers: {
+                    Authorization: "Bearer " + localStorage.getItem("jwt"),
+                  }
 			});
 			const data = await res.json();
 		
@@ -96,6 +96,7 @@ function PollStu() {
                 window.alert('Something went wrong')
 			} else if (res.status === 200 || res.status === 201) {
                 window.alert("SUCCESSFULLY LOGGED IN")
+                localStorage.setItem("sjwt", tok);
                 setTimedPopup(false);
                 suserd()
 			} 
