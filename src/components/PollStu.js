@@ -34,9 +34,10 @@ function PollStu() {
 
     
     const suserd = async () => {
-        const test=localStorage.getItem("sjwt");
-            console.log(test);
+        
 		try {
+            const test=localStorage.getItem("sjwt");
+            console.log(test);
             if(test === null) {
                 setTimeout(()=>{
                     setLoading(true);
@@ -56,7 +57,6 @@ function PollStu() {
 
 			if (res.status === 200) {
                 setUserInfo(data);
-                
                 socket.emit('join',{data,lobbyuuid},(error)=>{
                     if(error){alert(error);}
                 });
@@ -73,7 +73,8 @@ function PollStu() {
                 },1000);
             
             }
-		} }catch (err) {
+		} 
+    }catch (err) {
 		}
 	};
     const responseGoogle = async (response) => {
