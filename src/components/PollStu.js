@@ -114,11 +114,17 @@ function PollStu() {
 			} 
             else if(res.status === 422)
                 {
-                window.alert("USER DOES NOT EXSIST")
+                window.alert("USER DOES NOT EXSIST");
+                setTimeout(()=>{
+                    setTimedPopup(true);
+                },1000);
 			}
             else
             {
-                window.alert("INVALID USER")
+                window.alert("INVALID USER");
+                setTimeout(()=>{
+                    setTimedPopup(true);
+                },1000);
             }
 		}
 	};
