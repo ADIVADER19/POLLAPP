@@ -60,7 +60,8 @@ function PollStu() {
                     if(error){alert(error);}
                 });
 			}
-            else if (res.status === 422) {
+            else{ if (res.status === 422) {
+                
                 setTimeout(()=>{
                     setTimedPopup(true);
                 },1000);
@@ -71,7 +72,7 @@ function PollStu() {
                     setTimedPopup(true);
                 },1000);
             
-            }
+            }}
 		} 
     }catch (err) {
         console.log(err);
