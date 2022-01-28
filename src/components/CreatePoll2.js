@@ -33,7 +33,7 @@ const  useStyles = makeStyles({
             width:"100vw",
           }
     },stylings:{
-        background:"#bababa",
+        background:"#f4511e",
         position:"absolute",
         top:0,
         left:0,
@@ -42,9 +42,24 @@ const  useStyles = makeStyles({
         borderRadius:"15% 50% 50% 0%"
     },
     lobbypollsseen:{
-        position:"relative",width:"43%",height:"50vh",backgroundColor:"white",display:"flex",flexDirection:"column",alignItems:"flex-start",margin:"1%",borderLeft:"10px solid #bababa",borderRadius:"1em",zIndex:"2",
+        position:"relative",width:"43%",height:"63vh",backgroundColor:"white",display:"flex",flexDirection:"column",alignItems:"flex-start",margin:"1%",borderLeft:"10px solid #f4511e",borderRadius:"1em",zIndex:"2",
         ['@media (max-width:780px)']: {
             width:"100%",
+            height:"70vh"
+          },
+          ['@media (max-width:340px)']: {
+            width:"100%",
+            height:"88vh"
+          }
+    },
+    lastStuf:{
+        display:"flex",fontFamily: "Roboto,Arial,sans-serif", fontSize: 25,width:"100%",position:"relative",top:"13vh",zIndex:"1",background:"#ebebeb",height:"45vh",borderRadius:"0 0 0 2%",
+        ['@media (max-width:780px)']: {height:"52vh",
+          }
+          ,
+          ['@media (max-width:340px)']: {
+            width:"100%",
+            height:"70vh"
           }
     },
     question:{
@@ -559,12 +574,12 @@ function CreatePoll2() {
                 <div className={classes.lobbypollsseen} key={lob}>
                    <div style={{position:"absolute",right:"1vw",top:"2vh",zIndex:"4"}}><Delete  className={classes.tired} onClick={()=>{setmodal(true);setDeletepollid(lob._id)}}/></div>
                    <div className={classes.stylings}></div>
-                    <div style={{display:"flex", fontFamily: "Roboto,Arial,sans-serif",color:"#333",width:"95%",position:"absolute",top:"2%",zIndex:"1",left:"3%",overflow:"hidden"}}>
+                    <div style={{display:"flex", fontFamily: "Roboto,Arial,sans-serif",color:"#333",width:"93%",position:"absolute",top:"3%",height:"10vh",zIndex:"1",left:"3%",overflow:"hidden"}}>
                         <h2 className={classes.quest} style={{color:"white"}} variant="h5">{x+1}</h2>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         <h2 className={classes.quest} variant="h5">{lob.pollQuestion}</h2>
                     </div>
                     <br/>
-                    <div style={{display:"flex",fontFamily: "Roboto,Arial,sans-serif", fontSize: 25,width:"100%",position:"relative",top:"7vh",zIndex:"1",background:"linear-gradient(to bottom right,#DBDBDB 50%,#d1d1d1 50%)",height:"38vh"}}>
+                    <div className={classes.lastStuf}>
                     <div style={{width:"100%",height:"100%",display:"flex",flexDirection:"column",justifyContent:"space-around"}}>
                        {lob.pollOption.map((oop,y)=>(
                     <>{oop.optionValue == "" &&(
@@ -581,7 +596,7 @@ function CreatePoll2() {
                     </div> 
                     <br/>
                     <div style={{position:"absolute",width:"100%",bottom:"0",
-                    background:"#bababa",height:"10%",borderRadius:"50% 50% 0.5em 0.5em"}}></div>
+                    background:"#f4511e",height:"10%",borderRadius:"50% 50% 0.5em 0.5em"}}></div>
                 </div>))}               
                 </div>
             </div>
