@@ -23,6 +23,7 @@ const useStyles=makeStyles({
 function PollStu() {
     const [timedPopup, setTimedPopup] = useState(false);
     const [userInfo, setUserInfo] = useState({});
+    const[loading,setLoading]=useState(false);
     const currentPathName = window.location.pathname;
     const lobbyuuid = currentPathName.slice(9);
     const [polldes, setItems] = useState([]);
@@ -57,7 +58,8 @@ function PollStu() {
 			if (res.status === 200 || res.status===201) {
                 setUserInfo(data);
                 socket.emit('join',{data,lobbyuuid},(error)=>{
-                    if(error){alert(error);}
+                    if(error){alert(error);
+                    setLoading(true)}
                 });
 			}
             else{ if (res.status === 422) {
@@ -303,27 +305,31 @@ const socker=(question,option)=>{
                     <h2>{lobbydes.lobbyDescription}</h2>
                 </div>
                 {polldes.map((lob,x)=>(
-                <div className='questsp' key={lob}>
-                    <div className='questionp'>
-                        <h1>{x+1}. {lob.pollQuestion}</h1>
-                    </div>
-                    {lob.pollOption.map((oop)=>(
-                        <>{oop.optionValue == "" &&(
-                            <></>
-                        )}
-                        {!oop.optionValue == "" &&(
-                        <div id= "catrina">
-                            <div className= "optionsp" >
-                                <input type="radio" value={oop.optionValue} name={lob.pollQuestion} id="gywshb" 
-                                onClick={()=>nowdigonthis(lob._id,oop._id,lob.pollQuestion,oop.optionValue)}
-                                ></input>
-                                <h3 id="muda">{oop.optionValue}</h3>
-                            </div>
-                        </div>
-                        )}
-                        </>    
-                        ))}
-                </div>
+                    <>
+                      {loading?<div></div>:
+                         <div className='questsp' key={lob}>
+                         <div className='questionp'>
+                             <h1>{x+1}. {lob.pollQuestion}</h1>
+                         </div>
+                         {lob.pollOption.map((oop)=>(
+                             <>{oop.optionValue == "" &&(
+                                 <></>
+                             )}
+                             {!oop.optionValue == "" &&(
+                             <div id= "catrina">
+                                 <div className= "optionsp" >
+                                     <input type="radio" value={oop.optionValue} name={lob.pollQuestion} id="gywshb" 
+                                     onClick={()=>nowdigonthis(lob._id,oop._id,lob.pollQuestion,oop.optionValue)}
+                                     ></input>
+                                     <h3 id="muda">{oop.optionValue}</h3>
+                                 </div>
+                             </div>
+                             )}
+                             </>    
+                             ))}
+                     </div>}
+                    </>
+             
                 ))}
                 
             </div>
