@@ -412,6 +412,7 @@ function CreatePoll2() {
     const DeletetingPoll = async()=>{
         let pollId = deletepollid;
         let lobbyId = lobbydes._id;
+        console.log(lobbyId);
         const res = await fetch(`${link}deletePoll`, {
             method: "POST",
             headers: {
