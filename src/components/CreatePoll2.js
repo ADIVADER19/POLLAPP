@@ -33,7 +33,7 @@ const  useStyles = makeStyles({
             width:"100vw",
           }
     },stylings:{
-        background:"#f4511e",
+        background:"#bababa",
         position:"absolute",
         top:0,
         left:0,
@@ -42,7 +42,7 @@ const  useStyles = makeStyles({
         borderRadius:"15% 50% 50% 0%"
     },
     lobbypollsseen:{
-        position:"relative",width:"43%",height:"50vh",backgroundColor:"white",display:"flex",flexDirection:"column",alignItems:"flex-start",margin:"1%",borderLeft:"10px solid #f4511e",borderRadius:"1em",zIndex:"2",
+        position:"relative",width:"43%",height:"50vh",backgroundColor:"white",display:"flex",flexDirection:"column",alignItems:"flex-start",margin:"1%",borderLeft:"10px solid #bababa",borderRadius:"1em",zIndex:"2",
         ['@media (max-width:780px)']: {
             width:"100%",
           }
@@ -564,7 +564,7 @@ function CreatePoll2() {
                         <h2 className={classes.quest} variant="h5">{lob.pollQuestion}</h2>
                     </div>
                     <br/>
-                    <div style={{display:"flex",fontFamily: "Roboto,Arial,sans-serif", fontSize: 25,width:"100%",position:"relative",top:"7vh",zIndex:"1",background:"linear-gradient(to bottom right,#DBDBDB 50%,#bababa 50%)",height:"38vh"}}>
+                    <div style={{display:"flex",fontFamily: "Roboto,Arial,sans-serif", fontSize: 25,width:"100%",position:"relative",top:"7vh",zIndex:"1",background:"linear-gradient(to bottom right,#DBDBDB 50%,#d1d1d1 50%)",height:"38vh"}}>
                     <div style={{width:"100%",height:"100%",display:"flex",flexDirection:"column",justifyContent:"space-around"}}>
                        {lob.pollOption.map((oop,y)=>(
                     <>{oop.optionValue == "" &&(
@@ -581,7 +581,7 @@ function CreatePoll2() {
                     </div> 
                     <br/>
                     <div style={{position:"absolute",width:"100%",bottom:"0",
-                    background:"#f4511e",height:"10%",borderRadius:"50% 50% 0.5em 0.5em"}}></div>
+                    background:"#bababa",height:"10%",borderRadius:"50% 50% 0.5em 0.5em"}}></div>
                 </div>))}               
                 </div>
             </div>
@@ -595,7 +595,7 @@ function CreatePoll2() {
                  </div>
                  <Modal style={{overlay: {zIndex:10,width:"100%",height:"100%",backgroundColor:'rgba(255, 255, 255, 0.1)'},content:{display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",width:"50vw",height:"25vh",top:"25vh",left:"25vw"}}} isOpen={modal} onRequestClose={()=>setmodal(false)}>
                     <div className="modaltitle">
-                      <h2>Are You Sure You Want to Delete The Lobby ?</h2>
+                      <h2>Are You Sure You Want to Delete The Poll ?</h2>
                     </div>
                     <div className="modalfooter">
                       <button onClick={()=>setmodal(false)} id="modalcancelBtn">Cancel</button>

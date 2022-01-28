@@ -24,6 +24,7 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import Modal from 'react-modal';
 import LinearProgress from '@mui/material/LinearProgress';
+import CodeIcon from '@mui/icons-material/Code';
 let socket;
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -600,7 +601,11 @@ function Vpoll() {
                 </div>
                 ))}
                 </div>
+                <div className='fature'>
+                    <CodeIcon fontSize='large'style={{color:"whitesmoke"}}/><h1 align="center" style={{fontSize:"1.5em",color:"whitesmoke",fontWeight:"normal"}}>  by  Advait,Soham and Hridayesh</h1>
+                </div>
             </div>
+          
         </div>
         :<div className={classes.loader}>
         <CircularProgress style={{color:"#f4511e"}} size={100} />

@@ -9,17 +9,12 @@ import Popup from './Popup';
 import { GoogleLogin } from 'react-google-login';
 import CircularProgress from '@mui/material/CircularProgress';
 import CodeIcon from '@mui/icons-material/Code';
+import Modal from 'react-modal';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import Alert from '@mui/material/Alert';
 const  useStyles = makeStyles({
     pops:{
         backgroundColor:"whitesmoke"
-    },
-    log:{
-        width:"30%",
-        marginLeft:"2%",
-    },
-    sign:{
-        width:"30%",
-        marginLeft:"2%",
     },
     homeMain:{
         display:"flex",
@@ -96,7 +91,24 @@ const  useStyles = makeStyles({
           flexDirection:"column",
           alignItems:"center",
           justifyContent:"center",
-      }
+      },
+      log:{
+          width:"200px",
+          marginBottom:"2%",
+          marginLeft:"1%",
+          marginTop:"1%",
+      },
+      sign:{
+        width:"200px",
+        marginBottom:"2%",
+        marginTop:"1%",
+        marginLeft:"1%",
+    },
+    poptit:{
+        color:"#333",
+        fontWeight:"normal",
+        fontFamily: "Roboto,Arial,sans-serif"
+    }
 })
 function HomePage() {
     const [timedPopup, setTimedPopup] = useState(false);
@@ -104,6 +116,10 @@ function HomePage() {
 	const [userInfo, setUserInfo] = useState({});
     const[loading,setLoading]=useState(true);
     const[newid,setRid]=useState();
+    const[loggedIn,setloggedIn]=useState(false);
+    const[signedIn,setsignedIn]=useState(false);
+    const[existance,setexistance]=useState(false);
+    const[logexist,setlogexist]=useState(false);
     const userd = async () => {
 		try {
 			const res = await fetch("/userdata", {
@@ -166,7 +182,10 @@ function HomePage() {
 			if (res.status === 400 || !data) {
                 window.alert('Something went wrong')
 			} else if (res.status === 200 || res.status === 201) {
-                window.alert("SUCCESSFULLY LOGGED IN")
+                setloggedIn(true);
+                window.setTimeout(() => {
+                    setloggedIn(false);
+                  }, 5000);
                 //props.setTrigger(false)
                 window.location.reload();
                 setTimedPopup(false);
@@ -174,7 +193,10 @@ function HomePage() {
 			} 
             else if(res.status === 422)
                 {
-                window.alert("USER DOES NOT EXSIST")
+                    setlogexist(true);
+                    window.setTimeout(() => {
+                        setlogexist(false);
+                      }, 5000);
 			}
             else
             {
@@ -209,12 +231,18 @@ function HomePage() {
 			if (res.status === 400 || !data) {
                 window.alert('Something went wrong')
 			} else if (res.status === 200 || res.status === 201) {
-                window.alert("SUCCESSFULLY SIGNED UP")
+                setsignedIn(true);
+                window.setTimeout(() => {
+                    setsignedIn(false);
+                  }, 5000);
                 document.getElementByClassName("sign").style.visibility="hidden";
 			} 
             else if(res.status === 422)
             {
-                window.alert("USER ALREADY EXISTS");
+                setexistance(true);
+                window.setTimeout(() => {
+                    setexistance(false);
+                  }, 5000);
             }
             else {
 			}
@@ -409,7 +437,7 @@ function HomePage() {
             </div>
             <Popup className={classes.pops} id="popup" trigger={timedPopup} setTrigger={setTimedPopup}>
                 <h3 align="center" className={classes.poptit}>SIGN UP OR LOGIN TO CONTINUE</h3>
-                <div style={{display:"flex",width:"100%",alignItems:"center",justifyContent:"center"}}>
+                <div style={{display:"flex",width:"100%",alignItems:"center",justifyContent:"center",flexWrap:"wrap"}}>
                 <GoogleLogin id="log" className={classes.log}  
                             clientId="399611436919-fo4n24pr7bpmslat5vamj5u8rc5q0v6f.apps.googleusercontent.com"
                             buttonText="LOGIN IN"
@@ -417,7 +445,7 @@ function HomePage() {
                             onFailure={responseGoogle}
                             cookiePolicy={'single_host_origin'}
                             color="primary"
-                        />
+                        />&nbsp;&nbsp;
                    <GoogleLogin id="sign" className={classes.sign} 
                             clientId="399611436919-fo4n24pr7bpmslat5vamj5u8rc5q0v6f.apps.googleusercontent.com"
                             buttonText="SIGN UP"
@@ -428,7 +456,18 @@ function HomePage() {
                         />
                 </div>
             </Popup>
-            
+            <Modal isOpen={loggedIn} style={{height:300,width:300,margin:0,overlay:{zIndex:11,display:"flex",alignItems:"center",justifyContent:"center",width:"100%",height:"100%",backgroundColor: 'rgba(255, 255, 255, 0.1)'},content:{width:"230px",backgroundColor: 'rgba(255, 255, 255, 0.1)',height:"fit-content",margin:0,top:"10px",left:"0",transition:"1000ms all",border:"none"}}}>
+            <Alert variant="filled" severity="success">Login Successfull</Alert>
+                    </Modal>
+                    <Modal isOpen={signedIn} style={{height:300,width:300,margin:0,overlay:{zIndex:11,display:"flex",alignItems:"center",justifyContent:"center",width:"100%",height:"100%",backgroundColor: 'rgba(255, 255, 255, 0.1)'},content:{width:"230px",backgroundColor: 'rgba(255, 255, 255, 0.1)',height:"fit-content",margin:0,top:"10px",left:"0",transition:"1000ms all",border:"none"}}}>
+            <Alert variant="filled" severity="success">Successfully Signed In</Alert>
+                    </Modal>
+                    <Modal isOpen={existance} style={{height:300,width:300,margin:0,overlay:{zIndex:11,display:"flex",alignItems:"center",justifyContent:"center",width:"100%",height:"100%",backgroundColor: 'rgba(255, 255, 255, 0.1)'},content:{width:"230px",backgroundColor: 'rgba(255, 255, 255, 0.1)',height:"fit-content",margin:0,top:"10px",left:"0",transition:"1000ms all",border:"none"}}}>
+            <Alert variant="filled" severity="error">LogIn to Continue</Alert>
+                    </Modal>
+                    <Modal isOpen={logexist} style={{height:300,width:300,margin:0,overlay:{zIndex:11,display:"flex",alignItems:"center",justifyContent:"center",width:"100%",height:"100%",backgroundColor: 'rgba(255, 255, 255, 0.1)'},content:{width:"230px",backgroundColor: 'rgba(255, 255, 255, 0.1)',height:"fit-content",margin:0,top:"10px",left:"0",transition:"1000ms all",border:"none"}}}>
+            <Alert variant="filled" severity="error">SignUP to Continue</Alert>
+                    </Modal>
             </div>
         :<div className={classes.loader}>
         <CircularProgress style={{color:"#f4511e"}} size={100} />
