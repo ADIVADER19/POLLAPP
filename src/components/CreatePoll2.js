@@ -314,6 +314,7 @@ function CreatePoll2() {
     const classes = useStyles();
     const [modal, setmodal] = useState(false);
     const[deletepollid,setDeletepollid]=useState('');
+    const link="https://pollapp281907.herokuapp.com/"
     function toggle(value){
         return !value;
       }
@@ -326,7 +327,7 @@ function CreatePoll2() {
     }
     
     useEffect(() => {
-        fetch("/bobs", {method: "POST",
+        fetch(`${link}bobs`, {method: "POST",
         headers: {
             "Content-type": "application/json",
         },
@@ -337,7 +338,7 @@ function CreatePoll2() {
         })
     }, [polldes]);
     useEffect(()=>{
-        fetch("/ross", {method: "POST",
+        fetch(`${link}ross`, {method: "POST",
         headers: {
             "Content-type": "application/json",
         },
@@ -489,7 +490,7 @@ function CreatePoll2() {
             setPoll(question);
         }
         else{
-            const res = await fetch("/createnewpoll", {
+            const res = await fetch(`${link}createnewpoll`, {
                 method: "POST",
                 headers: {
                     "Content-type": "application/json",
@@ -519,7 +520,7 @@ function CreatePoll2() {
         }
        }
        else{
-           window.alert("redundant entry");
+           window.alert("Poll Already Exists");
            rups = false;
        }
     }

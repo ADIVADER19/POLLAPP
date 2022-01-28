@@ -19,15 +19,14 @@ export default function Profile() {
 	const [colorr, setColorr] = useState();
 	const [userInfo, setUserInfo] = useState({});
 	const colorarr=["red","blue","yellow","orange","purple","cyan","lightblue","lightgreen","lightyellow","darkblue","crimson","lightorange","darkorange","darkyellow","darkcyan","darkgreen","whitesmoke","white","black","pink"]
+	const link="https://pollapp281907.herokuapp.com/"
 	const callProfilePage = async () => {
 		try {
-			const res = await fetch("/userdata", {
+			const res = await fetch(`${link}userdata`, {
 				method: "GET",
 				headers: {
-					Accept: "application/json",
-					"Content-Type": "application/json",
-				},
-				credentials: "include",
+                    Authorization: "Bearer " + localStorage.getItem("jwt"),
+                  }
 			});
 			const data = await res.json();
 			setUserInfo(data);

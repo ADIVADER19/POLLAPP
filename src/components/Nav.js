@@ -114,6 +114,7 @@ function Nav() {
     const classes=useStyles();
     const [checked, setChecked] = useState(false);
     const [userInfo, setUserInfo] = useState({});
+    const link="https://pollapp281907.herokuapp.com/"
       let navigate = useNavigate();
     function toggle(value){
         return !value;
@@ -121,29 +122,13 @@ function Nav() {
       function navicon() {
           navigate('/')
       }
-      const logout = async (e) => {
+      function logout(e){
           e.preventDefault();
-          await fetch("/logout", {
-              method: "GET",
-              headers: {
-                  "Content-type": "application/json",
-              },
-              credentials: "include",
-          }).then((res)=>{
-  
-              if (res.status === 200) {
-                  window.alert("LOGGED OUT SUCCESSFULLY")
-                  window.location.reload();
-              }
-              else
-              {
-                  window.alert("SOMETHING WENT WRONG")
-              }
-  
-          })
+          localStorage.removeItem('jwt');
+          window.alert('LOGGED OUT SUCCESSFULLY');
+          window.location.reload();
+          }
        
-  
-      };
       function profile(e){
         e.preventDefault();
           navigate("/profile");
@@ -153,16 +138,15 @@ function Nav() {
         navigate("/vpoll/");
     }
     useEffect(async() => {
-        const res = await fetch("/userdata", {
+        const res = await fetch(`${link}userdata`, {
 				method: "GET",
-				headers: {
-					Accept: "application/json",
-					"Content-Type": "application/json",
-				},
-				credentials: "include",
+                headers: {
+                    Authorization: "Bearer " + localStorage.getItem("jwt"),
+                  },
+				//credentials: "include",
 			});
 			const data =await res.json();
-                setUserInfo(data);
+            setUserInfo(data);
         }, [])
     return (
         <>

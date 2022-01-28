@@ -191,12 +191,13 @@ function LivepollT() {
     const [users, setUsers] = useState([]);
     const [polls, setPolls] = useState([]);
     const data = {name:'teacher'};
-    const ENDPOINT = 'localhost:5000';
+    const ENDPOINT = 'https://pollapp281907.herokuapp.com';
     const [sum,setSum] = useState([]);
     const [open, setOpen] = useState(false);
     const[op,setOp]=useState(false);
     const close = true;
     const [modal, setmodal] = useState(false);
+    const link="https://pollapp281907.herokuapp.com/"
     let navigate = useNavigate();
     const str1 = window.location.href;
     const str2 = str1.slice(0,str1.indexOf('LivepollT'));
@@ -248,7 +249,7 @@ function LivepollT() {
         };
         const CloseLobby=()=>{
             const stuid = lobbyuuid;
-            fetch("/close", {
+            fetch(`${link}close`, {
               method: "put",
               headers: {
                 "Content-Type": "application/json",
@@ -286,8 +287,9 @@ function LivepollT() {
         });    
         return()=>{
             socket.emit('disconnect');
-            socket.off();
+            socket.close();
         }
+        
     },[ENDPOINT, lobbyuuid])
     
     useEffect(() => {
@@ -317,7 +319,7 @@ function LivepollT() {
 
 
     useEffect(() => {
-        fetch("/bobs", {method: "POST",
+        fetch(`${link}bobs`, {method: "POST",
         headers: {
             "Content-type": "application/json",
         },
@@ -333,7 +335,7 @@ function LivepollT() {
     }, []);
 
     useEffect(()=>{
-        fetch("/ross",{method:"POST",
+        fetch(`${link}ross`,{method:"POST",
         headers: {
             "Content-type": "application/json",
         },
@@ -344,7 +346,6 @@ function LivepollT() {
 
         })
     },[]);
-
     return (
         <div className='actuallythepagel'>
             <header className={classes.main}>

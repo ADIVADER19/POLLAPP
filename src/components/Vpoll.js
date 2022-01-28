@@ -234,6 +234,7 @@ function Vpoll() {
     const [endLobbyMessage, setendLobbyMessage] = useState(false);
     const [createLob, setcreateLob] = useState(false);
     const [loadss, setloadss] = useState(true);
+    const link="https://pollapp281907.herokuapp.com/"
     useEffect(() => () => {
       clearTimeout(timerRef.current);
     },
@@ -266,7 +267,7 @@ function Vpoll() {
     const[linktxt,setLinktxt]=useState("Share Link");
     const [op, setOp] = React.useState(false);
     const data = {name:'teacher'};
-    const ENDPOINT = 'localhost:5000';
+    const ENDPOINT = 'https://pollapp281907.herokuapp.com';
     const [modal, setmodal] = useState(false);
     const[deletelobid,setDeletelobid]=useState('');
     const[delMessage,setdelMessage]=useState(false);
@@ -283,13 +284,11 @@ function Vpoll() {
       }
     const userd = async () => {
       try {
-			const res = await fetch("/userdata", {
+			const res = await fetch(`${link}userdata`, {
 				method: "GET",
-				headers: {
-					Accept: "application/json",
-					"Content-Type": "application/json",
-				},
-				credentials: "include",
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("jwt"),
+        }
 			});
 			const data = await res.json();      
 			if (res.status === 200 || res.status===201) {
@@ -321,7 +320,7 @@ function Vpoll() {
 
     var usern = userInfo;
     var userIds = usern._id;
-    const openlobbies = async (tata)=> {await fetch("/usrlobbies", {
+    const openlobbies = async (tata)=> {await fetch(`${link}usrlobbies`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -330,7 +329,7 @@ function Vpoll() {
     }).then(res=>res.json()).then(data=>{setLobbies(data); setLoading(true); console.log(lobbies);})
     };
 
-    const closelobbies = async(tata)=> {fetch("/clsrlobbies", {
+    const closelobbies = async(tata)=> {fetch(`${link}clsrlobbies`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -353,7 +352,7 @@ function Vpoll() {
     };
     const DeleteLobby = async()=>{
       console.log(deletelobid);
-      const res = await fetch("/delete", {
+      const res = await fetch(`${link}delete`, {
         method: "POST",
         headers: {
             "Content-type": "application/json",
@@ -391,7 +390,7 @@ function Vpoll() {
       setLinktxt("Link Copied");
     }
     const Closepoll = (stuid) => {
-        fetch("/close", {
+        fetch(`${link}close`, {
           method: "put",
           headers: {
             "Content-Type": "application/json",
@@ -429,45 +428,45 @@ function Vpoll() {
         setOpen(false);
     };
     const [Lobby, setLobby] = useState({
-        lobbyId:createid,
-        lobbyName:"",
-        lobbyDescription:"",
-        studentformId:[],
-        pollId:[],
-        userId:"",
-    });
-    useEffect(()=>{
-        
-      const d = new Date();
-      let timex = d.toLocaleString();
-      console.log(timex);
-      var xemit="";
-    for(var a=0;a<timex.length;a++){
-      if(timex[a]==':'||timex[a]==','||timex[a]=='/'){
-                  if(timex[a]==','){
-                      xemit=xemit+'t';    
-                  }
-                  else{
-                      xemit=xemit+'-';
-                  }
-              }
-      else{
-                  if(timex[a]==" "||timex[a]=="P"||timex[a]=="A"||timex[a]=="M"){
-                      xemit=xemit+'';
-                  }
-                  else{
-        xemit=xemit+timex[a];
-        console.log(xemit);
-                  }
-              }
-    }
-      var finalid=createid+xemit;
-      // var lobster = {...Lobby};
-      // lobster.lobbyId = finalid;
-      // setLobby(lobster)
-      Lobby.lobbyId=finalid
-      console.log(finalid);    
-  },[])
+      lobbyId:'',
+      lobbyName:"",
+      lobbyDescription:"",
+      studentformId:[],
+      pollId:[],
+      userId:"",
+  });
+  useEffect(()=>{
+      
+    const d = new Date();
+    let timex = d.toLocaleString();
+    console.log(timex);
+    var xemit="";
+  for(var a=0;a<timex.length;a++){
+    if(timex[a]==':'||timex[a]==','||timex[a]=='/'){
+                if(timex[a]==','){
+                    xemit=xemit+'t';    
+                }
+                else{
+                    xemit=xemit+'-';
+                }
+            }
+    else{
+                if(timex[a]==" "||timex[a]=="P"||timex[a]=="A"||timex[a]=="M"){
+                    xemit=xemit+'';
+                }
+                else{
+      xemit=xemit+timex[a];
+      console.log(xemit);
+                }
+            }
+  }
+    var finalid=createid+xemit;
+    // var lobster = {...Lobby};
+    // lobster.lobbyId = finalid;
+    // setLobby(lobster)
+    Lobby.lobbyId=finalid
+    console.log(finalid);    
+},[])
     let name, value;
     const handleInputs = (e) => {
 		name = e.target.name;
@@ -484,7 +483,7 @@ function Vpoll() {
         }
         else{
             const{lobbyId,lobbyName,lobbyDescription,studentformId,pollId,userId} = Lobby;
-            const res = await fetch("/createnewlobby", {
+            const res = await fetch(`${link}createnewlobby`, {
                 method: "POST",
                 headers: {
                     "Content-type": "application/json",
@@ -500,7 +499,7 @@ function Vpoll() {
 			} 
       navigate("/poll/"+Lobby.lobbyId); 
         }
-    } 
+    }  
     return (
     <>
       {loading?<div className='coomtainer'>

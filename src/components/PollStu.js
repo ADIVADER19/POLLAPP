@@ -28,33 +28,42 @@ function PollStu() {
     const [polldes, setItems] = useState([]);
     const [lobbydes, setTritems] = useState([]);
     const [check, setBitems] = useState(Boolean);
-    const ENDPOINT = 'localhost:5000';
-    
-    
+    const[loading,setLoading]=useState(false);
+    const ENDPOINT = 'https://pollapp281907.herokuapp.com';
+    const link="https://pollapp281907.herokuapp.com/"
 
 
     
     const suserd = async () => {
+        
 		try {
-			const res = await fetch("/suserdata", {
+            const test=localStorage.getItem("sjwt");
+            console.log(test);
+            if(test === null) {
+                setTimeout(()=>{
+                    setTimedPopup(true);
+                },1000);
+            }
+             else
+             {
+			const res = await fetch(`${link}suserdata`, {
 				method: "GET",
-				headers: {
-					Accept: "application/json",
-					"Content-Type": "application/json",
-				},
-				credentials: "include",
+                headers: {
+                    Authorization: "Bearer " + localStorage.getItem("sjwt"),
+                  }
 			});
 			const data = await res.json();
 		
 
-			if (res.status === 200) {
+			if (res.status === 200 || res.status===201) {
                 setUserInfo(data);
-                
                 socket.emit('join',{data,lobbyuuid},(error)=>{
-                    if(error){alert(error);}
+                    if(error){alert(error);
+                        setLoading(true)}
                 });
 			}
-            else if (res.status === 422) {
+            else{ if (res.status === 422) {
+                
                 setTimeout(()=>{
                     setTimedPopup(true);
                 },1000);
@@ -65,8 +74,10 @@ function PollStu() {
                     setTimedPopup(true);
                 },1000);
             
-            }
-		} catch (err) {
+            }}
+		} 
+    }catch (err) {
+        console.log(err);
 		}
 	};
     const responseGoogle = async (response) => {
@@ -81,7 +92,7 @@ function PollStu() {
 			!givenName 
 		) {
 		} else {
-			const res = await fetch("/slogin", {
+			const res = await fetch(`${link}slogin`, {
 				method: "POST",
 				headers: {
 					"Content-type": "application/json",
@@ -93,20 +104,33 @@ function PollStu() {
 				}),
 			});
             const data= await res.json();
+            const tok=data.message;
+            console.log(data);
+            console.log(tok);
 			if (res.status === 400 || !data) {
                 window.alert('Something went wrong')
+                setTimeout(()=>{
+                    setTimedPopup(true);
+                },1000);
 			} else if (res.status === 200 || res.status === 201) {
                 window.alert("SUCCESSFULLY LOGGED IN")
+                localStorage.setItem("sjwt", tok);
                 setTimedPopup(false);
                 suserd()
 			} 
             else if(res.status === 422)
                 {
-                window.alert("USER DOES NOT EXSIST")
+                window.alert("USER DOES NOT EXSIST");
+                setTimeout(()=>{
+                    setTimedPopup(true);
+                },1000);
 			}
             else
             {
-                window.alert("INVALID USER")
+                window.alert("INVALID USER");
+                setTimeout(()=>{
+                    setTimedPopup(true);
+                },1000);
             }
 		}
 	};
@@ -122,7 +146,7 @@ function PollStu() {
 			!givenName 
 		) {
 		} else {
-			const res = await fetch("/su", {
+			const res = await fetch(`${link}su`, {
 				method: "POST",
 				headers: {
 					"Content-type": "application/json",
@@ -138,7 +162,6 @@ function PollStu() {
                 window.alert('Something went wrong')
 			} else if (res.status === 200 || res.status === 201) {
                 window.alert("SUCCESSFULLY SIGNED UP")
-                document.getElementByclassName("sign").style.display="none";
                 
 			} 
             else if(res.status === 422)
@@ -159,7 +182,7 @@ function PollStu() {
         socket = io(ENDPOINT)
         return()=>{
             socket.emit('disconnect');
-            socket.off();
+            socket.close();
         }
         
     },[ENDPOINT, lobbyuuid])
@@ -173,7 +196,7 @@ const socker=(question,option)=>{
 }      
 
     const polls =(() => {
-        fetch("/bobs", {method: "POST",
+        fetch(`${link}bobs`, {method: "POST",
         headers: {
             "Content-type": "application/json",
         },
@@ -188,7 +211,7 @@ const socker=(question,option)=>{
     });
 
     const lobby =(()=>{
-        fetch("/ross",{method:"POST",
+        fetch(`${link}ross`,{method:"POST",
         headers: {
             "Content-type": "application/json",
         },
@@ -200,7 +223,7 @@ const socker=(question,option)=>{
     });
 
     useEffect(()=>{
-        fetch("/check",{method:"POST",
+        fetch(`${link}check`,{method:"POST",
         headers: {
             "Content-type": "application/json",
         },
@@ -219,7 +242,7 @@ const socker=(question,option)=>{
     },[])
 
     const selectthis=(puid,opuid)=>{
-        fetch("/select", {
+        fetch(`${link}select`, {
             method: "PUT",
             headers: {
               "Content-Type": "application/json",
@@ -249,7 +272,7 @@ const socker=(question,option)=>{
     const classes=useStyles();
     
     const nowdigonthis=(puid,opuid,question,option)=>{
-        fetch("/check",{method:"POST",
+        fetch(`${link}check`,{method:"POST",
         headers: {
             "Content-type": "application/json",
         },
@@ -282,27 +305,30 @@ const socker=(question,option)=>{
                     <h2>{lobbydes.lobbyDescription}</h2>
                 </div>
                 {polldes.map((lob,x)=>(
-                <div className='questsp' key={lob}>
-                    <div className='questionp'>
-                        <h1>{x+1}. {lob.pollQuestion}</h1>
-                    </div>
-                    {lob.pollOption.map((oop)=>(
-                        <>{oop.optionValue == "" &&(
-                            <></>
-                        )}
-                        {!oop.optionValue == "" &&(
-                        <div id= "catrina">
-                            <div className= "optionsp" >
-                                <input type="radio" value={oop.optionValue} name={lob.pollQuestion} id="gywshb" 
-                                onClick={()=>nowdigonthis(lob._id,oop._id,lob.pollQuestion,oop.optionValue)}
-                                ></input>
-                                <h3 id="muda">{oop.optionValue}</h3>
-                            </div>
-                        </div>
-                        )}
-                        </>    
-                        ))}
-                </div>
+                <>
+                {loading?<div></div>:
+                   <div className='questsp' key={lob}>
+                   <div className='questionp'>
+                       <h1>{x+1}. {lob.pollQuestion}</h1>
+                   </div>
+                   {lob.pollOption.map((oop)=>(
+                       <>{oop.optionValue == "" &&(
+                           <></>
+                       )}
+                       {!oop.optionValue == "" &&(
+                       <div id= "catrina">
+                           <div className= "optionsp" >
+                               <input type="radio" value={oop.optionValue} name={lob.pollQuestion} id="gywshb" 
+                               onClick={()=>nowdigonthis(lob._id,oop._id,lob.pollQuestion,oop.optionValue)}
+                               ></input>
+                               <h3 id="muda">{oop.optionValue}</h3>
+                           </div>
+                       </div>
+                       )}
+                       </>    
+                       ))}
+               </div>}
+              </>
                 ))}
                 
             </div>

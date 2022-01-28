@@ -180,9 +180,11 @@ function Closepoll() {
        { x:"",y:"",label:""}
     ]);
     var anotherVar;
+    const link="https://pollapp281907.herokuapp.com/"
+
     const userd = async () => {
         try {
-              const res = await fetch("/userdata", {
+              const res = await fetch(`${link}userdata`, {
                   method: "GET",
                   headers: {
                       Accept: "application/json",
@@ -204,6 +206,8 @@ function Closepoll() {
                 }
         } catch (err) {
          
+
+            
         }
       };
       
@@ -218,7 +222,7 @@ function Closepoll() {
         return !value;
       }
       function navicon() {
-        navigate('/vpoll/');
+        navigate('/')
     }
     const [open, setOpen] = React.useState(false);
     const handleClickOpen = (e) => {
@@ -228,8 +232,40 @@ function Closepoll() {
     const handleClose = () => {
         setOpen(false);
     };
+    useEffect(()=>{
+        
+        const d = new Date();
+        let timex = d.toLocaleString();
+        console.log(timex);
+        var xemit="";
+			for(var a=0;a<timex.length;a++){
+				if(timex[a]==':'||timex[a]==','||timex[a]=='/'){
+                    if(timex[a]==','){
+                        xemit=xemit+'t';    
+                    }
+                    else{
+                        xemit=xemit+'-';
+                    }
+                }
+				else{
+                    if(timex[a]==" "||timex[a]=="P"||timex[a]=="A"||timex[a]=="M"){
+                        xemit=xemit+'';
+                    }
+                    else{
+					xemit=xemit+timex[a];
+					console.log(xemit);
+                    }
+                }
+			}
+        var finalid=createid+xemit;
+        // var lobster = {...Lobby};
+        // lobster.lobbyId = finalid;
+        // setLobby(lobster)
+        Lobby.lobbyId=finalid
+        console.log(finalid);    
+    },[])
     const [Lobby, setLobby] = useState({
-        lobbyId:createid,
+        lobbyId:'',
         lobbyName:"",
         lobbyDescription:"",
         studentformId:[],
@@ -253,7 +289,7 @@ function Closepoll() {
         else{
             
             const{lobbyId,lobbyName,lobbyDescription,studentformId,pollId,userId} = Lobby;
-            const res = await fetch("/createnewlobby", {
+            const res = await fetch(`${link}createnewlobby`, {
                 method: "POST",
                 headers: {
                     "Content-type": "application/json",
@@ -279,7 +315,7 @@ function Closepoll() {
     }
     
     useEffect(() => {
-        fetch("/bobs", {method: "POST",
+        fetch(`${link}bobs`, {method: "POST",
         headers: {
             "Content-type": "application/json",
         },
@@ -287,7 +323,6 @@ function Closepoll() {
     }).then((res) => res.json())
         .then((ret) => {
            setItems(ret.myitem);
-           console.log(polldes);
             let vederichi=[] 
             for(var r=0;r<ret.myitem.length;r++){
                 let arri=0
@@ -305,7 +340,7 @@ function Closepoll() {
 
 
     useEffect(()=>{
-        fetch("/ross",{method:"POST",
+        fetch(`${link}ross`,{method:"POST",
         headers: {
             "Content-type": "application/json",
         },
@@ -319,7 +354,7 @@ function Closepoll() {
     },[]);
 
     const excel = async () =>{
-        const res = await fetch("/excel", {
+        const res = await fetch(`${link}excel`, {
             method: "POST",
             headers: {
                 "Content-type": "application/json",
@@ -334,11 +369,11 @@ function Closepoll() {
         if (res.status===200||res.status===201)
         {
             
-            fetch("/download/"+lobbyuuid+"/"+lobbydes.lobbyName,{
+            fetch(`${link}download/`+lobbyuuid+"/"+lobbydes.lobbyName,{
                 method:"GET",
                 headers: {},            
             })
-            window.open('/download/'+lobbyuuid+"/"+lobbydes.lobbyName);
+            window.open(`${link}download/`+lobbyuuid+"/"+lobbydes.lobbyName);
         }
 
     }

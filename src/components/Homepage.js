@@ -120,21 +120,27 @@ function HomePage() {
     const[signedIn,setsignedIn]=useState(false);
     const[existance,setexistance]=useState(false);
     const[logexist,setlogexist]=useState(false);
+    const link="https://pollapp281907.herokuapp.com/"
     const userd = async () => {
 		try {
-			const res = await fetch("/userdata", {
+            const test=localStorage.getItem("jwt");
+            console.log(test);
+            if(test === null) {
+                setTimeout(()=>{
+                    setLoading(true);
+                    setTimedPopup(true);
+                },1000);
+            }
+            else
+            {
+			const res = await fetch(`${link}userdata`, {
 				method: "GET",
-				headers: {
-					Accept: "application/json",
-					"Content-Type": "application/json",
-				},
-				credentials: "include",
+                headers: {
+                    Authorization: "Bearer " + localStorage.getItem("jwt"),
+                  }
 			});
 			const data = await res.json();
-		
-            
 			if (res.status === 200 || res.status===201) {
-			
                 setUserInfo(data);
                 setLoading(true);
 			}
@@ -152,7 +158,9 @@ function HomePage() {
                 },1000);
             
             }
+        }
 		} catch (err) {
+            console.log(err);
 		}
 	};
     const responseGoogle = async (response) => {
@@ -167,7 +175,7 @@ function HomePage() {
 			!givenName 
 		) {
 		} else {
-			const res = await fetch("/login", {
+			const res = await fetch(`${link}login`, {
 				method: "POST",
 				headers: {
 					"Content-type": "application/json",
@@ -179,10 +187,14 @@ function HomePage() {
 				}),
 			});
             const data= await res.json();
+            const tok=data.message;
+            console.log(data);
+            console.log(tok);
 			if (res.status === 400 || !data) {
                 window.alert('Something went wrong')
 			} else if (res.status === 200 || res.status === 201) {
                 setloggedIn(true);
+                localStorage.setItem("jwt", tok);
                 window.setTimeout(() => {
                     setloggedIn(false);
                   }, 5000);
@@ -216,7 +228,7 @@ function HomePage() {
 			!givenName 
 		) {
 		} else {
-			const res = await fetch("/u", {
+			const res = await fetch(`${link}u`, {
 				method: "POST",
 				headers: {
 					"Content-type": "application/json",
@@ -326,7 +338,7 @@ function HomePage() {
         }
         else{
             const{lobbyId,lobbyName,lobbyDescription,studentformId,pollId,userId} = Lobby;
-            const res = await fetch("/createnewlobby", {
+            const res = await fetch(`${link}createnewlobby`, {
                 method: "POST",
                 headers: {
                     "Content-type": "application/json",
