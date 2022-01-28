@@ -106,6 +106,9 @@ function PollStu() {
             console.log(tok);
 			if (res.status === 400 || !data) {
                 window.alert('Something went wrong')
+                setTimeout(()=>{
+                    setTimedPopup(true);
+                },1000);
 			} else if (res.status === 200 || res.status === 201) {
                 window.alert("SUCCESSFULLY LOGGED IN")
                 localStorage.setItem("sjwt", tok);
