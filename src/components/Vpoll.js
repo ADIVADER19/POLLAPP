@@ -436,6 +436,38 @@ function Vpoll() {
         pollId:[],
         userId:"",
     });
+    useEffect(()=>{
+        
+      const d = new Date();
+      let timex = d.toLocaleString();
+      console.log(timex);
+      var xemit="";
+    for(var a=0;a<timex.length;a++){
+      if(timex[a]==':'||timex[a]==','||timex[a]=='/'){
+                  if(timex[a]==','){
+                      xemit=xemit+'t';    
+                  }
+                  else{
+                      xemit=xemit+'-';
+                  }
+              }
+      else{
+                  if(timex[a]==" "||timex[a]=="P"||timex[a]=="A"||timex[a]=="M"){
+                      xemit=xemit+'';
+                  }
+                  else{
+        xemit=xemit+timex[a];
+        console.log(xemit);
+                  }
+              }
+    }
+      var finalid=createid+xemit;
+      // var lobster = {...Lobby};
+      // lobster.lobbyId = finalid;
+      // setLobby(lobster)
+      Lobby.lobbyId=finalid
+      console.log(finalid);    
+  },[])
     let name, value;
     const handleInputs = (e) => {
 		name = e.target.name;
