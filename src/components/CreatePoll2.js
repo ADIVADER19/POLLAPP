@@ -412,14 +412,13 @@ function CreatePoll2() {
     const DeletetingPoll = async()=>{
         let pollId = deletepollid;
         let lobbyId = lobbydes._id;
-        
         const res = await fetch(`${link}deletePoll`, {
             method: "POST",
             headers: {
                 "Content-type": "application/json",
             },
             body: JSON.stringify({pollId,lobbyId})
-        }); 
+        });
         if (res.status === 200 ) { 
             setmodal(false);
       }
