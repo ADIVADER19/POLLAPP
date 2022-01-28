@@ -617,7 +617,7 @@ function CreatePoll2() {
                     </div>
                     <div className="modalfooter">
                       <button onClick={()=>setmodal(false)} id="modalcancelBtn">Cancel</button>
-                      <button onClick={()=>{DeletetingPoll();setmodal(false)}}>Continue</button>
+                      <button onClick={()=>{DeletetingPoll()}}>Continue</button>
                     </div>
                     </Modal>
             </>
