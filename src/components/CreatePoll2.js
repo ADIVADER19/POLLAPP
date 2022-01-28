@@ -423,6 +423,7 @@ function CreatePoll2() {
         if (res.status === 200 ) { 
             setmodal(false);
       }
+
     }
     const CreatePoll = async(e)=>{
         var options = [...opt];
@@ -616,7 +617,7 @@ function CreatePoll2() {
                     </div>
                     <div className="modalfooter">
                       <button onClick={()=>setmodal(false)} id="modalcancelBtn">Cancel</button>
-                      <button onClick={()=>{DeletetingPoll()}}>Continue</button>
+                      <button onClick={()=>{DeletetingPoll();setmodal(false)}}>Continue</button>
                     </div>
                     </Modal>
             </>
