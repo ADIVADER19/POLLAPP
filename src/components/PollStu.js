@@ -13,6 +13,8 @@ const useStyles=makeStyles({
     },
     log:{
         width:"200px",
+        position:"relative",
+        zIndex:"150",
         marginBottom:"2%",
         marginLeft:"1%",
         marginTop:"1%",
