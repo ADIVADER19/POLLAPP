@@ -19,6 +19,8 @@ const useStyles=makeStyles({
     },
     sign:{
       width:"200px",
+      position:"relative",
+      zIndex:"150",
       marginBottom:"2%",
       marginTop:"1%",
       marginLeft:"1%",
