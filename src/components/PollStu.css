@@ -136,6 +136,8 @@ input[type='radio']:checked:after>.optionsp{
     font-weight: normal;
 }
 @media only screen and (max-width: 750px){
+    .questsp{width:80%;
+    min-height:65vh;};
     #muda{
         margin: 0;
         margin-left: 5%;
