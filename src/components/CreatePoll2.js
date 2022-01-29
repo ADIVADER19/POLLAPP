@@ -16,6 +16,8 @@ import PollIcon from '@material-ui/icons/Poll';
 import MenuIcon from '@mui/icons-material/Menu';
 import SaveIcon from '@mui/icons-material/Save';
 import Modal from 'react-modal';
+import io from 'socket.io-client';
+let socket
 const  useStyles = makeStyles({
     root:{
         margin:"0",
@@ -349,6 +351,12 @@ function CreatePoll2() {
                 setTritems(rte.myitem[0]);
         })
     },[lobbydes]);
+    useEffect(()=>{
+        socket = io(ENDPOINT)
+        return()=>{
+          socket.off();
+      }
+    },[ENDPOINT, 'vpoll'])
     
     const [opt, setopt] = useState([{
         optionValue:"",
@@ -423,6 +431,9 @@ function CreatePoll2() {
         });
         if (res.status === 200 ) { 
             setmodal(false);
+            socket.emit('deletepoll',{lobbyuuid:lobbydes.lobbyId,poll:polldes,pollId:deletepollid},(error)=>{
+                if(error){alert(error);}
+            });
       }
 
     }
