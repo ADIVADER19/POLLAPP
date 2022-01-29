@@ -13,16 +13,12 @@ const useStyles=makeStyles({
     },
     log:{
         width:"200px",
-        position:"relative",
-        zIndex:"150",
         marginBottom:"2%",
         marginLeft:"1%",
         marginTop:"1%",
     },
     sign:{
       width:"200px",
-      position:"relative",
-      zIndex:"150",
       marginBottom:"2%",
       marginTop:"1%",
       marginLeft:"1%",
@@ -356,7 +352,7 @@ const socker=(question,option)=>{
             </div>
             <Popup className={classes.pops} id="popup" trigger={timedPopup} setTrigger={setTimedPopup}>
                 <h3 align="center" className={classes.poptit}>SIGN UP OR LOGIN TO CONTINUE</h3>
-                <div style={{display:"flex",width:"100%",alignItems:"center",justifyContent:"center"}}>
+                <div style={{display:"flex",width:"100%",alignItems:"center",justifyContent:"center",position:"relative",zIndex:"150"}}>
                 <GoogleLogin id="log" className={classes.log}  
                             clientId="399611436919-fo4n24pr7bpmslat5vamj5u8rc5q0v6f.apps.googleusercontent.com"
                             buttonText="LOGIN IN"
