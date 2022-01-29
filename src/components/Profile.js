@@ -115,103 +115,105 @@ export default function Profile() {
 	var lastchar;
 	return (
 		
-		<div>
-			<Box className="form">
-				<div className="title">
-					{/* <AccountCircleIcon
-						style={{ fontSize: 55, marginRight: 10, marginTop: -3}}
-						className="icon"
-					/> */}
-					<Avatar style={{backgroundColor:`${colorarr[colorr]}`}} className="iconn" >{paa}</Avatar>
-					<Typography style={{fontSize:40}} className="text" variant="h2">
-						{" "}
-						Welcome Back, {userInfo.givenName}!
-					</Typography>
-				</div>
+		<div style={{ overflow: "hidden" }}>
+		<div class="triangle-right1"></div>
+		<div className="triangle-left1"></div>
+		<Box className="form">
+			<div className="title">
+				{/* <AccountCircleIcon
+					style={{ fontSize: 55, marginRight: 10, marginTop: -3}}
+					className="icon"
+				/> */}
+				<Avatar style={{backgroundColor:`${colorarr[colorr]}`}} className="iconn" >{paa}</Avatar>
+				<Typography style={{fontSize:40}} className="text" variant="h2">
+					{" "}
+					Welcome Back, {userInfo.givenName}!
+				</Typography>
+			</div>
 
-				<div className="detail">
-					<Typography
-						style={{ marginRight: 80, marginTop: 10}}
-						className="label"
-						variant="h5"
-					>
-						First Name:
-					</Typography>
-					<TextField
-						value={userInfo.givenName}
-						// onChange={(e) =>
-						// 	setUserInfo({ ...userInfo, firstname: e.target.value })
-						// }
-						disabled
-						style={{ width: 750, backgroundColor: "white" }}
-						variant="outlined"
-					></TextField>
-				</div>
-				<div className="detail">
-					<Typography
-						style={{ marginRight: 140 , marginTop: 10}}
-						className="label"
-						variant="h5"
-					>
-						Email:
-					</Typography>
-					<TextField
-						value={userInfo.mail}
-						// onChange={(e) =>
-						// 	setUserInfo({ ...userInfo, email: e.target.value })
-						// }
-						disabled
-						style={{ width: 750, backgroundColor: "white" }}
-						variant="outlined"
-					></TextField>
-				</div>
-                <div className="detail">
-					<Typography
-						style={{ marginRight: 140, marginTop: 10 }}
-						className="label"
-						variant="h5"
-					>
-						Name:
-					</Typography>
-					<TextField
-						value={userInfo.name}
-						// onChange={(e) =>
-						// 	setUserInfo({ ...userInfo, email: e.target.value })
-						// }
-						disabled
-						style={{ width: 750, backgroundColor: "white" }}
-						variant="outlined"
-					></TextField>
-				</div>
-				{/* <div className="detail">
-					<Typography
-						style={{ marginRight: 90 }}
-						className="label"
-						variant="h5"
-					>
-						Password:
-					</Typography>
-					<TextField
-						placeholder="Type a new password and submit this form to change"
-						style={{ width: 750, backgroundColor: "white" }}
-						variant="outlined"
-					></TextField>
-				</div> */}
-				{/* <div className="submit">
-					<Button
-						variant="contained"
-						style={{ fontSize: 15 }}
-						color="primary"
-						endIcon={<ArrowRightAltIcon />}
-						size="large"
-						onClick={PostData}
-					>
-						UPDATE DETAILS
-					</Button>
-				</div> */}
-               
-			</Box>
-            <button onClick={goBack} className="butt">BACK</button>
-		</div>
+			<div className="detail">
+				<Typography
+					style={{ marginRight: 80, marginTop: 10}}
+					className="label"
+					variant="h5"
+				>
+					First Name:
+				</Typography>
+				<TextField
+					value={userInfo.givenName}
+					// onChange={(e) =>
+					// 	setUserInfo({ ...userInfo, firstname: e.target.value })
+					// }
+					disabled
+					style={{ width: 750, backgroundColor: "white" }}
+					variant="outlined"
+				></TextField>
+			</div>
+			<div className="detail">
+				<Typography
+					style={{ marginRight: 140 , marginTop: 10}}
+					className="label"
+					variant="h5"
+				>
+					Email:
+				</Typography>
+				<TextField
+					value={userInfo.mail}
+					// onChange={(e) =>
+					// 	setUserInfo({ ...userInfo, email: e.target.value })
+					// }
+					disabled
+					style={{ width: 750, backgroundColor: "white" }}
+					variant="outlined"
+				></TextField>
+			</div>
+			<div className="detail">
+				<Typography
+					style={{ marginRight: 140, marginTop: 10 }}
+					className="label"
+					variant="h5"
+				>
+					Name:
+				</Typography>
+				<TextField
+					value={userInfo.name}
+					// onChange={(e) =>
+					// 	setUserInfo({ ...userInfo, email: e.target.value })
+					// }
+					disabled
+					style={{ width: 750, backgroundColor: "white" }}
+					variant="outlined"
+				></TextField>
+			</div>
+			{/* <div className="detail">
+				<Typography
+					style={{ marginRight: 90 }}
+					className="label"
+					variant="h5"
+				>
+					Password:
+				</Typography>
+				<TextField
+					placeholder="Type a new password and submit this form to change"
+					style={{ width: 750, backgroundColor: "white" }}
+					variant="outlined"
+				></TextField>
+			</div> */}
+			{/* <div className="submit">
+				<Button
+					variant="contained"
+					style={{ fontSize: 15 }}
+					color="primary"
+					endIcon={<ArrowRightAltIcon />}
+					size="large"
+					onClick={PostData}
+				>
+					UPDATE DETAILS
+				</Button>
+			</div> */}
+		   
+		</Box>
+		<button onClick={goBack} className="butt">BACK</button>
+	</div>
 	);
 }

@@ -314,7 +314,8 @@ function CreatePoll2() {
     const classes = useStyles();
     const [modal, setmodal] = useState(false);
     const[deletepollid,setDeletepollid]=useState('');
-    const link="https://pollapp281907.herokuapp.com/"
+    const link="https://pollapp281907.herokuapp.com/";
+    const ENDPOINT = 'https://pollapp281907.herokuapp.com';
     function toggle(value){
         return !value;
       }
