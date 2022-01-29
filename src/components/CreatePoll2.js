@@ -412,6 +412,7 @@ function CreatePoll2() {
     const DeletetingPoll = async()=>{
         let pollId = deletepollid;
         let lobbyId = lobbydes._id;
+        console.log(lobbyId);
         const res = await fetch(`${link}deletePoll`, {
             method: "POST",
             headers: {
@@ -422,6 +423,7 @@ function CreatePoll2() {
         if (res.status === 200 ) { 
             setmodal(false);
       }
+
     }
     const CreatePoll = async(e)=>{
         var options = [...opt];
