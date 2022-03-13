@@ -1,17 +1,168 @@
 import React, { useState, useEffect} from "react";
 import { useNavigate } from 'react-router';
 import "./Profile.css";
-import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import Box from "@material-ui/core/Box";
 import Avatar from "@material-ui/core/Avatar";
-import {deepPurple} from '@mui/material/colors';
-import ArrowRightAltIcon from "@material-ui/icons/ArrowRightAlt";
-import { ToastContainer, toast } from "react-toastify";
-import { unstable_renderSubtreeIntoContainer } from "react-dom";
-
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import Stack from '@mui/material/Stack';
+import Divider from '@mui/material/Divider';
+import { styled } from '@mui/material/styles';
+import { FormHelperText } from "@material-ui/core";
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
+import * as XLSX from 'xlsx';
+import {Dialog,DialogTitle,DialogActions,DialogContent,DialogContentText} from '@material-ui/core';
+import SelectUnstyled, { selectUnstyledClasses } from '@mui/base/SelectUnstyled';
+import OptionUnstyled, { optionUnstyledClasses } from '@mui/base/OptionUnstyled';
+import PopperUnstyled from '@mui/base/PopperUnstyled';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+import PreviewIcon from '@mui/icons-material/Preview';
+import Tooltip from '@mui/material/Tooltip';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
+/*Select component Styling*/
+const blue = {
+	100: '#DAECFF',
+	200: '#99CCF3',
+	400: '#3399FF',
+	500: '#007FFF',
+	600: '#0072E5',
+	900: '#003A75',
+  };
+  
+  const grey = {
+	100: '#E7EBF0',
+	200: '#E0E3E7',
+	300: '#CDD2D7',
+	400: '#B2BAC2',
+	500: '#A0AAB4',
+	600: '#6F7E8C',
+	700: '#3E5060',
+	800: '#2D3843',
+	900: '#1A2027',
+  };
+  
+  const StyledButton = styled('button')(
+	({ theme }) => `
+	font-family: IBM Plex Sans, sans-serif;
+	font-size: 0.875rem;
+	box-sizing: border-box;
+	min-height: calc(1.5em + 22px);
+	min-width: 70%;
+	background: ${theme.palette.mode === 'dark' ? grey[900] : '#fff'};
+	border: 1px solid ${theme.palette.mode === 'dark' ? grey[800] : grey[300]};
+	border-radius: 0.75em;
+	margin: 0.5em;
+	padding: 10px;
+	text-align: left;
+	line-height: 1.5;
+	color: ${theme.palette.mode === 'dark' ? grey[300] : grey[900]};
+  
+	&:hover {
+	  background: ${theme.palette.mode === 'dark' ? '' : grey[100]};
+	  border-color: ${theme.palette.mode === 'dark' ? grey[700] : grey[400]};
+	}
+  
+	&.${selectUnstyledClasses.focusVisible} {
+	  outline: 3px solid ${theme.palette.mode === 'dark' ? blue[600] : blue[100]};
+	}
+  
+	&.${selectUnstyledClasses.expanded} {
+	  &::after {
+		content: '▴';
+	  }
+	}
+  
+	&::after {
+	  content: '▾';
+	  float: right;
+	}
+	`,
+  );
+  
+  const StyledListbox = styled('ul')(
+	({ theme }) => `
+	font-family: IBM Plex Sans, sans-serif;
+	font-size: 0.875rem;
+	box-sizing: border-box;
+	padding: 5px;
+	margin: 10px 0;
+	min-width: 70vw;
+	background: ${theme.palette.mode === 'dark' ? grey[900] : '#fff'};
+	border: 1px solid ${theme.palette.mode === 'dark' ? grey[800] : grey[300]};
+	border-radius: 0.75em;
+	color: ${theme.palette.mode === 'dark' ? grey[300] : grey[900]};
+	overflow: auto;
+	outline: 0px;
+	`,
+  );
+  
+  const StyledOption = styled(OptionUnstyled)(
+	({ theme }) => `
+	list-style: none;
+	padding: 8px;
+	border-radius: 0.45em;
+	cursor: default;
+  
+	&:last-of-type {
+	  border-bottom: none;
+	}
+  
+	&.${optionUnstyledClasses.selected} {
+	  background-color: ${theme.palette.mode === 'dark' ? blue[900] : blue[100]};
+	  color: ${theme.palette.mode === 'dark' ? blue[100] : blue[900]};
+	}
+  
+	&.${optionUnstyledClasses.highlighted} {
+	  background-color: ${theme.palette.mode === 'dark' ? grey[800] : grey[100]};
+	  color: ${theme.palette.mode === 'dark' ? grey[300] : grey[900]};
+	}
+  
+	&.${optionUnstyledClasses.highlighted}.${optionUnstyledClasses.selected} {
+	  background-color: ${theme.palette.mode === 'dark' ? blue[900] : blue[100]};
+	  color: ${theme.palette.mode === 'dark' ? blue[100] : blue[900]};
+	}
+  
+	&.${optionUnstyledClasses.disabled} {
+	  color: ${theme.palette.mode === 'dark' ? grey[700] : grey[400]};
+	}
+  
+	&:hover:not(.${optionUnstyledClasses.disabled}) {
+	  background-color: ${theme.palette.mode === 'dark' ? grey[800] : grey[100]};
+	  color: ${theme.palette.mode === 'dark' ? grey[300] : grey[900]};
+	}
+	`,
+  );
+  
+  const StyledPopper = styled(PopperUnstyled)`
+	z-index: 1;
+  `;
+  
+  const CustomSelect = React.forwardRef(function CustomSelect(props, ref) {
+	const components = {
+	  Root: StyledButton,
+	  Listbox: StyledListbox,
+	  Popper: StyledPopper,
+	  ...props.components,
+	};
+  
+	return <SelectUnstyled {...props} ref={ref} components={components} />;
+  });
+  function createData(Name,RollNo,Email) {
+	return { Name,RollNo,Email };
+  }
+  const Alert = React.forwardRef(function Alert(props, ref) {
+	return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+  });
 export default function Profile() {
 	const navigate = useNavigate();
 	const [data, setData] = useState("");
@@ -19,6 +170,9 @@ export default function Profile() {
 	const [colorr, setColorr] = useState();
 	const [userInfo, setUserInfo] = useState({});
 	const colorarr=["red","blue","yellow","orange","purple","cyan","lightblue","lightgreen","lightyellow","darkblue","crimson","lightorange","darkorange","darkyellow","darkcyan","darkgreen","whitesmoke","white","black","pink"]
+	const Input = styled('input')({
+		display: 'none',
+	  });
 	const callProfilePage = async () => {
 		try {
 			const res = await fetch("/userdata", {
@@ -31,7 +185,7 @@ export default function Profile() {
 			});
 			const data = await res.json();
 			setUserInfo(data);
-
+			console.log(data)
 			if (!res.status === 200) {
 				window.alert("login first");
 				navigate('/');
@@ -114,9 +268,128 @@ export default function Profile() {
 	var firstchar;
 	var fname;
 	var lastchar;
+	const [excelAlert, setexcelAlert] = useState(false);	
+	  const handleCloseexcAlr = () => {
+		setexcelAlert(false);
+	  };
+	  const [excelSucc, setexcelSucc] = useState(false);	
+	  const handleCloseexcSucc = () => {
+		setexcelSucc(false);
+	  };
+	const [openps, setOpenps] = React.useState(false);
+    const handleClickOpenps = () => {
+		console.log("Hi");
+		setOpenps(true);
+    };
+    const handleCloseps = () => {
+        setOpenps(false);
+    };
+	const [opentb, setOpentb] = React.useState(false);
+    const handleClickOpentb = () => {
+		console.log("Hi");
+		setOpentb(true);
+		const workbook = XLSX.read(excelFile,{type:'buffer'});
+		console.log(workbook)
+		const worksheetName = workbook.SheetNames[0];
+		const worksheet=workbook.Sheets[worksheetName];
+		const data = XLSX.utils.sheet_to_json(worksheet);
+		setExcelData(data);
+		console.log(data);
+		console.log("Ok",excelData);
+    };
+    const handleClosetb = () => {
+        setOpentb(false);
+    };
+	const subjectSelected = (index)=>{
+		console.log(index);
+	}
+	/*Excel sheet submission*/
+	const [filename, setfilename] = useState("No File Chosen");
+	const [subjectName, setsubjectName] = useState();
+	const retrivedSubject=["Subject1","Subject2","Subject3"];
+	let value;
+    const handlingSubject = (e) => {
+		value = e.target.value;
+		setsubjectName(e.target.value);
+		console.log(subjectName);
+	};
+	const [excelFile, setExcelFile]=useState(null);
+  const [excelFileError, setExcelFileError]=useState(null);  
+ 
+  // submit
+  const [excelData, setExcelData]=useState();
+ 
+   const[emailArray,setEmailArray]=useState([]);
+	// it will contain array of objects
+	const fileType=['application/vnd.ms-excel','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'];
+	const UploadFile = (e)=>{
+		let selectedFile = e.target.files[0];
+		setfilename(e.target.files[0].name);
+		console.log(selectedFile);
+		if(selectedFile){
+		    console.log(selectedFile.type);
+			if(selectedFile&&fileType.includes(selectedFile.type)){
+			let reader = new FileReader();
+			reader.readAsArrayBuffer(selectedFile);
+			reader.onload=(e)=>{
+				console.log("Hi",e.target.result);
+			  setExcelFileError(null);
+			  setExcelFile(e.target.result); 
+			}
+		    }
+			else{
+				setexcelAlert(true);
+				setExcelFile(null);
+				setsubjectName(null);
+				setfilename(null);
+				setExcelData(null);
+				setEmailArray([]);
+				setfilename("No File Chosen");
+			}
+			console.log(excelFile);
+		}
+		else{
+			console.log("Please Select The File")
+		}
+		}
+	const SubmitHandler=async()=>{
+		const workbook = XLSX.read(excelFile,{type:'buffer'});
+		console.log(workbook)
+		const worksheetName = workbook.SheetNames[0];
+		const worksheet=workbook.Sheets[worksheetName];
+		const data = XLSX.utils.sheet_to_json(worksheet);
+		setExcelData(data);
+		console.log(data.length);
+		console.log(data);
+		for (let i = 0; i < data.length; i++) { 
+			console.log(data[i].Email);
+			emailArray.push(data[i].Email);
+		  }
+		console.log("Hello",emailArray);
+		console.log("Ok",excelData);
+		let mailid = userInfo.mail;
+		console.log(mailid);
+		console.log(subjectName);
+		console.log(emailArray);
+		const res = await fetch("/createNewSubject", {
+			method: "POST",
+			headers: {
+				"Content-type": "application/json",
+			},
+			body: JSON.stringify({subjectName,emailArray,mailid})
+		});
+		setExcelFile(null);
+		setsubjectName(null);
+		setfilename(null);
+		setExcelData(null);
+		setEmailArray([]);
+		setexcelSucc(true);
+		setfilename("No File Chosen");
+		setOpenps(false);
+	}
 	return (
 		
-		<div style={{ overflow: "hidden" }}>
+		<div style={{display:"block",width:"100vw",overflow: "hidden" }}>
 			<div class="triangle-right1"></div>
             <div className="triangle-left1"></div>
 			<Box className="form">
@@ -186,35 +459,102 @@ export default function Profile() {
 						variant="outlined"
 					></TextField>
 				</div>
-				{/* <div className="detail">
-					<Typography
-						style={{ marginRight: 90 }}
-						className="label"
-						variant="h5"
-					>
-						Password:
-					</Typography>
-					<TextField
-						placeholder="Type a new password and submit this form to change"
-						style={{ width: 750, backgroundColor: "white" }}
-						variant="outlined"
-					></TextField>
-				</div> */}
-				{/* <div className="submit">
-					<Button
-						variant="contained"
-						style={{ fontSize: 15 }}
-						color="primary"
-						endIcon={<ArrowRightAltIcon />}
-						size="large"
-						onClick={PostData}
-					>
-						UPDATE DETAILS
-					</Button>
-				</div> */}
-               
+								
 			</Box>
+			<hr align="center" style={{marginLeft:"10%",width:"80%",align:"center"}}/>
+			<div style={{width:"100vw",display:"flex",alignItems:"center",justifyContent:"center"}}>
+			<CustomSelect defaultValue={1000} onChange={(index)=>{subjectSelected(index)}}>
+				{userInfo.Subject==undefined?
+					<>---No Subject Created---</>:<>
+				{
+					userInfo.Subject.map((value, index) => 
+					<StyledOption value={value} key={index} >{value.SubjectValue}</StyledOption>
+					)
+				}
+				</>}			
+				
+				<StyledOption value={handleClickOpenps} >Add Subject</StyledOption>
+			</CustomSelect>
+			<Dialog open={openps}>
+                  <DialogTitle>Add New Subject</DialogTitle>
+                  <DialogContent>
+                    <DialogContentText>
+					<Stack style={{width:"40vw"}}  divider={<Divider orientation="vertical" flexItem />} direction={{ xs: 'column'}} spacing={{ xs: 1, sm: 4, md: 8 }}>
+					<TextField style={{width:"100%"}} sx={{ input: { color: 'red' } }} id="outlined-basic" label="Subject Name" variant="outlined" onChange={handlingSubject} required />
+					<br/>
+					<div style={{display:"flex",justifyContent:"space-around",flexWrap:"wrap"}}>
+					<label htmlFor="contained-button-file">
+					<Input accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" id="contained-button-file" type="file"  aria-describedby="my-helper-text"  onChange={UploadFile} required/>
+					<Button variant="contained" component="span">Upload</Button>
+					<FormHelperText id="my-helper-text">{filename}</FormHelperText>
+					</label>
+					<Tooltip title="Preview" >
+						<IconButton >
+							<PreviewIcon fontSize='large'onClick={handleClickOpentb}/>
+						</IconButton>
+					</Tooltip>
+					</div>
+					<br/>
+					<div>
+					</div>
+				</Stack>	
+                    </DialogContentText>
+                  </DialogContent>
+                  <DialogActions>
+				  <Button variant="contained" onClick={handleCloseps} >Cancel</Button>
+                    <Button variant="contained" endIcon={<AddCircleOutlineIcon/>} onClick={SubmitHandler}>Add</Button>
+                  </DialogActions>
+                </Dialog>
+				<Dialog open={opentb}>
+					<DialogTitle style={{display:"flex",justifyContent:"space-between",flexWrap:"no-wrap",backgroundColor:"red"}}>Uploaded Xlsx File 
+					<Tooltip title="Close" float="right">
+						<IconButton >
+							<CloseIcon fontSize='medium'onClick={handleClosetb}/>
+						</IconButton>
+					</Tooltip>
+					</DialogTitle>
+					<DialogContent>
+						<DialogContentText>
+							<h3 style={{fontWeight:"normal"}}><u>Subject Name</u>: {subjectName}</h3>
+							<TableContainer component={Paper}>
+								<Table sx={{ minWidth: 650 }} aria-label="simple table">
+									<TableHead>
+										<TableRow>
+											<TableCell>Name</TableCell>
+											<TableCell align="right">Roll No</TableCell>
+											<TableCell align="right">Email</TableCell>
+										</TableRow>
+									</TableHead>
+									<TableBody>
+									{excelData==undefined?<>No enteries filled</>:<>
+									{excelData.map((row,i) => (
+									<TableRow key={excelData.Name}
+									sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+										<TableCell component="th" scope="row">{excelData[i].Name}
+										</TableCell>
+										<TableCell align="right">{excelData[i].RollNo}</TableCell>
+										<TableCell align="right">{excelData[i].Email}</TableCell></TableRow>
+									))}
+									</>}
+									</TableBody>
+								</Table>
+							</TableContainer>
+						</DialogContentText>
+					</DialogContent>
+					<DialogActions></DialogActions>
+				</Dialog>
+			</div>
             <button onClick={goBack} className="butt">BACK</button>
+			<Snackbar open={excelAlert} autoHideDuration={6000} onClose={handleCloseexcAlr}>
+        <Alert onClose={handleCloseexcAlr} severity="error" sx={{ width: '100%' }}>
+          Kindly Upload Excel File Only
+        </Alert>
+      </Snackbar>
+	  <Snackbar open={excelSucc} autoHideDuration={6000} onClose={handleCloseexcSucc}>
+        <Alert onClose={handleCloseexcSucc} severity="success" sx={{ width: '100%' }}>
+          Kindly Upload Excel File Only
+        </Alert>
+      </Snackbar>
 		</div>
 	);
 }

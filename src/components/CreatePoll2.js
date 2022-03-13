@@ -19,7 +19,6 @@ import io from 'socket.io-client';
 import { Delete } from '@material-ui/icons';
 
 let socket
-
 const  useStyles = makeStyles({
     root:{
         margin:"0",
@@ -36,11 +35,34 @@ const  useStyles = makeStyles({
         ['@media (max-width:780px)']: {
             width:"100vw",
           }
+    },stylings:{
+        background:"#f4511e",
+        position:"absolute",
+        top:0,
+        left:0,
+        width:"50px",
+        height:"50px",
+        borderRadius:"15% 50% 50% 0%"
     },
     lobbypollsseen:{
-        width:"45%",height:"40vh",backgroundColor:"whitesmoke",display:"flex",padding:"2%",flexDirection:"column",alignItems:"flex-start",borderRadius:"1em",
+        position:"relative",width:"43%",height:"63vh",backgroundColor:"white",display:"flex",flexDirection:"column",alignItems:"flex-start",margin:"1%",borderLeft:"10px solid #f4511e",borderRadius:"1em",zIndex:"2",
         ['@media (max-width:780px)']: {
             width:"100%",
+            height:"70vh"
+          },
+          ['@media (max-width:340px)']: {
+            width:"100%",
+            height:"88vh"
+          }
+    },
+    lastStuf:{
+        display:"flex",fontFamily: "Roboto,Arial,sans-serif", fontSize: 25,width:"100%",position:"relative",top:"13vh",zIndex:"1",background:"#ebebeb",height:"45vh",borderRadius:"0 0 0 2%",
+        ['@media (max-width:780px)']: {height:"52vh",
+          }
+          ,
+          ['@media (max-width:340px)']: {
+            width:"100%",
+            height:"70vh"
           }
     },
     question:{
@@ -64,8 +86,14 @@ const  useStyles = makeStyles({
     },
     quest:{
         fontFamily: "'Google Sans',Roboto,Arial,sans-serif",
-        fontSize: 30,
-        fontweight: 400,
+        fontWeight: 400,
+    },
+    tired:{
+        color:"#333",
+        "&:hover":{
+            color:"red",
+            cursor:"pointer",
+        }
     },
     add_question_body:{
         display:"flex",
@@ -172,7 +200,7 @@ const  useStyles = makeStyles({
         fontFamily: "Roboto,Arial,sans-serif",
         textTransform:"capitalize",
         position:"fixed",
-        zIndex:"2",
+        zIndex:"50",
         top:"0",
         left:"0",
         right:"0",
