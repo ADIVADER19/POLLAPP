@@ -1,33 +1,15 @@
 import React, { useState, useEffect} from "react";
 import { useNavigate } from 'react-router';
 import "./Profile.css";
-import Typography from "@material-ui/core/Typography";
-import TextField from "@material-ui/core/TextField";
-import Button from "@material-ui/core/Button";
-import Box from "@material-ui/core/Box";
-import Avatar from "@material-ui/core/Avatar";
+import {Typography,TextField,Button,Box,Avatar,Dialog,DialogTitle,DialogActions,DialogContent,DialogContentText,FormHelperText} from "@material-ui/core";
+import {Stack,Divider,styled,Snackbar,Table,TableBody,IconButton,Tooltip,Paper,TableRow,TableHead,TableContainer,TableCell} from "@mui/material";
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-import Stack from '@mui/material/Stack';
-import Divider from '@mui/material/Divider';
-import { styled } from '@mui/material/styles';
-import { FormHelperText } from "@material-ui/core";
-import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import * as XLSX from 'xlsx';
-import {Dialog,DialogTitle,DialogActions,DialogContent,DialogContentText} from '@material-ui/core';
 import SelectUnstyled, { selectUnstyledClasses } from '@mui/base/SelectUnstyled';
 import OptionUnstyled, { optionUnstyledClasses } from '@mui/base/OptionUnstyled';
 import PopperUnstyled from '@mui/base/PopperUnstyled';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
 import PreviewIcon from '@mui/icons-material/Preview';
-import Tooltip from '@mui/material/Tooltip';
-import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 /*Select component Styling*/
 const blue = {
@@ -268,6 +250,7 @@ export default function Profile() {
 	var firstchar;
 	var fname;
 	var lastchar;
+	/*All Alerts UseState*/
 	const [excelAlert, setexcelAlert] = useState(false);	
 	  const handleCloseexcAlr = () => {
 		setexcelAlert(false);
@@ -275,6 +258,22 @@ export default function Profile() {
 	  const [excelSucc, setexcelSucc] = useState(false);	
 	  const handleCloseexcSucc = () => {
 		setexcelSucc(false);
+	  };
+	  const [excelFail, setexcelFail] = useState(false);	
+	  const handleCloseexcFail = () => {
+		setexcelFail(false);
+	  };
+	  const [excelSub, setexcelSub] = useState(false);	
+	  const handleCloseSub = () => {
+		setexcelSub(false);
+	  };
+	  const [excelSubEnt, setexcelSubEnt] = useState(false);	
+	  const handleCloseSubEnt = () => {
+		setexcelSubEnt(false);
+	  };
+	  const [excelUpload, setexcelUpload] = useState(false);	
+	  const handleCloseexcUpload = () => {
+		setexcelUpload(false);
 	  };
 	const [openps, setOpenps] = React.useState(false);
     const handleClickOpenps = () => {
@@ -305,7 +304,7 @@ export default function Profile() {
 	}
 	/*Excel sheet submission*/
 	const [filename, setfilename] = useState("No File Chosen");
-	const [subjectName, setsubjectName] = useState();
+	const [subjectName, setsubjectName] = useState(null);
 	const retrivedSubject=["Subject1","Subject2","Subject3"];
 	let value;
     const handlingSubject = (e) => {
@@ -353,39 +352,111 @@ export default function Profile() {
 		}
 		}
 	const SubmitHandler=async()=>{
-		const workbook = XLSX.read(excelFile,{type:'buffer'});
-		console.log(workbook)
-		const worksheetName = workbook.SheetNames[0];
-		const worksheet=workbook.Sheets[worksheetName];
-		const data = XLSX.utils.sheet_to_json(worksheet);
-		setExcelData(data);
-		console.log(data.length);
-		console.log(data);
-		for (let i = 0; i < data.length; i++) { 
-			console.log(data[i].Email);
-			emailArray.push(data[i].Email);
-		  }
-		console.log("Hello",emailArray);
-		console.log("Ok",excelData);
-		let mailid = userInfo.mail;
-		console.log(mailid);
-		console.log(subjectName);
-		console.log(emailArray);
-		const res = await fetch("/createNewSubject", {
-			method: "POST",
-			headers: {
-				"Content-type": "application/json",
-			},
-			body: JSON.stringify({subjectName,emailArray,mailid})
-		});
-		setExcelFile(null);
-		setsubjectName(null);
-		setfilename(null);
-		setExcelData(null);
-		setEmailArray([]);
-		setexcelSucc(true);
-		setfilename("No File Chosen");
-		setOpenps(false);
+		let subValArr=[]
+		let subVal=userInfo.Subject;
+		let len = userInfo.Subject.length;
+		if(len==0||len==undefined||len==null){
+			if(subjectName==null||subjectName==''){
+				setexcelSubEnt(true);
+			}
+			else if(excelFile){
+			const workbook = XLSX.read(excelFile,{type:'buffer'});
+			console.log(workbook)
+			const worksheetName = workbook.SheetNames[0];
+			const worksheet=workbook.Sheets[worksheetName];
+			const data = XLSX.utils.sheet_to_json(worksheet);
+			setExcelData(data);
+			for (let i = 0; i < data.length; i++) { 
+				emailArray.push(data[i].Email);
+			}
+			let mailid = userInfo.mail;
+			const res = await fetch("/createNewSubject", {
+				method: "POST",
+				headers: {
+					"Content-type": "application/json",
+				},
+				body: JSON.stringify({subjectName,emailArray,mailid})
+			});
+			const dt= await res.json();
+			if (res.status === 400 || !dt) {
+				setexcelFail(true);
+				setfilename("No File Chosen");
+				setExcelFile(null);
+				setsubjectName(null);
+				setfilename(null);
+				setExcelData(null);
+				setEmailArray([]);
+			} else if (res.status === 200 || res.status === 201) {
+				setexcelSucc(true);
+				setOpenps(false);
+			} 
+			}
+			else{
+				setexcelUpload(true);
+			}
+		}
+		else{
+			for(let i =0;i<len;i++){
+				console.log(i);
+				subValArr.push(userInfo.Subject[i].SubjectValue);
+			}
+			if(subValArr.includes(subjectName)){
+				setexcelSub(true);
+				setfilename("No File Chosen");
+				setExcelFile(null);
+				setsubjectName(null);
+				setfilename(null);
+				setExcelData(null);
+				setEmailArray([]);
+			}
+			else if(subjectName==null||subjectName==''){
+				setexcelSubEnt(true);
+			}
+			else if(excelFile){
+			const workbook = XLSX.read(excelFile,{type:'buffer'});
+			console.log(workbook)
+			const worksheetName = workbook.SheetNames[0];
+			const worksheet=workbook.Sheets[worksheetName];
+			const data = XLSX.utils.sheet_to_json(worksheet);
+			setExcelData(data);
+			console.log(data.length);
+			console.log(data);
+			for (let i = 0; i < data.length; i++) { 
+				console.log(data[i].Email);
+				emailArray.push(data[i].Email);
+			}
+			console.log("Hello",emailArray);
+			console.log("Ok",excelData);
+			let mailid = userInfo.mail;
+			console.log(mailid);
+			console.log(subjectName);
+			console.log(emailArray);
+			const res = await fetch("/createNewSubject", {
+				method: "POST",
+				headers: {
+					"Content-type": "application/json",
+				},
+				body: JSON.stringify({subjectName,emailArray,mailid})
+			});
+			const dt= await res.json();
+			if (res.status === 400 || !dt) {
+				setexcelFail(true);
+				setfilename("No File Chosen");
+				setExcelFile(null);
+				setsubjectName(null);
+				setfilename(null);
+				setExcelData(null);
+				setEmailArray([]);
+			} else if (res.status === 200 || res.status === 201) {
+				setexcelSucc(true);
+				setOpenps(false);
+			} 
+			}
+			else{
+				setexcelUpload(true);
+			}
+		}
+		
 	}
 	return (
 		
@@ -552,7 +623,27 @@ export default function Profile() {
       </Snackbar>
 	  <Snackbar open={excelSucc} autoHideDuration={6000} onClose={handleCloseexcSucc}>
         <Alert onClose={handleCloseexcSucc} severity="success" sx={{ width: '100%' }}>
-          Kindly Upload Excel File Only
+          Subject Created successfully
+        </Alert>
+      </Snackbar>
+	  <Snackbar open={excelFail} autoHideDuration={6000} onClose={handleCloseexcFail}>
+        <Alert onClose={handleCloseexcFail} severity="error" sx={{ width: '100%' }}>
+          Subject Created Failed
+        </Alert>
+      </Snackbar>
+	  <Snackbar open={excelSub} autoHideDuration={6000} onClose={handleCloseSub}>
+        <Alert onClose={handleCloseSub} severity="warning" sx={{ width: '100%' }}>
+          Subject Already Exists
+        </Alert>
+      </Snackbar>
+	  <Snackbar open={excelSubEnt} autoHideDuration={6000} onClose={handleCloseSubEnt}>
+        <Alert onClose={handleCloseSubEnt} severity="error" sx={{ width: '100%' }}>
+          Please Fill All The Details
+        </Alert>
+      </Snackbar>
+	  <Snackbar open={excelUpload} autoHideDuration={6000} onClose={handleCloseexcUpload}>
+        <Alert onClose={handleCloseexcUpload} severity="error" sx={{ width: '100%' }}>
+          Upload Excel File
         </Alert>
       </Snackbar>
 		</div>
