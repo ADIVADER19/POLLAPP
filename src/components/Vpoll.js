@@ -31,107 +31,110 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 const  useStyles = makeStyles({
   main:{
-    boxSizing:"border-box",
-    fontFamily: "Roboto,Arial,sans-serif",
-    textTransform:"capitalize",
-    position:"fixed",
-    zIndex:"3",
-    top:"0",
-    left:"0",
-    right:"0",
-    backgroundColor:"whitesmoke",
-    boxShadow:"0 5px 10px rgba(0,0,0,.1)",
-    padding:"0px 2%",
-    display:"flex",
-    alignItems:"center",
-    height:"10vh",
-    width:"100vw",
-    justifyContent:"space-between",
-    '& a':{
-        textDecoration:"none",
-    },
-    '& #toggle':{
-        display:"none",
-    },
-    '& label':{
-        display:"none",
-    },
-    '& nav':{
-        '& ul':{
-            listStyle:"none",
-            '& li':{
-                position:"relative",
-                float:"left",
-                
-                '& ul':{
-                    position:"absolute",
-                    boxShadow:"0 5px 10px rgba(0,0,0,.1)",
-                    left:"0",
-                    width:"200px",
-                    backgroundColor:"whitesmoke",
-                    display:"none",
-                    '& li':{
-                        width:"100%",
-                        borderTop: "1px solid rgba(0,0,0,.1)",
-                    },
-                    
-                },
-                '&:hover':{
-                    '& ul':{
-                        display:"initial",
-                    }
-                },
-                '&:focus-within':{
-                    '& ul':{
-                        display:"initial",
-                    }
-                },
-                '& a':{
-                    display:"flex",
-                    alignItems:"center",
-                    justifyContent:"center",
-                    padding:"3vh",
-                    color:"#333",
-                    '&:hover':{
-                        color:"#f4511e",
-                    }
-                }
-            }
-        }
-    },
-    ["@media(max-width: 650px)"]: {
-        '& label':{
-            display:"initial",
-            zIndex:"100",
-        },
-        
-        '& nav':{
-            position:"absolute",
-            top:"100%",
-            left:"0",
-            right:"0",
-            backgroundColor:"whitesmoke",
-            borderTop:"1px solid rgba(0,0,0,.1)",
-            display:"none",
-            '& ul':{
-                '& li':{
-                    width:"100%",
-                    borderBottom:"1px solid rgba(0,0,0,.1)",
-                    '& ul':{
-                        position:"relative !important",
-                        width:"100vw !important",
-                    },
-                    
-                },
-                '&.div':{
-                    height:"2px",
-                    color:"green",
-                },
-            }
-        },
-         
-},
-},
+      boxSizing:"border-box",
+      fontFamily: "Roboto,Arial,sans-serif",
+      textTransform:"capitalize",
+      position:"fixed",
+      zIndex:"10",
+      top:"0",
+      left:"0",
+      right:"0",
+      backgroundColor:"whitesmoke",
+      boxShadow:"0 5px 10px rgba(0,0,0,.1)",
+      padding:"0px 2%",
+      display:"flex",
+      alignItems:"center",
+      height:"10vh",
+      width:"100vw",
+      justifyContent:"space-between",
+      '& a':{
+          textDecoration:"none",
+      },
+      '& #toggle':{
+          display:"none",
+      },
+      '& label':{
+          display:"none",
+      },
+      '& nav':{
+          '& ul':{
+              listStyle:"none",
+              '& li':{
+                  position:"relative",
+                  float:"left",
+                  
+                  '& ul':{
+                      position:"absolute",
+                      boxShadow:"0 5px 10px rgba(0,0,0,.1)",
+                      left:"0",
+                      width:"200px",
+                      height:"200px",overflow:"auto",
+                      backgroundColor:"whitesmoke",
+                      display:"none",
+                      '& li':{
+                          width:"100%",
+                          borderTop: "1px solid rgba(0,0,0,.1)",
+                      },
+                      
+                  },
+                  '&:hover':{
+                      '& ul':{
+                          display:"initial",
+                      }
+                  },
+                  '&:focus-within':{
+                      '& ul':{
+                          display:"initial",
+                      }
+                  },
+                  '& a':{
+                      display:"flex",
+                      alignItems:"center",
+                      justifyContent:"center",
+                      padding:"3vh",
+                      color:"#333",
+                      '&:hover':{
+                          color:"#f4511e",
+                      }
+                  }
+              }
+          }
+      },
+      ["@media(max-width: 650px)"]: {
+          '& label':{
+              display:"initial",
+              zIndex:"100",
+          },
+          
+          '& nav':{
+              position:"absolute",
+              top:"100%",
+              left:"0",
+              right:"0",
+              height:"200px",
+              overflow:"auto",
+              backgroundColor:"whitesmoke",
+              borderTop:"1px solid rgba(0,0,0,.1)",
+              display:"none",
+              '& ul':{
+                  '& li':{
+                      width:"100%",
+                      borderBottom:"1px solid rgba(0,0,0,.1)",
+                      '& ul':{
+                          position:"relative !important",
+                          width:"100vw !important",
+                      },
+                      
+                  },
+                  '&.div':{
+                      height:"2px",
+                      color:"green",
+                  },
+              }
+          },
+           
+  },
+  },
   loader:{
   position:"absolute",
   zIndex:"4",
@@ -233,6 +236,7 @@ function Vpoll() {
     const [endLobbyMessage, setendLobbyMessage] = useState(false);
     const [createLob, setcreateLob] = useState(false);
     const [loadss, setloadss] = useState(true);
+    const[selectedSubject,setSelectedSubject]=useState('No subject selected');
     useEffect(() => () => {
       clearTimeout(timerRef.current);
     },
@@ -389,6 +393,12 @@ function Vpoll() {
       setLoads(true);
       setLinktxt("Link Copied");
     }
+    const subsSel=(e,value,index)=>{
+      e.preventDefault();
+      console.log(value);
+      console.log(index);
+      setSelectedSubject(value.SubjectValue);
+    }
     const Closepoll = (stuid) => {
         fetch("/close", {
           method: "put",
@@ -477,9 +487,21 @@ function Vpoll() {
                <label for="toggle">{!checked?<MenuIcon/>:<CloseIcon/>}</label>
                <nav className="checks">
                    <ul>
-                       <li><a href="#">Active Lobby</a></li>
-                       <li><a href="#closed">Closed Lobby</a></li>
-                       <li><a href="#" onClick={(e)=>{handleClickOpen(e)}}>Create New Lobby</a></li>
+                      <li><a>{selectedSubject}</a>
+                        <ul>
+                        {userInfo.Subject==undefined?
+                        <li><a>No Subject Created</a></li>:
+                        <>
+                        {
+                        userInfo.Subject.map((value, index) => 
+                        <li value={value} key={index} ><a onClick={(e)=>{subsSel(e,value,index)}}>{value.SubjectValue}</a></li>
+                        )}
+                        </>}
+                        </ul>
+                      </li>
+                      <li><a href="#">Active Lobby</a></li>
+                      <li><a href="#closed">Closed Lobby</a></li>
+                      <li><a href="#" onClick={(e)=>{handleClickOpen(e)}}>Create New Lobby</a></li>
                    </ul>
                 </nav>
             </header>

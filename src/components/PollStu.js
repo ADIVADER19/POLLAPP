@@ -23,8 +23,16 @@ const useStyles=makeStyles({
 function PollStu() {
     const [timedPopup, setTimedPopup] = useState(false);
     const [userInfo, setUserInfo] = useState({});
-    const currentPathName = window.location.pathname;
-    const lobbyuuid = currentPathName.slice(9);
+    const currentPathName = window.location.href;
+    const lobbyuuid = currentPathName.slice(currentPathName.indexOf('pollstu'),-1);;
+    console.log(lobbyuuid);
+    const subexist=lobbyuuid.includes('s');
+    console.log(subexist);
+    let subject = '';
+    if(subexist){
+        subject = lobbyuuid.splice('s',-1);
+        console.log(subject);
+    }
     const [polldes, setItems] = useState([]);
     const [lobbydes, setTritems] = useState([]);
     const [check, setBitems] = useState(Boolean);
@@ -80,7 +88,11 @@ function PollStu() {
 			!name ||
 			!givenName 
 		) {
-		} else {
+		}
+        else if(subexist){
+            console.log(subject);
+        }
+        else {
 			const res = await fetch("/slogin", {
 				method: "POST",
 				headers: {
