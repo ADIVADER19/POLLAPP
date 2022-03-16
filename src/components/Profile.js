@@ -302,13 +302,32 @@ export default function Profile() {
 	/*Excel sheet submission*/
 	const [filename, setfilename] = useState("No File Chosen");
 	const [subjectName, setsubjectName] = useState(null);
-	const retrivedSubject=["Subject1","Subject2","Subject3"];
+	const [helpTxt, setHelpTxt] = useState("Suject Name should not contain spaces");
 	let value;
     const handlingSubject = (e) => {
 		value = e.target.value;
-		setsubjectName(e.target.value);
-		console.log(subjectName);
+		firstchar = value.charAt(0);
+		if(firstchar <='9' && firstchar >='0') {
+			setHelpTxt("Name should not begin with number");
+			setsubjectName("");
+			e.target.value="";
+		}
+		else if(firstchar==" "){
+			setsubjectName("");
+			e.target.value="";
+		}
+		else{
+			setsubjectName(e.target.value);
+			console.log(subjectName);
+			setHelpTxt("correct");
+		}
 	};
+	const handleSpace= (e) => {
+        if (e.keyCode === 32) { 
+			setsubjectName("");
+			e.target.value="";
+        }
+	}
 	const [excelFile, setExcelFile]=useState(null);
   const [excelFileError, setExcelFileError]=useState(null);  
  
@@ -336,7 +355,7 @@ export default function Profile() {
 			else{
 				setexcelAlert(true);
 				setExcelFile(null);
-				setsubjectName(null);
+				setsubjectName('');
 				setfilename(null);
 				setExcelData(null);
 				setEmailArray([]);
@@ -353,7 +372,7 @@ export default function Profile() {
 		let subVal=userInfo.Subject;
 		let len = userInfo.Subject.length;
 		if(len==0||len==undefined||len==null){
-			if(subjectName==null||subjectName==''){
+			if(subjectName==''){
 				setexcelSubEnt(true);
 			}
 			else if(excelFile){
@@ -379,7 +398,7 @@ export default function Profile() {
 				setexcelFail(true);
 				setfilename("No File Chosen");
 				setExcelFile(null);
-				setsubjectName(null);
+				setsubjectName('');
 				setfilename(null);
 				setExcelData(null);
 				setEmailArray([]);
@@ -401,7 +420,7 @@ export default function Profile() {
 				setexcelSub(true);
 				setfilename("No File Chosen");
 				setExcelFile(null);
-				setsubjectName(null);
+				setsubjectName('');
 				setfilename(null);
 				setExcelData(null);
 				setEmailArray([]);
@@ -440,7 +459,7 @@ export default function Profile() {
 				setexcelFail(true);
 				setfilename("No File Chosen");
 				setExcelFile(null);
-				setsubjectName(null);
+				setsubjectName('');
 				setfilename(null);
 				setExcelData(null);
 				setEmailArray([]);
@@ -548,7 +567,7 @@ export default function Profile() {
                   <DialogContent>
                     <DialogContentText>
 					<Stack style={{width:"40vw"}}  divider={<Divider orientation="vertical" flexItem />} direction={{ xs: 'column'}} spacing={{ xs: 1, sm: 4, md: 8 }}>
-					<TextField style={{width:"100%"}} sx={{ input: { color: 'red' } }} id="outlined-basic" label="Subject Name" variant="outlined" onChange={handlingSubject} required />
+					<TextField style={{width:"100%"}} sx={{ input: { color: 'red' } }} id="outlined-basic" label="Subject Name" variant="outlined" onChange={handlingSubject} helperText={helpTxt} onKeyDown={handleSpace} required />
 					<br/>
 					<div style={{display:"flex",justifyContent:"space-around",flexWrap:"wrap"}}>
 					<label htmlFor="contained-button-file">
@@ -574,8 +593,8 @@ export default function Profile() {
                   </DialogActions>
                 </Dialog>
 				<Dialog open={opentb}>
-					<DialogTitle style={{display:"flex",justifyContent:"space-between",flexWrap:"no-wrap",backgroundColor:"red"}}>Uploaded Xlsx File 
-					<Tooltip title="Close" float="right">
+					<DialogTitle style={{display:"flex",justifyContent:"space-between",flexWrap:"no-wrap",backgroundColor:"#DAECFF"}}>Uploaded Xlsx File
+					<Tooltip title="Close" style={{position:"absolute",right:0}}>
 						<IconButton >
 							<CloseIcon fontSize='medium'onClick={handleClosetb}/>
 						</IconButton>

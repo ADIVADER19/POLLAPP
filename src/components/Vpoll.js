@@ -298,8 +298,8 @@ function Vpoll() {
 			if (res.status === 200 || res.status===201) {
 	
                 setUserInfo(data);
-                openlobbies(data._id);
-                closelobbies(data._id);
+                openlobbies(data._id,null);
+                closelobbies(data._id,null);
         }
         else if (res.status === 422) {
         }
@@ -324,35 +324,42 @@ function Vpoll() {
 
     var usern = userInfo;
     var userIds = usern._id;
-    const openlobbies = async (tata)=> {await fetch("/usrlobbies", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({tata:tata}),
-    }).then(res=>res.json()).then(data=>{setLobbies(data); setLoading(true); console.log(lobbies);})
+    const openlobbies = async (tata,sub)=> {
+      setLoading(false);
+        await fetch("/usrlobbies", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({tata:tata,sub:sub}),
+        }).then(res=>res.json()).then(data=>{
+          console.log(data);
+          setLobbies(data);
+          setLoading(true);
+          console.log(lobbies);})
     };
 
-    const closelobbies = async(tata)=> {fetch("/clsrlobbies", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({tata:tata}),
-    }).then(res=>res.json()).then(data=>{
-      setClobbies(data);
-      setLoading(true);
-      setloadss(false);
-      window.setTimeout(() => {
-        setloadss(true);
-        setdelMessage(false);
-      }, 2000);
-      window.setTimeout(() => {
-        setloadss(true);
-        setendLobbyMessage(false);
-      }, 2000);
-      
-      })
+    const closelobbies = async(tata,sub)=> {
+        fetch("/clsrlobbies", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({tata:tata,sub:sub}),
+        }).then(res=>res.json()).then(data=>{
+          setClobbies(data);
+          setLoading(true);
+          setloadss(false);
+          window.setTimeout(() => {
+            setloadss(true);
+            setdelMessage(false);
+          }, 2000);
+          window.setTimeout(() => {
+            setloadss(true);
+            setendLobbyMessage(false);
+          }, 2000);
+          
+          })
     };
     const DeleteLobby = async()=>{
       console.log(deletelobid);
@@ -398,6 +405,14 @@ function Vpoll() {
       console.log(value);
       console.log(index);
       setSelectedSubject(value.SubjectValue);
+      openlobbies(userInfo._id,value);
+      closelobbies(userInfo._id,value);
+    }
+    const general=(e)=>{
+      e.preventDefault();
+      setSelectedSubject("No Subject Selected");
+      openlobbies(userInfo._id,null);
+      closelobbies(userInfo._id,null);
     }
     const Closepoll = (stuid) => {
         fetch("/close", {
@@ -496,6 +511,7 @@ function Vpoll() {
                         userInfo.Subject.map((value, index) => 
                         <li value={value} key={index} ><a onClick={(e)=>{subsSel(e,value,index)}}>{value.SubjectValue}</a></li>
                         )}
+                        <li><a onClick={(e)=>{general(e)}}>General</a></li>
                         </>}
                         </ul>
                       </li>
