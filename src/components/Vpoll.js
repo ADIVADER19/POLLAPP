@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router';
 import AddIcon from '@material-ui/icons/Add';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import { v4 as uuidv4 } from 'uuid';
-import { Delete, DeleteOutlined, Visibility } from '@material-ui/icons';
+import { CheckBox, Delete, DeleteOutlined, Visibility } from '@material-ui/icons';
 import M from "materialize-css";
 import CircularProgress from '@mui/material/CircularProgress';
 import './Nav.css';
@@ -20,10 +20,12 @@ import io from 'socket.io-client';
 import Box from '@mui/material/Box';
 import Fade from '@mui/material/Fade';
 import LinkIcon from '@mui/icons-material/Link';
+import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import Modal from 'react-modal';
 import LinearProgress from '@mui/material/LinearProgress';
+import DownloadIcon from '@mui/icons-material/Download';
 let socket;
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -229,7 +231,7 @@ function Vpoll() {
     const close = true;
     const [userInfo, setUserInfo] = useState({});
     const [lobbies,setLobbies] = useState([]);
-    const [clobbies,setClobbies] = useState([]);
+    let [clobbies,setClobbies] = useState([]);
     const [load, setLoad] = React.useState(false);
     const [query, setQuery] = React.useState('idle');
     const timerRef = React.useRef();
@@ -347,6 +349,10 @@ function Vpoll() {
           },
           body: JSON.stringify({tata:tata,sub:sub}),
         }).then(res=>res.json()).then(data=>{
+          for(let i=0;i<data.length;i++){
+            data[i].selected = false;
+          }
+          console.log(data);
           setClobbies(data);
           setLoading(true);
           setloadss(false);
@@ -358,7 +364,6 @@ function Vpoll() {
             setloadss(true);
             setendLobbyMessage(false);
           }, 2000);
-          
           })
     };
     const DeleteLobby = async()=>{
@@ -413,6 +418,39 @@ function Vpoll() {
       setSelectedSubject("No Subject Selected");
       openlobbies(userInfo._id,null);
       closelobbies(userInfo._id,null);
+    }
+    let finalizedArray = [];
+    const BundleDownload =(id,no)=>{
+      var lobs = [...clobbies];
+      if(lobs[no].selected){
+        lobs[no].selected=false;
+      }
+      else{
+        lobs[no].selected=true;
+      }
+      Something(lobs);
+    }
+    const Something=(lobs)=>{
+      setClobbies([...lobs]);
+    }
+    const SubmitDownload=async()=>{
+      let clob = [...clobbies];
+      let leng = clob.length;
+      console.log(clob);
+      console.log(leng);
+      for(let i=0;i<leng;i++){
+        if(clob[i].selected){
+          finalizedArray.push(clob[i].lobbyId);
+        }
+      }
+      console.log(finalizedArray);
+      const res = await fetch("/downloadExcel", {
+        method: "POST",
+        headers: {
+            "Content-type": "application/json",
+        },
+        body: JSON.stringify({finalizedArray})
+    });
     }
     const Closepoll = (stuid) => {
         fetch("/close", {
@@ -587,14 +625,22 @@ function Vpoll() {
               </div>
             </div>
             <div id='closed' className='clooll'>
-                <h1 style={{fontFamily: "Roboto,Arial,sans-serif",marginLeft:"2%",marginTop:"2%",marginBottom:"2%",color:"#f4511e",fontSize:"30px"}}>Closed Lobby</h1>
+               <div style={{display:"flex",width:"100%",justifyContent:"space-between"}}>
+               <h1 style={{fontFamily: "Roboto,Arial,sans-serif",marginLeft:"2%",marginTop:"2%",marginBottom:"2%",color:"#f4511e",fontSize:"30px"}}>Closed Lobby</h1>
+                {clobbies.length != 0 && (
+                  <Button style={{marginRight:"2%",marginTop:"2%",marginBottom:"2%",}} variant="contained" startIcon={<DownloadIcon/>} onClick={SubmitDownload}>DOWNLOAD</Button>
+                )}
+               </div>
                 {clobbies.length == 0 &&(
                 <h2 style={{fontFamily: "Roboto,Arial,sans-serif",marginLeft:"2%",marginTop:"2%",marginBottom:"2%",fontSize:"17px",color:"#333"}}>No closed lobbies are there.<br/></h2>
                 )}
                 <div className='collstaAlign'>
-                {clobbies.map(Clob=>(
+                {clobbies.map((Clob, x)=>(
                 <div className='closta'>
-                    <div className='poldet'key={Clob._id} style={{fontFamily: "Roboto,Arial,sans-serif"}}>
+                    <div className='poldet'key={Clob._id} onClick={()=>BundleDownload(Clob,x)} style={{fontFamily: "Roboto,Arial,sans-serif"}}>
+                     {Clob.selected? <>
+                      <CheckCircleRoundedIcon color='success' style={{position:"absolute",left:0,top:0}}/>
+                    </>:""}
                     <div className='polh2'>
                     <div className='pollsCreated'><div><Chip style={{backgroundColor:"#d1d1d1"}} icon={<PeopleAltIcon/>} label={Clob.studentformId.length} /></div><div style={{borderLeft:"1px solid #f4511e",width:"50%",height:"80%"}}>Polls: {Clob.pollId.length}</div></div>
                       <h2 style={{fontFamily: "Roboto,Arial,sans-serif",fontWeight:"normal",overflow:"hidden",fontSize: "25px",marginLeft:"1%"}}>{Clob.lobbyName}</h2></div>

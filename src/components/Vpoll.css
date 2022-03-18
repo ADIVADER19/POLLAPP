@@ -83,6 +83,7 @@
     margin:1%;
     min-height:42vh;
     transition:0.5s;
+    cursor:pointer;
 }
 .poldet:hover{
 transform: scale(1.05);
