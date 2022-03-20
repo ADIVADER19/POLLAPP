@@ -23,14 +23,22 @@ const useStyles=makeStyles({
 function PollStu() {
     const [timedPopup, setTimedPopup] = useState(false);
     const [userInfo, setUserInfo] = useState({});
-    const currentPathName = window.location.href;
-    const lobbyuuid = currentPathName.slice(currentPathName.indexOf('pollstu'),-1);;
-    console.log(lobbyuuid);
-    const subexist=lobbyuuid.includes('s');
-    console.log(subexist);
+    // const currentPathName = window.location.href;
+    // const lobbyuuid = currentPathName.slice(currentPathName.indexOf('pollstu'),-1);;
+    // console.log(lobbyuuid);
+    // const subexist=lobbyuuid.includes('s');
+    // console.log(subexist);
+    // let subject = '';
+    // if(subexist){
+    //     subject = lobbyuuid.splice('s',-1);
+    //     console.log(subject);
+    // }
+    const currentPathName = window.location.pathname; 
+    const lobbyuuid = currentPathName.slice(9);
+    const subexist=lobbyuuid.includes('s')
     let subject = '';
     if(subexist){
-        subject = lobbyuuid.splice('s',-1);
+        subject = lobbyuuid.slice(18);
         console.log(subject);
     }
     const [polldes, setItems] = useState([]);
@@ -89,9 +97,9 @@ function PollStu() {
 			!givenName 
 		) {
 		}
-        else if(subexist){
-            console.log(subject);
-        }
+        // else if(subexist){
+        //     console.log(subject);
+        // }
         else {
 			const res = await fetch("/slogin", {
 				method: "POST",
@@ -102,6 +110,8 @@ function PollStu() {
                     mail,
                     name,
                     givenName,
+                    subject,
+                    luuid:lobbyuuid,
 				}),
 			});
             const data= await res.json();
@@ -115,6 +125,10 @@ function PollStu() {
             else if(res.status === 422)
                 {
                 window.alert("USER DOES NOT EXSIST")
+			}
+            else if(res.status === 450)
+                {
+                window.alert("USER Cannot vote for this poll")
 			}
             else
             {
@@ -162,6 +176,8 @@ function PollStu() {
 		}
 	};
     var usern = userInfo.name;
+    var mer= userInfo.mail;
+    console.log(mer)
     useEffect(()=>
     {
         suserd();
@@ -239,7 +255,7 @@ const socker=(question,option)=>{
             body: JSON.stringify({
               puid,
               opuid,
-              usern,
+              mer,
               data:lobbyuuid
             }),
           })
