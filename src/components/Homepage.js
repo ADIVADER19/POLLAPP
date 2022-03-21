@@ -106,17 +106,6 @@ function HomePage() {
     const[newid,setRid]=useState();
     const link="https://pollapp281907.herokuapp.com/"
     const userd = async () => {
-		try {
-            const test=localStorage.getItem("jwt");
-            console.log(test);
-            if(test === null) {
-                setTimeout(()=>{
-                    setLoading(true);
-                    setTimedPopup(true);
-                },1000);
-            }
-            else
-            {
 			const res = await fetch(`${link}userdata`, {
 				method: "GET",
                 headers: {
@@ -143,10 +132,6 @@ function HomePage() {
                 },1000);
             
             }
-        }
-		} catch (err) {
-            console.log(err);
-		}
 	};
     const responseGoogle = async (response) => {
         
