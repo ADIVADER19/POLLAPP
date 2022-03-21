@@ -9,6 +9,8 @@ import Popup from './Popup';
 import { GoogleLogin } from 'react-google-login';
 import CircularProgress from '@mui/material/CircularProgress';
 import CodeIcon from '@mui/icons-material/Code';
+import Cookies from 'universal-cookie';
+
 const  useStyles = makeStyles({
     pops:{
         backgroundColor:"whitesmoke"
@@ -105,6 +107,7 @@ function HomePage() {
     const[loading,setLoading]=useState(true);
     const[newid,setRid]=useState();
     const link="https://pollapp281907.herokuapp.com/"
+    const cookies = new Cookies();
     const userd = async () => {
 			const res = await fetch(`${link}userdata`, {
 				method: "GET",
@@ -167,6 +170,7 @@ function HomePage() {
 			} else if (res.status === 200 || res.status === 201) {
                 window.alert("SUCCESSFULLY LOGGED IN")
                 //localStorage.setItem("jwt", tok);
+                cookies.set('jwt', tok, { path: '/' ,httpOnly:true,maxAge:8600});
                 setTimedPopup(false);
                 userd()
                 window.location.reload();
