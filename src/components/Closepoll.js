@@ -12,6 +12,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import Slide from '@mui/material/Slide';
 import zIndex from '@material-ui/core/styles/zIndex';
 import { maxWidth } from '@mui/system';
+import Cookies from 'universal-cookie';
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
   });
@@ -172,14 +173,14 @@ function Closepoll() {
     const [checked, setChecked] = useState(false);
     const [sum,setSum] = useState([]);
     const link="https://pollapp281907.herokuapp.com/"
+    const cookies = new Cookies();
 
     const userd = async () => {
         try {
               const res = await fetch(`${link}userdata`, {
                   method: "GET",
                   headers: {
-                      Accept: "application/json",
-                      "Content-Type": "application/json",
+                    Authorization: "Bearer " + cookies.get("jwt")
                   },
                   credentials: "include",
               });

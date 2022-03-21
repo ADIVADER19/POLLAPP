@@ -11,6 +11,7 @@ import {deepPurple} from '@mui/material/colors';
 import ArrowRightAltIcon from "@material-ui/icons/ArrowRightAlt";
 import { ToastContainer, toast } from "react-toastify";
 import { unstable_renderSubtreeIntoContainer } from "react-dom";
+import Cookies from 'universal-cookie';
 
 export default function Profile() {
 	const navigate = useNavigate();
@@ -20,12 +21,14 @@ export default function Profile() {
 	const [userInfo, setUserInfo] = useState({});
 	const colorarr=["red","blue","yellow","orange","purple","cyan","lightblue","lightgreen","lightyellow","darkblue","crimson","lightorange","darkorange","darkyellow","darkcyan","darkgreen","whitesmoke","white","black","pink"]
 	const link="https://pollapp281907.herokuapp.com/"
+	const cookies = new Cookies();
+	
 	const callProfilePage = async () => {
 		try {
 			const res = await fetch(`${link}userdata`, {
 				method: "GET",
 				headers: {
-                    Authorization: "Bearer " + localStorage.getItem("jwt"),
+                    Authorization: "Bearer " + cookies.get("jwt"),
                   }
 			});
 			const data = await res.json();
