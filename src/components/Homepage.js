@@ -167,9 +167,10 @@ function HomePage() {
 			} else if (res.status === 200 || res.status === 201) {
                 window.alert("SUCCESSFULLY LOGGED IN")
                 //localStorage.setItem("jwt", tok);
+                window.location.reload();
                 setTimedPopup(false);
                 userd()
-                window.location.reload();
+                
                 
                 
 			} 
