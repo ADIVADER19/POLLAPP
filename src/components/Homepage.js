@@ -179,7 +179,7 @@ function HomePage() {
                 window.alert('Something went wrong')
 			} else if (res.status === 200 || res.status === 201) {
                 window.alert("SUCCESSFULLY LOGGED IN")
-                localStorage.setItem("jwt", tok);
+                //localStorage.setItem("jwt", tok);
                 setTimedPopup(false);
                 userd()
                 window.location.reload();
