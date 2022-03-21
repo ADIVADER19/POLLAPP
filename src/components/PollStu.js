@@ -49,8 +49,9 @@ function PollStu() {
 			const res = await fetch(`${link}suserdata`, {
 				method: "GET",
                 headers: {
-                    Authorization: "Bearer " + localStorage.getItem("sjwt"),
-                  }
+                    //Authorization: "Bearer " + localStorage.getItem("sjwt"),
+                  },
+                credentials: "include"
 			});
 			const data = await res.json();
 		
@@ -101,7 +102,7 @@ function PollStu() {
                     mail,
                     name,
                     givenName,
-				}),
+				})
 			});
             const data= await res.json();
             const tok=data.message;
