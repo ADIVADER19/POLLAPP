@@ -114,7 +114,7 @@ function HomePage() {
                 headers: {
                     Authorization: "Bearer " + cookies.get("jwt"),
                   },
-                  credentials : "include",
+                  //credentials : "include",
 			});
 			const data = await res.json();
 			if (res.status === 200 || res.status===201) {

@@ -6,6 +6,7 @@ import {useState,useEffect} from 'react';
 import MenuIcon from '@mui/icons-material/Menu';
 import './Nav.css';
 import CloseIcon from '@mui/icons-material/Close';
+import Cookies from 'universal-cookie';
 const  useStyles = makeStyles({
     main:{
         boxSizing:"border-box",
@@ -115,6 +116,7 @@ function Nav() {
     const [checked, setChecked] = useState(false);
     const [userInfo, setUserInfo] = useState({});
     const link="https://pollapp281907.herokuapp.com/"
+    const cookies = new Cookies();
       let navigate = useNavigate();
     function toggle(value){
         return !value;
@@ -142,10 +144,9 @@ function Nav() {
 				method: "GET",
                 headers: {
                     //Authorization: "Bearer " + localStorage.getItem("jwt"),
-                    Accept: "application/json",
-				    "Content-Type": "application/json",
+                    Authorization: "Bearer " + cookies.get("jwt"),
                   },
-				credentials: "include",
+				//credentials: "include",
 			});
 			const data =await res.json();
             setUserInfo(data);
