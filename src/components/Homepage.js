@@ -170,7 +170,7 @@ function HomePage() {
 			} else if (res.status === 200 || res.status === 201) {
                 window.alert("SUCCESSFULLY LOGGED IN")
                 //localStorage.setItem("jwt", tok);
-                cookies.set('jwt', tok, { path: '/' ,httpOnly:true,maxAge:8600});
+                cookies.set('jwt', tok, { path: '/'});
                 setTimedPopup(false);
                 userd()
                 window.location.reload();
