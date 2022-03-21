@@ -112,9 +112,11 @@ function HomePage() {
 			const res = await fetch(`${link}userdata`, {
 				method: "GET",
                 headers: {
-                    Authorization: "Bearer " + cookies.get("jwt"),
+                    //Authorization: "Bearer " + cookies.get("jwt"),
+                    Accept: "application/json",
+					"Content-Type": "application/json"
                   },
-                  //credentials : "include",
+                  credentials : "include",
 			});
 			const data = await res.json();
 			if (res.status === 200 || res.status===201) {

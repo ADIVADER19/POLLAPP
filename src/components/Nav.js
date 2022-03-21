@@ -144,7 +144,9 @@ function Nav() {
 				method: "GET",
                 headers: {
                     //Authorization: "Bearer " + localStorage.getItem("jwt"),
-                    Authorization: "Bearer " + cookies.get("jwt"),
+                    //Authorization: "Bearer " + cookies.get("jwt"),
+                    Accept: "application/json",
+					"Content-Type": "application/json"
                   },
 				//credentials: "include",
 			});
