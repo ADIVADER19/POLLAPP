@@ -11,9 +11,11 @@ import Slide from '@mui/material/Slide';
 import './CreatePoll.css';
 import './Nav.css';
 import { useNavigate } from 'react-router';
+import Modal from 'react-modal';
 import PollIcon from '@material-ui/icons/Poll';
 import MenuIcon from '@mui/icons-material/Menu';
 import SaveIcon from '@mui/icons-material/Save';
+import { Delete } from '@material-ui/icons';
 const  useStyles = makeStyles({
     root:{
         margin:"0",
@@ -288,6 +290,8 @@ function CreatePoll2() {
      const [lobbydes, setTritems] = useState([]);
      let f = polldes.length+1;
     const [num,setNum]=useState([{value:f}]);
+    const [modal, setmodal] = useState(false);
+    const[deletepollid,setDeletepollid]=useState('')
     const link="https://pollapp281907.herokuapp.com/"
     const classes = useStyles();
     useEffect(() => {
@@ -476,12 +480,12 @@ function CreatePoll2() {
                    </ul>
                 </nav>
             </header> 
-        <div style={{display:"flex",flexDirection:"column-reverse",width:"100%",backgroundColor: "white",alignItems:"center",justifyContent:"center",position:"relative",top:"10vh"}}>
-        <div className={classes.createpoll} style={{margin:"0",padding:"0"}}>
+        <div style={{display:"flex",flexDirection:"column-reverse",width:"100%",backgroundColor: "whitesmoke",alignItems:"center",justifyContent:"center",position:"relative",top:"10vh"}}>
+        <div className={classes.createpoll} style={{margin:"0",padding:"0",position:"relative",zIndex:"5"}}>
                   
             <div className={classes.add_poll}>
                 <div style={{display:"flex", width:"100%"}}>
-                <input type="text" className={classes.question} value={poll.pollQuestion}placeholder="Question" onChange={(e)=>{ChangePollQuestion(e.target.value)}}></input>
+                <input type="text" className={classes.question} value={poll.pollQuestion}placeholder="Question" maxlength="85" onChange={(e)=>{ChangePollQuestion(e.target.value)}}></input>
             </div>
             <br/>
             <div className={classes.add_question_body}>
@@ -489,7 +493,7 @@ function CreatePoll2() {
                 <div style={{display:"flex", width:"100%",marginBottom:"1%"}} key={i}>
                 <input type="radio" id="optionentry" name="contact"  value={opt[i].optionValue} className={classes.radio_input} style={{marginBottom:"10px",marginTop:"2%", color: "green",marginLeft:"2%", marginRight:"3%"}} onClick={(e)=>{selectCorrectOption(e.target.value,i)}}/>
                  <label for="optionentry" style={{display:"flex",width:"100%",}}>
-                     <input type="text" className={classes.text_input} value={opt[i].optionValue} placeholder="option" onChange={(e)=>{ChangePollOption(e.target.value,i)}}></input>
+                     <input type="text" className={classes.text_input} value={opt[i].optionValue} placeholder="option" maxlength="75" onChange={(e)=>{ChangePollOption(e.target.value,i)}}></input>
                          <IconButton aria-label="delete" style={{color:"red"}}>
                              <CloseIcon onClick={()=>{removeOption(i)}}/>
                          </IconButton>
@@ -509,40 +513,57 @@ function CreatePoll2() {
                 <Button className={classes.delBtn}  onClick={Livelobby} size="large" variant="contained" endIcon={<SaveIcon/>} style={{fontFamily: "Roboto,Arial,sans-serif"}}>SAVE LOBBY</Button>
                 </div>
             </div>
-            <div style={{width:"100%",backgroundColor:"white"}}>
-            <div style={{width:"100%",display:"flex",flexWrap:"wrap",alignItems:"center",justifyContent:"space-around"}}>
+            <div style={{width:"100%",backgroundColor:"whitesmoke"}}>
+            <div style={{width:"100%",display:"flex",flexWrap:"wrap",alignItems:"center",position:"relative",zIndex:"2"}}>
                 {polldes.map((lob,x)=>(
                 <div className={classes.lobbypollsseen} key={lob}>
-                    <div style={{display:"flex", fontFamily: "Roboto,Arial,sans-serif",color:"#333",padding:"1%",}}>
-                        <h1 className={classes.quest} style={{color:"#f4511e"}} variant="h5">{x+1}.</h1>&nbsp;&nbsp;
-                        <h1 className={classes.quest} variant="h5">{lob.pollQuestion}</h1>
+                   <div style={{position:"absolute",right:"1vw",top:"2vh",zIndex:"4"}}><Delete  className={classes.tired} onClick={()=>{setmodal(true);setDeletepollid(lob._id)}}/></div>
+                   <div className={classes.stylings}></div>
+                    <div style={{display:"flex", fontFamily: "Roboto,Arial,sans-serif",color:"#333",width:"93%",position:"absolute",top:"3%",height:"10vh",zIndex:"1",left:"3%",overflow:"hidden"}}>
+                        <h2 className={classes.quest} style={{color:"white"}} variant="h5">{x+1}</h2>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <h2 className={classes.quest} variant="h5">{lob.pollQuestion}</h2>
                     </div>
                     <br/>
-                    <div style={{display:"flex",fontFamily: "Roboto,Arial,sans-serif", fontSize: 25,fontWeight: 400,letterSpacing: ".2px"}}> 
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <h5 style={{color:"#f4511e",fontSize: 25,fontWeight: 400,}}>Options:</h5>&nbsp;&nbsp;
-                    <div style={{color:"#323232",width:"100%",height:"100%",display:"flex",flexDirection:"column",justifyContent:"space-around",}}>
-                       {lob.pollOption.map((oop)=>(
+                    <div className={classes.lastStuf}>
+                    <div style={{width:"100%",height:"100%",display:"flex",flexDirection:"column",justifyContent:"space-around"}}>
+                       {lob.pollOption.map((oop,y)=>(
                     <>{oop.optionValue == "" &&(
                         <></>
                     )}
                     {!oop.optionValue == "" &&(
-                    <div style={{color:"black",width:"100%",margin:"1%"}}>
-                    <p style={{marginTop:"1%",fontSize: 25,fontWeight: 400,}}>{oop.optionValue}</p>
+                    <div style={{color:"rgb(73 73 73 / 87%)",width:"100%",margin:"1%",position:"relative",zIndex:"3"}}>
+                    <h5 style={{fontWeight: 400,}}>{y+1}. {oop.optionValue}</h5>
                     </div>
                     )}
                     </>    
                     ))}
                     </div>
                     </div> 
-                    <br/>   
+                    <br/>
+                    <div style={{position:"absolute",width:"100%",bottom:"0",
+                    background:"#f4511e",height:"10%",borderRadius:"50% 50% 0.5em 0.5em"}}></div>
                 </div>))}               
                 </div>
             </div>
-                <Typography variant="h4" style={{color:"#f4511e",marginLeft:"2%",marginTop:"1%",marginBottom:"1%"}}>{lobbydes.lobbyDescription}</Typography>
-                <Typography variant="h3" style={{color:"#f4511e",marginLeft:"2%",marginTop:"1%"}}>{lobbydes.lobbyName}</Typography>
-            </div>
+            <div className='poltlel'>
+            <div className='header' >
+                    <h1 className='lobby'>Lobby Title: {lobbydes.lobbyName}
+                    <span>Lobby Description: {lobbydes.lobbyDescription}</span></h1>
+                    </div>
+                    </div>
+                    <div className='styles'></div>
+                 </div>
+                 <Modal style={{overlay: {zIndex:10,width:"100%",height:"100%",backgroundColor:'rgba(255, 255, 255, 0.1)'},content:{display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",width:"50vw",height:"25vh",top:"25vh",left:"25vw"}}} isOpen={modal} onRequestClose={()=>setmodal(false)}>
+                    <div className="modaltitle">
+                      <h2>Are You Sure You Want to Delete The Poll ?</h2>
+                    </div>
+                    <div className="modalfooter">
+                      <button onClick={()=>setmodal(false)} id="modalcancelBtn">Cancel</button>
+                      <button onClick={()=>{DeletetingPoll()}}>Continue</button>
+                    </div>
+                    </Modal>
             </>
+      
     )
 }
 
