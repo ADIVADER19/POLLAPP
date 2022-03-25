@@ -85,6 +85,7 @@ function PollStu() {
 		} catch (err) {
 		}
 	};
+
     const responseGoogle = async (response) => {
         
         const mail=response.profileObj.email
@@ -120,7 +121,10 @@ function PollStu() {
 			} else if (res.status === 200 || res.status === 201) {
                 window.alert("SUCCESSFULLY LOGGED IN")
                 setTimedPopup(false);
-                suserd()
+                suserd();
+                if(subexist){
+                    subjectpolladd(mail);
+                }
 			} 
             else if(res.status === 422)
                 {
@@ -192,13 +196,42 @@ function PollStu() {
         
     },[ENDPOINT, lobbyuuid])
 
-const socker=(question,option)=>{
-    socket.emit('sendPoll', {lobbyuuid,question,option,usern}, (error) => {
-        if(error) {
-            alert(error);
+    const socker=(question,option)=>{
+        socket.emit('sendPoll', {lobbyuuid,question,option,usern}, (error) => {
+            if(error) {
+                alert(error);
+            }
+        })
+    }      
+
+    const subjectpolladd = async (mail) => {
+        try {
+            await fetch("/subjectpolladd", {
+                method: "POST",
+                headers: {
+                    "Content-type": "application/json",
+                },
+                body: JSON.stringify({
+                    mail,
+                    subject,
+                    luuid:lobbyuuid,
+                }),
+            })
+            .then((res) => res.json())
+            .then((data) => {
+            if (data.error) {
+                M.toast({ html: data.error });
+            } else {
+                M.toast({
+                html: "Attendence marked!",
+                classes: "#2e7d32 green darken-3",
+                });
+            }
+            })
         }
-    })
-}      
+        catch(err) {
+        };
+    }
 
     const polls =(() => {
         fetch("/bobs", {method: "POST",
@@ -256,7 +289,8 @@ const socker=(question,option)=>{
               puid,
               opuid,
               mer,
-              data:lobbyuuid
+              data:lobbyuuid,
+              subject
             }),
           })
             .then((res) => res.json())
