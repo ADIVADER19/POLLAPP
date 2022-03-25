@@ -9,8 +9,139 @@ import Popup from './Popup';
 import { GoogleLogin } from 'react-google-login';
 import CircularProgress from '@mui/material/CircularProgress';
 import CodeIcon from '@mui/icons-material/Code';
-import Cookies from 'universal-cookie';
-
+import {styled} from "@mui/material";
+import SelectUnstyled, { selectUnstyledClasses } from '@mui/base/SelectUnstyled';
+import OptionUnstyled, { optionUnstyledClasses } from '@mui/base/OptionUnstyled';
+import PopperUnstyled from '@mui/base/PopperUnstyled';
+/*Select component Styling*/
+const blue = {
+	100: '#DAECFF',
+	200: '#99CCF3',
+	400: '#3399FF',
+	500: '#007FFF',
+	600: '#0072E5',
+	900: '#003A75',
+  };
+  
+  const grey = {
+	100: '#E7EBF0',
+	200: '#E0E3E7',
+	300: '#CDD2D7',
+	400: '#B2BAC2',
+	500: '#A0AAB4',
+	600: '#6F7E8C',
+	700: '#3E5060',
+	800: '#2D3843',
+	900: '#1A2027',
+  };
+  
+  const StyledButton = styled('button')(
+	({ theme }) => `
+	font-family: IBM Plex Sans, sans-serif;
+	font-size: 0.875rem;
+	box-sizing: border-box;
+	min-height: calc(1.5em + 22px);
+	min-width: 70%;
+	background: ${theme.palette.mode === 'dark' ? grey[900] : '#fff'};
+	border: 1px solid ${theme.palette.mode === 'dark' ? grey[800] : grey[300]};
+	border-radius: 0.75em;
+	margin: 0.5em;
+	padding: 10px;
+	text-align: left;
+	line-height: 1.5;
+	color: ${theme.palette.mode === 'dark' ? grey[300] : grey[900]};
+  
+	&:hover {
+	  background: ${theme.palette.mode === 'dark' ? '' : grey[100]};
+	  border-color: ${theme.palette.mode === 'dark' ? grey[700] : grey[400]};
+	}
+  
+	&.${selectUnstyledClasses.focusVisible} {
+	  outline: 3px solid ${theme.palette.mode === 'dark' ? blue[600] : blue[100]};
+	}
+  
+	&.${selectUnstyledClasses.expanded} {
+	  &::after {
+		content: '▴';
+	  }
+	}
+  
+	&::after {
+	  content: '▾';
+	  float: right;
+	}
+	`,
+  );
+  
+  const StyledListbox = styled('ul')(
+	({ theme }) => `
+	font-family: IBM Plex Sans, sans-serif;
+	font-size: 0.875rem;
+	box-sizing: border-box;
+	padding: 5px;
+	margin: 10px 0;
+	min-width: 70vw;
+	background: ${theme.palette.mode === 'dark' ? grey[900] : '#fff'};
+	border: 1px solid ${theme.palette.mode === 'dark' ? grey[800] : grey[300]};
+	border-radius: 0.75em;
+	color: ${theme.palette.mode === 'dark' ? grey[300] : grey[900]};
+	overflow: auto;
+	outline: 0px;
+	`,
+  );
+  
+  const StyledOption = styled(OptionUnstyled)(
+	({ theme }) => `
+	list-style: none;
+	padding: 8px;
+	border-radius: 0.45em;
+	cursor: default;
+  
+	&:last-of-type {
+	  border-bottom: none;
+	}
+  
+	&.${optionUnstyledClasses.selected} {
+	  background-color: ${theme.palette.mode === 'dark' ? blue[900] : blue[100]};
+	  color: ${theme.palette.mode === 'dark' ? blue[100] : blue[900]};
+	}
+  
+	&.${optionUnstyledClasses.highlighted} {
+	  background-color: ${theme.palette.mode === 'dark' ? grey[800] : grey[100]};
+	  color: ${theme.palette.mode === 'dark' ? grey[300] : grey[900]};
+	}
+  
+	&.${optionUnstyledClasses.highlighted}.${optionUnstyledClasses.selected} {
+	  background-color: ${theme.palette.mode === 'dark' ? blue[900] : blue[100]};
+	  color: ${theme.palette.mode === 'dark' ? blue[100] : blue[900]};
+	}
+  
+	&.${optionUnstyledClasses.disabled} {
+	  color: ${theme.palette.mode === 'dark' ? grey[700] : grey[400]};
+	}
+  
+	&:hover:not(.${optionUnstyledClasses.disabled}) {
+	  background-color: ${theme.palette.mode === 'dark' ? grey[800] : grey[100]};
+	  color: ${theme.palette.mode === 'dark' ? grey[300] : grey[900]};
+	}
+	`,
+  );
+  
+  const StyledPopper = styled(PopperUnstyled)`
+	z-index: 1;
+  `;
+  
+  const CustomSelect = React.forwardRef(function CustomSelect(props, ref) {
+	const components = {
+	  Root: StyledButton,
+	  Listbox: StyledListbox,
+	  Popper: StyledPopper,
+	  ...props.components,
+	};
+  
+	return <SelectUnstyled {...props} ref={ref} components={components} />;
+  });
+/*Manual Stylingsss*/
 const  useStyles = makeStyles({
     pops:{
         backgroundColor:"whitesmoke"
@@ -106,21 +237,27 @@ function HomePage() {
 	const [userInfo, setUserInfo] = useState({});
     const[loading,setLoading]=useState(true);
     const[newid,setRid]=useState();
+    const [subjectArray, setSubjectArray] = useState([]);
     const link="https://pollapp281907.herokuapp.com/"
-    const cookies = new Cookies();
     const userd = async () => {
+		try {
 			const res = await fetch(`${link}userdata`, {
 				method: "GET",
-                headers: {
-                    Authorization: "Bearer " + cookies.get("jwt"),
-                    // Accept: "application/json",
-					// "Content-Type": "application/json"
-                  },
-                  //credentials : "include",
+				headers: {
+					Accept: "application/json",
+					"Content-Type": "application/json",
+				},
+				credentials: "include",
 			});
 			const data = await res.json();
+		
+            
 			if (res.status === 200 || res.status===201) {
+			
                 setUserInfo(data);
+                if(data.Subject){
+                    setSubjectArray(data.Subject);
+                }
                 setLoading(true);
 			}
             else if (res.status === 422) {
@@ -137,13 +274,15 @@ function HomePage() {
                 },1000);
             
             }
+		} catch (err) {
+		}
 	};
     const responseGoogle = async (response) => {
         
         const mail=response.profileObj.email
         const name=response.profileObj.name
         const givenName=response.profileObj.givenName
-        console.log(mail)
+   
         if (
 			!mail ||
 			!name ||
@@ -162,18 +301,14 @@ function HomePage() {
 				}),
 			});
             const data= await res.json();
-            const tok=data.message;
-            console.log(data);
-            console.log(tok);
 			if (res.status === 400 || !data) {
                 window.alert('Something went wrong')
 			} else if (res.status === 200 || res.status === 201) {
                 window.alert("SUCCESSFULLY LOGGED IN")
-                //localStorage.setItem("jwt", tok);
-                cookies.set('jwt', tok, { path: '/'});
+                //props.setTrigger(false)
+                window.location.reload();
                 setTimedPopup(false);
                 userd()
-                window.location.reload();
 			} 
             else if(res.status === 422)
                 {
@@ -190,7 +325,7 @@ function HomePage() {
         const mail=response.profileObj.email
         const name=response.profileObj.name
         const givenName=response.profileObj.givenName
-        console.log(mail)
+        
         if (
 			!mail ||
 			!name ||
@@ -230,9 +365,51 @@ function HomePage() {
         setLoading(false);
         userd();
         }, [])
-    const createid=uuidv4();
-    useEffect(()=>{
-        
+    // useEffect(() => {
+    //     setTimeout(()=>{
+    //         setTimedPopup(true);
+    //     },1000);
+
+    // },[])
+    
+    let SubVal = [];
+    const [open, setOpen] = React.useState(false);
+    const handleClickOpen = () => {
+        setOpen(true);
+        if(subjectArray.length!=0||subjectArray.length!=undefined||subjectArray.length!=null){
+            for(let i=0;i<subjectArray.length;i++){
+                SubVal.push(subjectArray[i].SubjectValue);
+            }
+            console.log(SubVal);
+        }
+    };
+    const [selectedSubject, setselectedSubject] = useState(1000);
+    const handleClose = () => {
+        setOpen(false);
+    };
+    const handleOption = () =>{
+        console.log(selectedSubject);
+    }
+    const [Lobby, setLobby] = useState({
+        lobbyId:'',
+        lobbyName:"",
+        lobbyDescription:"",
+        studentformId:[],
+        pollId:[],
+        userId:"",
+    });
+    let name, value;
+    const handleInputs = (e) => {
+		name = e.target.name;
+		value = e.target.value;
+		setLobby({ ...Lobby, [name]: value });
+	};
+    let navigate = useNavigate();
+    const Lob = async(e)=>{
+        var lobs = {...Lobby};
+        lobs.userId = userIds;
+        setLobby(lobs);
+        Lobby.userId = userIds;
         const d = new Date();
         let timex = d.toLocaleString();
         console.log(timex);
@@ -256,51 +433,23 @@ function HomePage() {
                     }
                 }
 			}
-        var finalid=createid+xemit;
-        // var lobster = {...Lobby};
-        // lobster.lobbyId = finalid;
-        // setLobby(lobster)
-        Lobby.lobbyId=finalid
-        console.log(finalid);    
-    },[])
-
-    const [open, setOpen] = React.useState(false);
-    const handleClickOpen = () => {
-        setOpen(true);
-    };
-    const handleClose = () => {
-        setOpen(false);
-    };
-    const [Lobby, setLobby] = useState({
-        lobbyId:'',
-        lobbyName:"",
-        lobbyDescription:"",
-        studentformId:[],
-        pollId:[],
-        userId:"",
-    });
-    let name, value;
-    const handleInputs = (e) => {
-		name = e.target.name;
-		value = e.target.value;
-		setLobby({ ...Lobby, [name]: value });
-	};
-    const Lob = async(e)=>{
-        var lobs = {...Lobby};
-        lobs.userId = userIds;
-        setLobby(lobs);
-        Lobby.userId = userIds;
         if(Lobby.lobbyName=="" || Lobby.lobbyDescription==""){
             window.alert("Please enter all the details");
         }
-        else{
+        else if(selectedSubject!=1000){
+            let subject = selectedSubject.SubjectValue;
+            console.log(subject);
+            let subs = subject.trim();
+            var finalid=xemit+'s'+subs;
+            Lobby.lobbyId=finalid
+            console.log(finalid);   
             const{lobbyId,lobbyName,lobbyDescription,studentformId,pollId,userId} = Lobby;
             const res = await fetch(`${link}createnewlobby`, {
                 method: "POST",
                 headers: {
                     "Content-type": "application/json",
                 },
-                body: JSON.stringify({lobbyId,lobbyName,lobbyDescription,studentformId,pollId,userId})
+                body: JSON.stringify({lobbyId,lobbyName,lobbyDescription,studentformId,pollId,userId,subject})
             })
             const data= await res.json();
 			if (res.status === 400 || !data) {
@@ -310,8 +459,27 @@ function HomePage() {
 			} 
             navigate("/poll/"+Lobby.lobbyId);
         }
+        else{
+            var finalid=xemit;
+            Lobby.lobbyId=finalid
+            console.log(finalid);   
+            const{lobbyId,lobbyName,lobbyDescription,studentformId,pollId,userId} = Lobby;
+            const res = await fetch(`${link}createnewlobby`, {
+                method: "POST",
+                headers: {
+                    "Content-type": "application/json",
+                },
+                body: JSON.stringify({lobbyId,lobbyName,lobbyDescription,studentformId,pollId,userId})
+            })
+            const dat= await res.json();
+			if (res.status === 400 || !dat) {
+                window.alert("Lobby Creation Failed");
+			} else if (res.status === 200 || res.status === 201) {
+                window.alert("Lobby Created Successfully");
+			} 
+            navigate("/poll/"+Lobby.lobbyId);
+        }
     } 
-    let navigate = useNavigate();
     function viewpoll()
     {
         navigate("/vpoll/");
@@ -342,10 +510,26 @@ function HomePage() {
                     <DialogContentText>
                     <TextField sx={{width:"30em"}} name="lobbyName" value={Lobby.lobbyName} autoFocus margin="dense" id="name" label="Enter Lobby Name" type="text" fullWidth variant="standard" onChange={handleInputs} inputProps={{maxLength: 40}}/>
                     <TextField 	name="lobbyDescription"	value={Lobby.lobbyDescription}margin="dense" id="outlined-multiline-static" label="Lobby Description" type="text" fullWidth  multiline rows={2} onChange={handleInputs} inputProps={{maxLength: 100}}/>
+                    <CustomSelect value={selectedSubject} onChange={setselectedSubject}>
+                    
+				{userInfo.Subject==undefined?
+					<>---No Subject Created---</>:<>
+                    <StyledOption value={1000}>No Subject Selected</StyledOption>
+				{
+                    
+					userInfo.Subject.map((value, index) => 
+					<StyledOption value={value} key={index} >{value.SubjectValue}</StyledOption>
+					)
+				}
+				</>}			
+				
+				<StyledOption >Add Subject</StyledOption>
+			</CustomSelect>
                     </DialogContentText>
                   </DialogContent>
                   <DialogActions>
                     <Button className={classes.cpoll} onClick={handleClose} >Cancel</Button>
+                    <Button className={classes.cpoll} onClick={handleOption} >Cancel</Button>
                     <Button className={classes.cpoll} onClick={Lob}>Create</Button>
                   </DialogActions>
                 </Dialog>

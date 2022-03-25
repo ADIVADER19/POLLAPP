@@ -126,9 +126,6 @@ function Nav() {
       }
       function logout(e){
           e.preventDefault();
-          localStorage.removeItem('jwt');
-          window.alert('LOGGED OUT SUCCESSFULLY');
-          window.location.reload();
           }
        
       function profile(e){
@@ -143,12 +140,10 @@ function Nav() {
         const res = await fetch(`${link}userdata`, {
 				method: "GET",
                 headers: {
-                    //Authorization: "Bearer " + localStorage.getItem("jwt"),
-                    Authorization: "Bearer " + cookies.get("jwt"),
-                    // Accept: "application/json",
-					// "Content-Type": "application/json"
+                    Accept: "application/json",
+					"Content-Type": "application/json"
                   },
-				//credentials: "include",
+				credentials: "include",
 			});
 			const data =await res.json();
             setUserInfo(data);

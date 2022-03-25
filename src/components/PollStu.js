@@ -23,48 +23,55 @@ const useStyles=makeStyles({
 function PollStu() {
     const [timedPopup, setTimedPopup] = useState(false);
     const [userInfo, setUserInfo] = useState({});
-    const[loading,setLoading]=useState(false);
-    const currentPathName = window.location.pathname;
+    // const currentPathName = window.location.href;
+    // const lobbyuuid = currentPathName.slice(currentPathName.indexOf('pollstu'),-1);;
+    // console.log(lobbyuuid);
+    // const subexist=lobbyuuid.includes('s');
+    // console.log(subexist);
+    // let subject = '';
+    // if(subexist){
+    //     subject = lobbyuuid.splice('s',-1);
+    //     console.log(subject);
+    // }
+    const currentPathName = window.location.pathname; 
     const lobbyuuid = currentPathName.slice(9);
+    const subexist=lobbyuuid.includes('s')
+    let subject = '';
+    if(subexist){
+        subject = lobbyuuid.slice(18);
+        console.log(subject);
+    }
     const [polldes, setItems] = useState([]);
     const [lobbydes, setTritems] = useState([]);
     const [check, setBitems] = useState(Boolean);
-    const ENDPOINT = 'https://pollapp281907.herokuapp.com';
+    const ENDPOINT = 'http://pollapp281907.herokuapp.com/';
     const link="https://pollapp281907.herokuapp.com/"
+    
+    
 
 
     
     const suserd = async () => {
-        
 		try {
-            const test=localStorage.getItem("sjwt");
-            console.log(test);
-            if(test === null) {
-                setTimeout(()=>{
-                    setTimedPopup(true);
-                },1000);
-            }
-             else
-             {
 			const res = await fetch(`${link}suserdata`, {
 				method: "GET",
-                headers: {
-                    //Authorization: "Bearer " + localStorage.getItem("sjwt"),
-                  },
-                credentials: "include"
+				headers: {
+					Accept: "application/json",
+					"Content-Type": "application/json",
+				},
+				credentials: "include",
 			});
 			const data = await res.json();
 		
 
-			if (res.status === 200 || res.status===201) {
+			if (res.status === 200) {
                 setUserInfo(data);
+                
                 socket.emit('join',{data,lobbyuuid},(error)=>{
-                    if(error){alert(error);
-                    setLoading(true)}
+                    if(error){alert(error);}
                 });
 			}
-            else{ if (res.status === 422) {
-                
+            else if (res.status === 422) {
                 setTimeout(()=>{
                     setTimedPopup(true);
                 },1000);
@@ -75,12 +82,11 @@ function PollStu() {
                     setTimedPopup(true);
                 },1000);
             
-            }}
-		} 
-    }catch (err) {
-        console.log(err);
+            }
+		} catch (err) {
 		}
 	};
+
     const responseGoogle = async (response) => {
         
         const mail=response.profileObj.email
@@ -92,7 +98,11 @@ function PollStu() {
 			!name ||
 			!givenName 
 		) {
-		} else {
+		}
+        // else if(subexist){
+        //     console.log(subject);
+        // }
+        else {
 			const res = await fetch(`${link}slogin`, {
 				method: "POST",
 				headers: {
@@ -102,36 +112,32 @@ function PollStu() {
                     mail,
                     name,
                     givenName,
-				})
+                    subject,
+                    luuid:lobbyuuid,
+				}),
 			});
             const data= await res.json();
-            const tok=data.message;
-            console.log(data);
-            console.log(tok);
 			if (res.status === 400 || !data) {
                 window.alert('Something went wrong')
-                setTimeout(()=>{
-                    setTimedPopup(true);
-                },1000);
 			} else if (res.status === 200 || res.status === 201) {
                 window.alert("SUCCESSFULLY LOGGED IN")
-                localStorage.setItem("sjwt", tok);
                 setTimedPopup(false);
-                suserd()
+                suserd();
+                if(subexist){
+                    subjectpolladd(mail);
+                }
 			} 
             else if(res.status === 422)
                 {
-                window.alert("USER DOES NOT EXSIST");
-                setTimeout(()=>{
-                    setTimedPopup(true);
-                },1000);
+                window.alert("USER DOES NOT EXSIST")
+			}
+            else if(res.status === 450)
+                {
+                window.alert("USER Cannot vote for this poll")
 			}
             else
             {
-                window.alert("INVALID USER");
-                setTimeout(()=>{
-                    setTimedPopup(true);
-                },1000);
+                window.alert("INVALID USER")
             }
 		}
 	};
@@ -163,6 +169,7 @@ function PollStu() {
                 window.alert('Something went wrong')
 			} else if (res.status === 200 || res.status === 201) {
                 window.alert("SUCCESSFULLY SIGNED UP")
+                document.getElementByclassName("sign").style.display="none";
                 
 			} 
             else if(res.status === 422)
@@ -174,6 +181,8 @@ function PollStu() {
 		}
 	};
     var usern = userInfo.name;
+    var mer= userInfo.mail;
+    console.log(mer)
     useEffect(()=>
     {
         suserd();
@@ -188,13 +197,42 @@ function PollStu() {
         
     },[ENDPOINT, lobbyuuid])
 
-const socker=(question,option)=>{
-    socket.emit('sendPoll', {lobbyuuid,question,option,usern}, (error) => {
-        if(error) {
-            alert(error);
+    const socker=(question,option)=>{
+        socket.emit('sendPoll', {lobbyuuid,question,option,usern}, (error) => {
+            if(error) {
+                alert(error);
+            }
+        })
+    }      
+
+    const subjectpolladd = async (mail) => {
+        try {
+            await fetch(`${link}subjectpolladd`, {
+                method: "POST",
+                headers: {
+                    "Content-type": "application/json",
+                },
+                body: JSON.stringify({
+                    mail,
+                    subject,
+                    luuid:lobbyuuid,
+                }),
+            })
+            .then((res) => res.json())
+            .then((data) => {
+            if (data.error) {
+                M.toast({ html: data.error });
+            } else {
+                M.toast({
+                html: "Attendence marked!",
+                classes: "#2e7d32 green darken-3",
+                });
+            }
+            })
         }
-    })
-}      
+        catch(err) {
+        };
+    }
 
     const polls =(() => {
         fetch(`${link}bobs`, {method: "POST",
@@ -251,8 +289,9 @@ const socker=(question,option)=>{
             body: JSON.stringify({
               puid,
               opuid,
-              usern,
-              data:lobbyuuid
+              mer,
+              data:lobbyuuid,
+              subject
             }),
           })
             .then((res) => res.json())
@@ -302,37 +341,42 @@ const socker=(question,option)=>{
             <>                  
             <div className='ice2p'>
                 <div className='poltlep'>
-                    <h1>{lobbydes.lobbyName}</h1>
-                    <h2>{lobbydes.lobbyDescription}</h2>
+                <div className='header' >
+                    <h1 className='lobby'>Lobby Title: {lobbydes.lobbyName}
+                    <span>Lobby Description: {lobbydes.lobbyDescription}</span></h1>
+                    </div>
                 </div>
+                <div className='styles'></div>
+                    <div class="triangle-right"></div>
+                    <div className="triangle-left"></div>
+                <div className='polldiv'>
                 {polldes.map((lob,x)=>(
-                    <>
-                      {loading?<div></div>:
-                         <div className='questsp' key={lob}>
-                         <div className='questionp'>
-                             <h1>{x+1}. {lob.pollQuestion}</h1>
-                         </div>
-                         {lob.pollOption.map((oop)=>(
-                             <>{oop.optionValue == "" &&(
-                                 <></>
-                             )}
-                             {!oop.optionValue == "" &&(
-                             <div id= "catrina">
-                                 <div className= "optionsp" >
-                                     <input type="radio" value={oop.optionValue} name={lob.pollQuestion} id="gywshb" 
-                                     onClick={()=>nowdigonthis(lob._id,oop._id,lob.pollQuestion,oop.optionValue)}
-                                     ></input>
-                                     <h3 id="muda">{oop.optionValue}</h3>
-                                 </div>
-                             </div>
-                             )}
-                             </>    
-                             ))}
-                     </div>}
-                    </>
-             
+                <div className='questsp' key={lob}>
+                    {/* <div className='questionp'>
+                        <h1>{x+1}. {lob.pollQuestion}</h1>
+                    </div> */}
+                    <div className='shapes'></div>
+                    <h2 className='sequence'>{x+1}</h2>
+                    <h2 className='question1l'>{lob.pollQuestion}</h2>
+                    {lob.pollOption.map((oop)=>(
+                        <>{oop.optionValue == "" &&(
+                            <></>
+                        )}
+                        {!oop.optionValue == "" &&(
+                        <div id= "catrina" className='viki'>
+                            <div className= "optionsp" >
+                                <input type="radio" value={oop.optionValue} name={lob.pollQuestion} id="gywshb" 
+                                onClick={()=>nowdigonthis(lob._id,oop._id,lob.pollQuestion,oop.optionValue)}
+                                ></input>&nbsp;
+                                <h3 id="muda">{oop.optionValue}</h3>
+                            </div>
+                        </div>
+                        )}
+                        </>    
+                        ))}
+                </div>
                 ))}
-                
+                </div>
             </div>
             <Popup className={classes.pops} id="popup" trigger={timedPopup} setTrigger={setTimedPopup}>
                 <h3 align="center" className={classes.poptit}>SIGN UP OR LOGIN TO CONTINUE</h3>

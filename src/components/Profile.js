@@ -1,222 +1,190 @@
-import React, { useState, useEffect} from "react";
+import React from 'react'
+import {makeStyles,Button} from '@material-ui/core';
+import PollIcon from '@material-ui/icons/Poll';
 import { useNavigate } from 'react-router';
-import "./Profile.css";
-import AccountCircleIcon from "@material-ui/icons/AccountCircle";
-import Typography from "@material-ui/core/Typography";
-import TextField from "@material-ui/core/TextField";
-import Button from "@material-ui/core/Button";
-import Box from "@material-ui/core/Box";
-import Avatar from "@material-ui/core/Avatar";
-import {deepPurple} from '@mui/material/colors';
-import ArrowRightAltIcon from "@material-ui/icons/ArrowRightAlt";
-import { ToastContainer, toast } from "react-toastify";
-import { unstable_renderSubtreeIntoContainer } from "react-dom";
-import Cookies from 'universal-cookie';
-
-export default function Profile() {
-	const navigate = useNavigate();
-	const [data, setData] = useState("");
-	const [paa, setPaa] = useState("");
-	const [colorr, setColorr] = useState();
-	const [userInfo, setUserInfo] = useState({});
-	const colorarr=["red","blue","yellow","orange","purple","cyan","lightblue","lightgreen","lightyellow","darkblue","crimson","lightorange","darkorange","darkyellow","darkcyan","darkgreen","whitesmoke","white","black","pink"]
-	const link="https://pollapp281907.herokuapp.com/"
-	const cookies = new Cookies();
-	
-	const callProfilePage = async () => {
-		try {
-			const res = await fetch(`${link}userdata`, {
+import {useState,useEffect} from 'react';
+import MenuIcon from '@mui/icons-material/Menu';
+import './Nav.css';
+import CloseIcon from '@mui/icons-material/Close';
+const  useStyles = makeStyles({
+    main:{
+        boxSizing:"border-box",
+        fontFamily: "Roboto,Arial,sans-serif",
+        textTransform:"capitalize",
+        position:"fixed",
+        zIndex:"2",
+        top:"0",
+        left:"0",
+        right:"0",
+        backgroundColor:"whitesmoke",
+        boxShadow:"0 5px 10px rgba(0,0,0,.1)",
+        padding:"0px 2%",
+        display:"flex",
+        alignItems:"center",
+        height:"10vh",
+        width:"100vw",
+        justifyContent:"space-between",
+        '& a':{
+            textDecoration:"none",
+        },
+        '& #toggle':{
+            display:"none",
+        },
+        '& label':{
+            display:"none",
+        },
+        '& nav':{
+            '& ul':{
+                listStyle:"none",
+                '& li':{
+                    position:"relative",
+                    float:"left",
+                    
+                    '& ul':{
+                        position:"absolute",
+                        boxShadow:"0 5px 10px rgba(0,0,0,.1)",
+                        left:"0",
+                        width:"200px",
+                        backgroundColor:"whitesmoke",
+                        display:"none",
+                        '& li':{
+                            width:"100%",
+                            borderTop: "1px solid rgba(0,0,0,.1)",
+                        },
+                        
+                    },
+                    '&:hover':{
+                        '& ul':{
+                            display:"initial",
+                        }
+                    },
+                    '&:focus-within':{
+                        '& ul':{
+                            display:"initial",
+                        }
+                    },
+                    '& a':{
+                        display:"flex",
+                        alignItems:"center",
+                        justifyContent:"center",
+                        padding:"3vh",
+                        color:"#333",
+                        '&:hover':{
+                            color:"#f4511e",
+                        }
+                    }
+                }
+            }
+        },
+        ["@media(max-width: 650px)"]: {
+            '& label':{
+                display:"initial",
+                zIndex:"100",
+            },
+            
+            '& nav':{
+                position:"absolute",
+                top:"100%",
+                left:"0",
+                right:"0",
+                backgroundColor:"whitesmoke",
+                borderTop:"1px solid rgba(0,0,0,.1)",
+                display:"none",
+                '& ul':{
+                    '& li':{
+                        width:"100%",
+                        borderBottom:"1px solid rgba(0,0,0,.1)",
+                        '& ul':{
+                            position:"relative !important",
+                            width:"100vw !important",
+                        },
+                        
+                    },
+                    '&.div':{
+                        height:"2px",
+                        color:"green",
+                    },
+                }
+            },
+           	
+		},
+    }
+})
+function Nav() {
+    const classes=useStyles();
+    const [checked, setChecked] = useState(false);
+    const [userInfo, setUserInfo] = useState({});
+	const link ="https://pollapp281907.herokuapp.com/"
+    let navigate = useNavigate();
+    function toggle(value){
+        return !value;
+      }
+      function navicon() {
+          navigate('/')
+      }
+      const logout = async (e) => {
+          e.preventDefault();
+          await fetch(`${link}logout`, {
+              method: "GET",
+              headers: {
+                  "Content-type": "application/json",
+              },
+              credentials: "include",
+          }).then((res)=>{
+  
+              if (res.status === 200) {
+                  window.alert("LOGGED OUT SUCCESSFULLY")
+                  window.location.reload();
+              }
+              else
+              {
+                  window.alert("SOMETHING WENT WRONG")
+              }
+  
+          })
+       
+  
+      };
+      function profile(e){
+        e.preventDefault();
+          navigate("/profile");
+      };
+    function viewpoll(e){
+        e.preventDefault();
+        navigate("/vpoll/");
+    }
+    useEffect(async() => {
+        const res = await fetch(`${link}userdata`, {
 				method: "GET",
 				headers: {
-                    Authorization: "Bearer " + cookies.get("jwt"),
-                  }
+					Accept: "application/json",
+					"Content-Type": "application/json",
+				},
+				credentials: "include",
 			});
-			const data = await res.json();
-			setUserInfo(data);
-
-			if (!res.status === 200) {
-				window.alert("login first");
-				navigate('/');
-			}
-		} catch (err) {
-			navigate("/");
-		}
-	}
-    function goBack() {
-        navigate("/");
-    }
-	useEffect(() => {
-       callProfilePage();
-        }, []);
-
-
-	setTimeout(() => {
-		avatarr();
-	},1000);
-
-	/*To comment*/
-	// const PostData = async (e) => {
-	// 	console.log("submitted");
-	// 	// e.preventDefault();
-
-	// 	const { firstname, lastname, username, email, password } = userInfo;
-	// 	const res = await fetch("/profile", {
-	// 		method: "POST",
-	// 		headers: {
-	// 			"Content-type": "application/json",
-	// 		},
-	// 		body: JSON.stringify({
-	// 			firstname,
-	// 			lastname,
-	// 			username,
-	// 			email,
-	// 			password,
-	// 		}),
-	// 	});
-	// 	const data = await res.json();
-	// 	if (res.status === 422 || !data) {
-	// 		alert("User Update Failed");
-	// 		console.log("User Update Failed");
-	// 	}
-	// 	if (data.status === 200 || data.status === 201) {
-	// 		toast.success("Uesr updated", {
-	// 			position: "top-center",
-	// 			autoClose: 3000,
-	// 		});
-
-	// 		console.log("ZA WARUDOO!!!!");
-	// 	} else {
-	// 		window.alert("User updation failed");
-	// 	}
-	// };
-	/*To comment*/
-	/*Remove update button, remove onChange attr, make value as placeholder and/or textfield disabled*/
-	function avatarr()
-	{
-		
-		fname=userInfo.givenName[0];
-		firstchar=fname;
-		console.log(firstchar);
-		console.log(userInfo.name)
-		console.log(userInfo.name.length)
-		for (var a=0;a<userInfo.name.length;a++)
-		{
-			if (userInfo.name[a]==" ")
-			{
-				setColorr(a)
-				lastchar=userInfo.name[a+1];
-				console.log(lastchar);
-			}
-		}
-		
-		console.log(firstchar+lastchar);
-		setPaa(firstchar+lastchar);
-	}
- 
-	var firstchar;
-	var fname;
-	var lastchar;
-	return (
-		
-		<div style={{ overflow: "hidden" }}>
-			<div class="triangle-right1"></div>
-            <div className="triangle-left1"></div>
-			<Box className="form">
-				<div className="title">
-					{/* <AccountCircleIcon
-						style={{ fontSize: 55, marginRight: 10, marginTop: -3}}
-						className="icon"
-					/> */}
-					<Avatar style={{backgroundColor:`${colorarr[colorr]}`}} className="iconn" >{paa}</Avatar>
-					<Typography style={{fontSize:40}} className="text" variant="h2">
-						{" "}
-						Welcome Back, {userInfo.givenName}!
-					</Typography>
-				</div>
-
-				<div className="detail">
-					<Typography
-						style={{ marginRight: 80, marginTop: 10}}
-						className="label"
-						variant="h5"
-					>
-						First Name:
-					</Typography>
-					<TextField
-						value={userInfo.givenName}
-						// onChange={(e) =>
-						// 	setUserInfo({ ...userInfo, firstname: e.target.value })
-						// }
-						disabled
-						style={{ width: 750, backgroundColor: "white" }}
-						variant="outlined"
-					></TextField>
-				</div>
-				<div className="detail">
-					<Typography
-						style={{ marginRight: 140 , marginTop: 10}}
-						className="label"
-						variant="h5"
-					>
-						Email:
-					</Typography>
-					<TextField
-						value={userInfo.mail}
-						// onChange={(e) =>
-						// 	setUserInfo({ ...userInfo, email: e.target.value })
-						// }
-						disabled
-						style={{ width: 750, backgroundColor: "white" }}
-						variant="outlined"
-					></TextField>
-				</div>
-                <div className="detail">
-					<Typography
-						style={{ marginRight: 140, marginTop: 10 }}
-						className="label"
-						variant="h5"
-					>
-						Name:
-					</Typography>
-					<TextField
-						value={userInfo.name}
-						// onChange={(e) =>
-						// 	setUserInfo({ ...userInfo, email: e.target.value })
-						// }
-						disabled
-						style={{ width: 750, backgroundColor: "white" }}
-						variant="outlined"
-					></TextField>
-				</div>
-				{/* <div className="detail">
-					<Typography
-						style={{ marginRight: 90 }}
-						className="label"
-						variant="h5"
-					>
-						Password:
-					</Typography>
-					<TextField
-						placeholder="Type a new password and submit this form to change"
-						style={{ width: 750, backgroundColor: "white" }}
-						variant="outlined"
-					></TextField>
-				</div> */}
-				{/* <div className="submit">
-					<Button
-						variant="contained"
-						style={{ fontSize: 15 }}
-						color="primary"
-						endIcon={<ArrowRightAltIcon />}
-						size="large"
-						onClick={PostData}
-					>
-						UPDATE DETAILS
-					</Button>
-				</div> */}
-               
-			</Box>
-            <button onClick={goBack} className="butt">BACK</button>
-		</div>
-	);
+			const data =await res.json();
+                setUserInfo(data);
+        }, [])
+    return (
+        <>
+           <header className={classes.main}>
+               <a href="#" style={{display:"flex",color:"#f4511e"}}><PollIcon style={{cursor:"pointer"}} fontSize='medium' onClick={navicon}/><h2 onClick={navicon}>POLLAPP</h2></a>
+               <input type="checkbox" name="toggle" id="toggle" checked={checked}onChange={e => setChecked(toggle)}/>
+               <label for="toggle">{!checked?<MenuIcon/>:<CloseIcon/>}</label>
+               <nav className="checks">
+                   <ul>
+                       <li><a href="#" onClick={(e)=>{viewpoll(e)}}>Dashboard</a></li>
+                       <li ><a href="#">Welcome,{userInfo.name}</a>
+                       <ul>
+                       <li><a href="#" onClick={(e)=>{profile(e)}}>View Profile</a></li>
+                       <li><a href="#" onClick={(e)=>logout(e)}>Logout</a></li>
+                       </ul>
+                       </li>
+                   </ul>
+                </nav>
+            </header> 
+        </>
+    )
 }
+
+export default Nav
