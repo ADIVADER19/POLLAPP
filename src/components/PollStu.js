@@ -23,14 +23,22 @@ const useStyles=makeStyles({
 function PollStu() {
     const [timedPopup, setTimedPopup] = useState(false);
     const [userInfo, setUserInfo] = useState({});
-    const currentPathName = window.location.href;
-    const lobbyuuid = currentPathName.slice(currentPathName.indexOf('pollstu'),-1);;
-    console.log(lobbyuuid);
-    const subexist=lobbyuuid.includes('s');
-    console.log(subexist);
+    // const currentPathName = window.location.href;
+    // const lobbyuuid = currentPathName.slice(currentPathName.indexOf('pollstu'),-1);;
+    // console.log(lobbyuuid);
+    // const subexist=lobbyuuid.includes('s');
+    // console.log(subexist);
+    // let subject = '';
+    // if(subexist){
+    //     subject = lobbyuuid.splice('s',-1);
+    //     console.log(subject);
+    // }
+    const currentPathName = window.location.pathname; 
+    const lobbyuuid = currentPathName.slice(9);
+    const subexist=lobbyuuid.includes('s')
     let subject = '';
     if(subexist){
-        subject = lobbyuuid.splice('s',-1);
+        subject = lobbyuuid.slice(18);
         console.log(subject);
     }
     const [polldes, setItems] = useState([]);
@@ -77,6 +85,7 @@ function PollStu() {
 		} catch (err) {
 		}
 	};
+
     const responseGoogle = async (response) => {
         
         const mail=response.profileObj.email
@@ -89,9 +98,9 @@ function PollStu() {
 			!givenName 
 		) {
 		}
-        else if(subexist){
-            console.log(subject);
-        }
+        // else if(subexist){
+        //     console.log(subject);
+        // }
         else {
 			const res = await fetch("/slogin", {
 				method: "POST",
@@ -102,6 +111,8 @@ function PollStu() {
                     mail,
                     name,
                     givenName,
+                    subject,
+                    luuid:lobbyuuid,
 				}),
 			});
             const data= await res.json();
@@ -110,11 +121,18 @@ function PollStu() {
 			} else if (res.status === 200 || res.status === 201) {
                 window.alert("SUCCESSFULLY LOGGED IN")
                 setTimedPopup(false);
-                suserd()
+                suserd();
+                if(subexist){
+                    subjectpolladd(mail);
+                }
 			} 
             else if(res.status === 422)
                 {
                 window.alert("USER DOES NOT EXSIST")
+			}
+            else if(res.status === 450)
+                {
+                window.alert("USER Cannot vote for this poll")
 			}
             else
             {
@@ -162,6 +180,8 @@ function PollStu() {
 		}
 	};
     var usern = userInfo.name;
+    var mer= userInfo.mail;
+    console.log(mer)
     useEffect(()=>
     {
         suserd();
@@ -176,13 +196,42 @@ function PollStu() {
         
     },[ENDPOINT, lobbyuuid])
 
-const socker=(question,option)=>{
-    socket.emit('sendPoll', {lobbyuuid,question,option,usern}, (error) => {
-        if(error) {
-            alert(error);
+    const socker=(question,option)=>{
+        socket.emit('sendPoll', {lobbyuuid,question,option,usern}, (error) => {
+            if(error) {
+                alert(error);
+            }
+        })
+    }      
+
+    const subjectpolladd = async (mail) => {
+        try {
+            await fetch("/subjectpolladd", {
+                method: "POST",
+                headers: {
+                    "Content-type": "application/json",
+                },
+                body: JSON.stringify({
+                    mail,
+                    subject,
+                    luuid:lobbyuuid,
+                }),
+            })
+            .then((res) => res.json())
+            .then((data) => {
+            if (data.error) {
+                M.toast({ html: data.error });
+            } else {
+                M.toast({
+                html: "Attendence marked!",
+                classes: "#2e7d32 green darken-3",
+                });
+            }
+            })
         }
-    })
-}      
+        catch(err) {
+        };
+    }
 
     const polls =(() => {
         fetch("/bobs", {method: "POST",
@@ -239,8 +288,9 @@ const socker=(question,option)=>{
             body: JSON.stringify({
               puid,
               opuid,
-              usern,
-              data:lobbyuuid
+              mer,
+              data:lobbyuuid,
+              subject
             }),
           })
             .then((res) => res.json())
