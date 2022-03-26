@@ -3,11 +3,13 @@ import "./Popup.css"
 
 function Popup(props) {
     return (props.trigger)?(
+        <>
         <div id="popup" className='popup'>
-            <div className='popup-inner'>
+        </div>
+        <div className='popup-inner'>
                 { props.children}
             </div>
-        </div>
+        </>
     ) : "";
 }
 
