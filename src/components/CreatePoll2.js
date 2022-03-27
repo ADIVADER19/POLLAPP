@@ -38,14 +38,15 @@ const  useStyles = makeStyles({
     },stylings:{
         background:"#f4511e",
         position:"absolute",
-        top:0,
-        left:0,
+        bottom:0,
+        right:0,
+        zIndex:7,
         width:"50px",
         height:"50px",
-        borderRadius:"15% 50% 50% 0%"
+        borderRadius:"50% 0% 0% 0%"
     },
     lobbypollsseen:{
-        position:"relative",width:"43%",height:"63vh",backgroundColor:"white",display:"flex",flexDirection:"column",alignItems:"flex-start",margin:"1%",borderLeft:"10px solid #f4511e",borderRadius:"1em",zIndex:"2",
+        position:"relative",width:"35vw",height:"66vh",backgroundColor:"white",display:"flex",flexDirection:"column",alignItems:"flex-start",margin:"1%",border:"10px solid #f4511e",borderRadius:"1em",zIndex:"2",
         ['@media (max-width:780px)']: {
             width:"100%",
             height:"70vh"
@@ -565,8 +566,8 @@ function CreatePoll2() {
                 <div className={classes.lobbypollsseen} key={lob}>
                    <div style={{position:"absolute",right:"1vw",top:"2vh",zIndex:"4"}}><Delete  className={classes.tired} onClick={()=>{setmodal(true);setDeletepollid(lob._id)}}/></div>
                    <div className={classes.stylings}></div>
+                   <h2 style={{position:"absolute",color:"white",bottom:6,right:12,zIndex:8}} variant="h5">{x+1}</h2>
                     <div style={{display:"flex", fontFamily: "Roboto,Arial,sans-serif",color:"#333",width:"93%",position:"absolute",top:"3%",height:"10vh",zIndex:"1",left:"3%",overflow:"hidden"}}>
-                        <h2 className={classes.quest} style={{color:"white"}} variant="h5">{x+1}</h2>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         <h2 className={classes.quest} variant="h5">{lob.pollQuestion}</h2>
                     </div>
                     <br/>
@@ -578,7 +579,7 @@ function CreatePoll2() {
                     )}
                     {!oop.optionValue == "" &&(
                     <div style={{color:"rgb(73 73 73 / 87%)",width:"100%",margin:"1%",position:"relative",zIndex:"3"}}>
-                    <h5 style={{fontWeight: 400,}}>{y+1}. {oop.optionValue}</h5>
+                    <h5 title={oop.optionValue} style={{whiteSpace: "nowrap",fontWeight: 400,textOverflow:"ellipsis",overflow:"hidden"}}>{y+1}. {oop.optionValue}</h5>
                     </div>
                     )}
                     </>    
@@ -586,8 +587,6 @@ function CreatePoll2() {
                     </div>
                     </div> 
                     <br/>
-                    <div style={{position:"absolute",width:"100%",bottom:"0",
-                    background:"#f4511e",height:"10%",borderRadius:"50% 50% 0.5em 0.5em"}}></div>
                 </div>))}               
                 </div>
             </div>

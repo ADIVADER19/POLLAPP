@@ -6,6 +6,8 @@ import {useState,useEffect} from 'react';
 import MenuIcon from '@mui/icons-material/Menu';
 import './Nav.css';
 import CloseIcon from '@mui/icons-material/Close';
+import Modal from 'react-modal';
+import Alert from '@mui/material/Alert';
 const  useStyles = makeStyles({
     main:{
         boxSizing:"border-box",
@@ -113,6 +115,7 @@ const  useStyles = makeStyles({
 function Nav() {
     const classes=useStyles();
     const [checked, setChecked] = useState(false);
+    const[loggedOut,setloggedOut]=useState(false);
     const [userInfo, setUserInfo] = useState({});
       let navigate = useNavigate();
     function toggle(value){
@@ -132,7 +135,11 @@ function Nav() {
           }).then((res)=>{
   
               if (res.status === 200) {
-                  window.alert("LOGGED OUT SUCCESSFULLY")
+                setloggedOut(true);
+                //props.setTrigger(false)
+                window.setTimeout(() => {
+                    setloggedOut(false);
+                  }, 5000);
                   window.location.reload();
               }
               else
@@ -181,6 +188,9 @@ function Nav() {
                        </li>
                    </ul>
                 </nav>
+                <Modal isOpen={loggedOut} style={{height:300,width:300,margin:0,overlay:{zIndex:55,display:"flex",alignItems:"center",justifyContent:"center",width:"100%",height:"100%",backgroundColor:'#FFFAFA',opacity:'0.9'},content:{width:"230px",backgroundColor: 'rgba(255, 255, 255, 0.1)',height:"fit-content",margin:0,top:"10px",left:"0",transition:"1000ms all",border:"none"}}}>
+            <Alert variant="filled" severity="success">LogOut Successfully</Alert>
+                    </Modal>
             </header> 
         </>
     )

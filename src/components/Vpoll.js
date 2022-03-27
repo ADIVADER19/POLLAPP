@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import'./Vpoll.css';
+import './HomePage.css';
 import {Typography,Button,makeStyles,IconButtons,Dialog,DialogTitle,DialogActions,TextField,DialogContent,DialogContentText}  from '@material-ui/core'
 import { useNavigate } from 'react-router';
 import AddIcon from '@material-ui/icons/Add';
@@ -451,6 +452,7 @@ function Vpoll() {
         },
         body: JSON.stringify({finalizedArray})
     });
+    finalizedArray.splice(0, finalizedArray.length);
     }
     const Closepoll = (stuid) => {
         fetch("/close", {
@@ -687,8 +689,18 @@ function Vpoll() {
             </div>
         </div>
         :<div className={classes.loader}>
-        <CircularProgress style={{color:"#f4511e"}} size={100} />
-        <Typography variant="h3" style={{color:"#f4511e"}}>Loading...</Typography>
+       <div className={classes.loader}>
+            <div class="middle">
+                <div class="bar bar1"></div>&nbsp;
+                <div class="bar bar2"></div>&nbsp;
+                <div class="bar bar3"></div>&nbsp;
+                <div class="bar bar4"></div>&nbsp;
+                <div class="bar bar5"></div>&nbsp;
+                <div class="bar bar6"></div>&nbsp;
+                <div class="bar bar7"></div>&nbsp;
+                <div class="bar bar8"></div>
+            </div>
+        </div>
         </div>}
         </>
     )
