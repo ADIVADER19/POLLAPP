@@ -146,6 +146,13 @@ module.exports = function(app) {
     changeOrigin:true,
   }
   ))
+  app.use('/deletePoll',
+  createProxyMiddleware({
+    target: 'https://pollapp281907.herokuapp.com/',
+    changeOrigin:true,
+  }
+  ));
+  
 
 };
 

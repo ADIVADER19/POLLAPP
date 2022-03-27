@@ -9,150 +9,12 @@ import Popup from './Popup';
 import { GoogleLogin } from 'react-google-login';
 import CircularProgress from '@mui/material/CircularProgress';
 import CodeIcon from '@mui/icons-material/Code';
-import {styled} from "@mui/material";
-import SelectUnstyled, { selectUnstyledClasses } from '@mui/base/SelectUnstyled';
-import OptionUnstyled, { optionUnstyledClasses } from '@mui/base/OptionUnstyled';
-import PopperUnstyled from '@mui/base/PopperUnstyled';
-/*Select component Styling*/
-const blue = {
-	100: '#DAECFF',
-	200: '#99CCF3',
-	400: '#3399FF',
-	500: '#007FFF',
-	600: '#0072E5',
-	900: '#003A75',
-  };
-  
-  const grey = {
-	100: '#E7EBF0',
-	200: '#E0E3E7',
-	300: '#CDD2D7',
-	400: '#B2BAC2',
-	500: '#A0AAB4',
-	600: '#6F7E8C',
-	700: '#3E5060',
-	800: '#2D3843',
-	900: '#1A2027',
-  };
-  
-  const StyledButton = styled('button')(
-	({ theme }) => `
-	font-family: IBM Plex Sans, sans-serif;
-	font-size: 0.875rem;
-	box-sizing: border-box;
-	min-height: calc(1.5em + 22px);
-	min-width: 70%;
-	background: ${theme.palette.mode === 'dark' ? grey[900] : '#fff'};
-	border: 1px solid ${theme.palette.mode === 'dark' ? grey[800] : grey[300]};
-	border-radius: 0.75em;
-	margin: 0.5em;
-	padding: 10px;
-	text-align: left;
-	line-height: 1.5;
-	color: ${theme.palette.mode === 'dark' ? grey[300] : grey[900]};
-  
-	&:hover {
-	  background: ${theme.palette.mode === 'dark' ? '' : grey[100]};
-	  border-color: ${theme.palette.mode === 'dark' ? grey[700] : grey[400]};
-	}
-  
-	&.${selectUnstyledClasses.focusVisible} {
-	  outline: 3px solid ${theme.palette.mode === 'dark' ? blue[600] : blue[100]};
-	}
-  
-	&.${selectUnstyledClasses.expanded} {
-	  &::after {
-		content: '▴';
-	  }
-	}
-  
-	&::after {
-	  content: '▾';
-	  float: right;
-	}
-	`,
-  );
-  
-  const StyledListbox = styled('ul')(
-	({ theme }) => `
-	font-family: IBM Plex Sans, sans-serif;
-	font-size: 0.875rem;
-	box-sizing: border-box;
-	padding: 5px;
-	margin: 10px 0;
-	min-width: 70vw;
-	background: ${theme.palette.mode === 'dark' ? grey[900] : '#fff'};
-	border: 1px solid ${theme.palette.mode === 'dark' ? grey[800] : grey[300]};
-	border-radius: 0.75em;
-	color: ${theme.palette.mode === 'dark' ? grey[300] : grey[900]};
-	overflow: auto;
-	outline: 0px;
-	`,
-  );
-  
-  const StyledOption = styled(OptionUnstyled)(
-	({ theme }) => `
-	list-style: none;
-	padding: 8px;
-	border-radius: 0.45em;
-	cursor: default;
-  
-	&:last-of-type {
-	  border-bottom: none;
-	}
-  
-	&.${optionUnstyledClasses.selected} {
-	  background-color: ${theme.palette.mode === 'dark' ? blue[900] : blue[100]};
-	  color: ${theme.palette.mode === 'dark' ? blue[100] : blue[900]};
-	}
-  
-	&.${optionUnstyledClasses.highlighted} {
-	  background-color: ${theme.palette.mode === 'dark' ? grey[800] : grey[100]};
-	  color: ${theme.palette.mode === 'dark' ? grey[300] : grey[900]};
-	}
-  
-	&.${optionUnstyledClasses.highlighted}.${optionUnstyledClasses.selected} {
-	  background-color: ${theme.palette.mode === 'dark' ? blue[900] : blue[100]};
-	  color: ${theme.palette.mode === 'dark' ? blue[100] : blue[900]};
-	}
-  
-	&.${optionUnstyledClasses.disabled} {
-	  color: ${theme.palette.mode === 'dark' ? grey[700] : grey[400]};
-	}
-  
-	&:hover:not(.${optionUnstyledClasses.disabled}) {
-	  background-color: ${theme.palette.mode === 'dark' ? grey[800] : grey[100]};
-	  color: ${theme.palette.mode === 'dark' ? grey[300] : grey[900]};
-	}
-	`,
-  );
-  
-  const StyledPopper = styled(PopperUnstyled)`
-	z-index: 1;
-  `;
-  
-  const CustomSelect = React.forwardRef(function CustomSelect(props, ref) {
-	const components = {
-	  Root: StyledButton,
-	  Listbox: StyledListbox,
-	  Popper: StyledPopper,
-	  ...props.components,
-	};
-  
-	return <SelectUnstyled {...props} ref={ref} components={components} />;
-  });
-/*Manual Stylingsss*/
+import Modal from 'react-modal';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import Alert from '@mui/material/Alert';
 const  useStyles = makeStyles({
     pops:{
         backgroundColor:"whitesmoke"
-    },
-    log:{
-        width:"30%",
-        marginLeft:"2%",
-    },
-    sign:{
-        width:"30%",
-        marginLeft:"2%",
     },
     homeMain:{
         display:"flex",
@@ -229,7 +91,24 @@ const  useStyles = makeStyles({
           flexDirection:"column",
           alignItems:"center",
           justifyContent:"center",
-      }
+      },
+      log:{
+          width:"200px",
+          marginBottom:"2%",
+          marginLeft:"1%",
+          marginTop:"1%",
+      },
+      sign:{
+        width:"200px",
+        marginBottom:"2%",
+        marginTop:"1%",
+        marginLeft:"1%",
+    },
+    poptit:{
+        color:"#333",
+        fontWeight:"normal",
+        fontFamily: "Roboto,Arial,sans-serif"
+    }
 })
 function HomePage() {
     const [timedPopup, setTimedPopup] = useState(false);
@@ -237,23 +116,31 @@ function HomePage() {
 	const [userInfo, setUserInfo] = useState({});
     const[loading,setLoading]=useState(true);
     const[newid,setRid]=useState();
-    const [subjectArray, setSubjectArray] = useState([]);
+    const[loggedIn,setloggedIn]=useState(false);
+    const[signedIn,setsignedIn]=useState(false);
+    const[existance,setexistance]=useState(false);
+    const[logexist,setlogexist]=useState(false);
     const link="https://pollapp281907.herokuapp.com/"
     const userd = async () => {
 		try {
+            const test=localStorage.getItem("jwt");
+            console.log(test);
+            if(test === null) {
+                setTimeout(()=>{
+                    setLoading(true);
+                    setTimedPopup(true);
+                },1000);
+            }
+            else
+            {
 			const res = await fetch(`${link}userdata`, {
 				method: "GET",
-				headers: {
-					Accept: "application/json",
-					"Content-Type": "application/json",
-				},
-				credentials: "include",
+                headers: {
+                    Authorization: "Bearer " + localStorage.getItem("jwt"),
+                  }
 			});
 			const data = await res.json();
-		
-            
 			if (res.status === 200 || res.status===201) {
-			
                 setUserInfo(data);
                 if(data.Subject){
                     setSubjectArray(data.Subject);
@@ -274,7 +161,9 @@ function HomePage() {
                 },1000);
             
             }
+        }
 		} catch (err) {
+            console.log(err);
 		}
 	};
     const responseGoogle = async (response) => {
@@ -301,10 +190,17 @@ function HomePage() {
 				}),
 			});
             const data= await res.json();
+            const tok=data.message;
+            console.log(data);
+            console.log(tok);
 			if (res.status === 400 || !data) {
                 window.alert('Something went wrong')
 			} else if (res.status === 200 || res.status === 201) {
-                window.alert("SUCCESSFULLY LOGGED IN")
+                setloggedIn(true);
+                localStorage.setItem("jwt", tok);
+                window.setTimeout(() => {
+                    setloggedIn(false);
+                  }, 5000);
                 //props.setTrigger(false)
                 window.location.reload();
                 setTimedPopup(false);
@@ -312,7 +208,10 @@ function HomePage() {
 			} 
             else if(res.status === 422)
                 {
-                window.alert("USER DOES NOT EXSIST")
+                    setlogexist(true);
+                    window.setTimeout(() => {
+                        setlogexist(false);
+                      }, 5000);
 			}
             else
             {
@@ -347,12 +246,18 @@ function HomePage() {
 			if (res.status === 400 || !data) {
                 window.alert('Something went wrong')
 			} else if (res.status === 200 || res.status === 201) {
-                window.alert("SUCCESSFULLY SIGNED UP")
+                setsignedIn(true);
+                window.setTimeout(() => {
+                    setsignedIn(false);
+                  }, 5000);
                 document.getElementByClassName("sign").style.visibility="hidden";
 			} 
             else if(res.status === 422)
             {
-                window.alert("USER ALREADY EXISTS");
+                setexistance(true);
+                window.setTimeout(() => {
+                    setexistance(false);
+                  }, 5000);
             }
             else {
 			}
@@ -590,7 +495,7 @@ function HomePage() {
             </div>
             <Popup className={classes.pops} id="popup" trigger={timedPopup} setTrigger={setTimedPopup}>
                 <h3 align="center" className={classes.poptit}>SIGN UP OR LOGIN TO CONTINUE</h3>
-                <div style={{display:"flex",width:"100%",alignItems:"center",justifyContent:"center"}}>
+                <div style={{display:"flex",width:"100%",alignItems:"center",justifyContent:"center",flexWrap:"wrap"}}>
                 <GoogleLogin id="log" className={classes.log}  
                             clientId="399611436919-fo4n24pr7bpmslat5vamj5u8rc5q0v6f.apps.googleusercontent.com"
                             buttonText="LOGIN IN"
@@ -598,7 +503,7 @@ function HomePage() {
                             onFailure={responseGoogle}
                             cookiePolicy={'single_host_origin'}
                             color="primary"
-                        />
+                        />&nbsp;&nbsp;
                    <GoogleLogin id="sign" className={classes.sign} 
                             clientId="399611436919-fo4n24pr7bpmslat5vamj5u8rc5q0v6f.apps.googleusercontent.com"
                             buttonText="SIGN UP"
@@ -609,7 +514,18 @@ function HomePage() {
                         />
                 </div>
             </Popup>
-            
+            <Modal isOpen={loggedIn} style={{height:300,width:300,margin:0,overlay:{zIndex:11,display:"flex",alignItems:"center",justifyContent:"center",width:"100%",height:"100%",backgroundColor: 'rgba(255, 255, 255, 0.1)'},content:{width:"230px",backgroundColor: 'rgba(255, 255, 255, 0.1)',height:"fit-content",margin:0,top:"10px",left:"0",transition:"1000ms all",border:"none"}}}>
+            <Alert variant="filled" severity="success">Login Successfull</Alert>
+                    </Modal>
+                    <Modal isOpen={signedIn} style={{height:300,width:300,margin:0,overlay:{zIndex:11,display:"flex",alignItems:"center",justifyContent:"center",width:"100%",height:"100%",backgroundColor: 'rgba(255, 255, 255, 0.1)'},content:{width:"230px",backgroundColor: 'rgba(255, 255, 255, 0.1)',height:"fit-content",margin:0,top:"10px",left:"0",transition:"1000ms all",border:"none"}}}>
+            <Alert variant="filled" severity="success">Successfully Signed In</Alert>
+                    </Modal>
+                    <Modal isOpen={existance} style={{height:300,width:300,margin:0,overlay:{zIndex:11,display:"flex",alignItems:"center",justifyContent:"center",width:"100%",height:"100%",backgroundColor: 'rgba(255, 255, 255, 0.1)'},content:{width:"230px",backgroundColor: 'rgba(255, 255, 255, 0.1)',height:"fit-content",margin:0,top:"10px",left:"0",transition:"1000ms all",border:"none"}}}>
+            <Alert variant="filled" severity="error">LogIn to Continue</Alert>
+                    </Modal>
+                    <Modal isOpen={logexist} style={{height:300,width:300,margin:0,overlay:{zIndex:11,display:"flex",alignItems:"center",justifyContent:"center",width:"100%",height:"100%",backgroundColor: 'rgba(255, 255, 255, 0.1)'},content:{width:"230px",backgroundColor: 'rgba(255, 255, 255, 0.1)',height:"fit-content",margin:0,top:"10px",left:"0",transition:"1000ms all",border:"none"}}}>
+            <Alert variant="filled" severity="error">SignUP to Continue</Alert>
+                    </Modal>
             </div>
         :<div className={classes.loader}>
         <CircularProgress style={{color:"#f4511e"}} size={100} />

@@ -1,18 +1,19 @@
 import React from 'react'
 import './Closepoll.css';
 import { useState,useEffect } from 'react'
-import { Button,makeStyles,Dialog,DialogTitle,DialogActions,TextField,DialogContent,DialogContentText } from '@material-ui/core';
+import { Button,makeStyles,Dialog,DialogTitle,DialogActions,TextField,DialogContent,DialogContentText, rgbToHex } from '@material-ui/core';
 import DownloadIcon from '@mui/icons-material/Download';
 import { useNavigate } from 'react-router';
 import { v4 as uuidv4 } from 'uuid';
 import './Nav.css';
-import PollIcon from '@material-ui/icons/Poll';
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import MenuIcon from '@mui/icons-material/Menu';
 import CloseIcon from '@mui/icons-material/Close';
 import Slide from '@mui/material/Slide';
 import zIndex from '@material-ui/core/styles/zIndex';
 import { maxWidth } from '@mui/system';
-import Cookies from 'universal-cookie';
+import { VictoryBar, VictoryChart, VictoryAxis,VictoryTheme,VictoryScatter,VictoryLabel } from 'victory';
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
   });
@@ -22,7 +23,7 @@ const  useStyles = makeStyles({
         fontFamily: "Roboto,Arial,sans-serif",
         textTransform:"capitalize",
         position:"fixed",
-        zIndex:"2",
+        zIndex:"10",
         top:"0",
         left:"0",
         right:"0",
@@ -141,7 +142,10 @@ const  useStyles = makeStyles({
     },
     head:{
         width:"40%",marginLeft:"2%",display:"flex",alignItems:"center",justifyContent:"flex-end",
+        position:"absolute",right:"0",top:"7vh",
         ["@media(max-width: 700px)"]: {
+            position:"relative",
+            top:"0",
             width:"100%",
             alignItems:"center",justifyContent:"center",
         }
@@ -172,8 +176,11 @@ function Closepoll() {
     const [lobbydes, setTritems] = useState([]);
     const [checked, setChecked] = useState(false);
     const [sum,setSum] = useState([]);
+    const[datas,setDatas]=useState([
+       { x:"",y:"",label:""}
+    ]);
+    var anotherVar;
     const link="https://pollapp281907.herokuapp.com/"
-    const cookies = new Cookies();
 
     const userd = async () => {
         try {
@@ -224,8 +231,40 @@ function Closepoll() {
     const handleClose = () => {
         setOpen(false);
     };
+    useEffect(()=>{
+        
+        const d = new Date();
+        let timex = d.toLocaleString();
+        console.log(timex);
+        var xemit="";
+			for(var a=0;a<timex.length;a++){
+				if(timex[a]==':'||timex[a]==','||timex[a]=='/'){
+                    if(timex[a]==','){
+                        xemit=xemit+'t';    
+                    }
+                    else{
+                        xemit=xemit+'-';
+                    }
+                }
+				else{
+                    if(timex[a]==" "||timex[a]=="P"||timex[a]=="A"||timex[a]=="M"){
+                        xemit=xemit+'';
+                    }
+                    else{
+					xemit=xemit+timex[a];
+					console.log(xemit);
+                    }
+                }
+			}
+        var finalid=createid+xemit;
+        // var lobster = {...Lobby};
+        // lobster.lobbyId = finalid;
+        // setLobby(lobster)
+        Lobby.lobbyId=finalid
+        console.log(finalid);    
+    },[])
     const [Lobby, setLobby] = useState({
-        lobbyId:createid,
+        lobbyId:'',
         lobbyName:"",
         lobbyDescription:"",
         studentformId:[],
@@ -344,13 +383,13 @@ function Closepoll() {
     return (
         <div className='actuallythepage'>
              <header className={classes.main}>
-               <a href="#" style={{display:"flex",color:"#f4511e"}}><PollIcon style={{cursor:"pointer"}} fontSize='medium' onClick={navicon}/><h2 onClick={navicon}>POLLAPP</h2></a>
+             <a href="#" style={{display:"flex",color:"#f4511e"}}><ArrowBackIosIcon style={{cursor:"pointer"}} fontSize='medium' onClick={navicon}/><h2 onClick={navicon}>BACK</h2></a>
                <input type="checkbox" name="toggle" id="toggle" checked={checked}onChange={e => setChecked(toggle)}/>
                <label for="toggle">{!checked?<MenuIcon/>:<CloseIcon/>}</label>
                <nav className="checks">
                    <ul>
                        <li><a href="#" onClick={(e)=>{viewpoll(e)}}>Dashboard</a></li>
-                       <li><a href="#" onClick={(e)=>{handleClickOpen(e)}}>Create New Lobby</a></li>
+                       <li><a href="#" onClick={(e)=>{handleClickOpen(e)}}>Create New Lobby <AddCircleOutlineIcon/></a></li>
                    </ul>
                 </nav>
             </header>
@@ -370,40 +409,87 @@ function Closepoll() {
                 </Dialog>
             <div className='ice'>
                 <div className={classes.poltle}>
-                <div className={classes.hea}>
-                    <h1 style={{marginBottom:"1%"}}>{lobbydes.lobbyName}</h1>
-                    <h2 style={{marginBottom:"1%"}}>{lobbydes.lobbyDescription}</h2>
-                </div>
+                <div className='header' >
+                    <h1 className='lobby'>Lobby Title: {lobbydes.lobbyName}
+                    <span>Lobby Description: {lobbydes.lobbyDescription}</span></h1>
+                    </div>
                 <div className={classes.head}>
                 <Button className={classes.download} startIcon={<DownloadIcon/>} onClick={downloadd}>DOWNLOAD RESPONSES</Button>
             </div>
                     </div>
                 <div style={{display:"flex",width:"100%",flexWrap:"wrap",alignItems:"center",justifyContent:"space-around"}}>
-                {polldes.map((lob, x)=>(
-                <div className='quests' key={lob}>
-                    <div className='question'>
-                        <h1>{x+1}. {lob.pollQuestion}</h1>
-                    </div>
-                    {lob.pollOption.map((oop,y)=>(
-                        <>{oop.optionValue == "" &&(
-                            <></>
-                        )}
-                        {!oop.optionValue == "" &&(
-                        <>
-                            <div className='opt' style={{width:"100%",zIndex:"1"}}>
-                                <h2>{y+1}. {oop.optionValue}</h2>
-                                <div value={oop.optionArray.length*100/sum[x]} style={{width:`calc(${oop.optionArray.length}*100%/${sum[x]})`,height:"100%",zIndex:"-1",position: "absolute", maxWidth:"89%",borderRadius: "10px"}}>{Math.round(oop.optionArray.length*100/sum[x])}</div>
-                                <h3 style={{borderLeft:"2px solid white", height:"100%", paddingRight:"1%", paddingLeft:"0.4%"}}>{oop.optionArray.length} votes</h3>
-                            </div> 
-                        </>
-                        )}
-                        </>    
-                        ))}
-                </div>
-                ))}
-               </div> 
+           {polldes.map((lob, x)=>(
+                    <div className='quests' key={lob}>
+                         <h2 className='question1l'>{x+1}. {lob.pollQuestion}</h2>
+                         <VictoryChart height={200} domainPadding={{ x: 20 }} theme={VictoryTheme.material}>
+                         {lob.pollOption.map((oop,y)=>(
+                             <VictoryAxis
+                             fixLabelOverlap={true}
+                             label="Options"
+                             style={{
+                                axis: { stroke: "#f4511e" }, 
+                                axisLabel: {
+                                fontFamily: "inherit",
+                                fontWeight: 100,
+                                letterSpacing: "1px",
+                                fill: "#f4511e",
+                                fontSize: 12
+                            },
+                              grid: { stroke: "rgb(244, 80, 30,0.2)"},
+                              tickLabels: {
+                                fontFamily: "inherit",
+                                fontWeight: 100,
+                                fill:"#333",
+                                fontSize: 10
+                              }
+                            }}
+                             tickValues={[y+1]}
+                             tickFormat={[lob.pollOption[y].optionValue.substring(0, 8)]}
+                             axisLabelComponent={<VictoryLabel dy={18} />}
+                           />
+                            ))} 
+                            <VictoryAxis
+                            dependentAxis
+                            label="No. Of Votes"
+                            style={{
+                                axis: { stroke: "#f4511e" }, 
+                                axisLabel: {
+                                  fontFamily: "inherit",
+                                  fill: "#f4511e"
+                                },
+                                grid: { stroke: "rgb(244, 80, 30,0.5)"},
+                                tickLabels: {
+                                  fontFamily: "inherit",
+                                  fill: "#333",
+                                  fontSize:10
+                                }
+                             }}
+                            tickFormat={(x) => (`${x*1}`)}
+                            axisLabelComponent={<VictoryLabel dy={-28} />}
+                            />       
+                         {lob.pollOption.map((oop,y)=>( 
+                                       
+                                 <VictoryBar 
+                                 style={{ labels: { fill: "white" } }}
+                                 barRatio={2}
+                                 data={[{x:parseInt(y+1),y:parseInt(oop.optionArray.length)}]}
+                                 style={{
+                                    parent: {border: '1px solid black',fontSize:'2px'},
+                                   
+                                    data: {
+                                        fill: ({ datum }) => datum.x === 1 ? "#328fa5" : datum.x === 2 ? "#f54967" : datum.x === 3 ? "#af7c4c" : datum.x === 4 ? "#534caf" : "#4caf50",
+                                       
+                                      },
+                                  }}
+                                 />                               
+                         ))}
+                       
+                     </VictoryChart> 
+                     </div>
+                 ))}   
+            </div> 
             </div>
-            
+           
         </div>
     )
 }

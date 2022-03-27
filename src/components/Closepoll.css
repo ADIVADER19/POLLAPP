@@ -7,12 +7,12 @@
 .ice{
     background-color: white;
     width: 100%;
-    height: 90vh;
     border-radius: 20px;
     max-width: 100%;
     overflow-y: scroll;
     position:relative;
     top:10vh;
+    padding-bottom:50vh;
 }
 
 
@@ -20,8 +20,7 @@
     background-color:whitesmoke;
     border-radius: 15px;
     padding:1%;
-    width:43%;
-    min-height:83vh;
+    width:40%;
     margin-bottom:1%;
     display:flex;
     flex-direction:column;
@@ -155,6 +154,45 @@
 }
 .quests>.opt:nth-child(6)  div{
    background-color:#534caf;    
+}
+
+.graphs{
+        box-shadow:0 5px 10px rgba(0,0,0,.1);
+        width:100%;
+        min-height:70vh;
+        margin-top:5%;
+        position:relative;
+        display:flex;
+        flex-direction:column;
+        transition:0.5s;
+        background:white;
+}
+.pollQuests{
+    background:whitesmoke;
+    height:10vh;
+    padding:1%;
+}
+.pollQuestions{
+    position: relative;
+    color: #333;
+    z-index:3;
+    font-weight:normal;
+}
+.pollQuestions::after{
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 140%;
+    width: 100% ;
+    height: 2px;
+    background: #f4511e;
+}
+.pollOptionC{
+    display:flex;
+    height:100%;
+    justify-content:center;
+    background:green;
+    width:fit-content;
 }
 @media only screen and (max-width: 750px){
     .quests{

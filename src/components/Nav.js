@@ -116,7 +116,10 @@ function Nav() {
     const [checked, setChecked] = useState(false);
     const [userInfo, setUserInfo] = useState({});
     const link="https://pollapp281907.herokuapp.com/"
+<<<<<<< HEAD
     const cookies = new Cookies();
+=======
+>>>>>>> local
       let navigate = useNavigate();
     function toggle(value){
         return !value;
@@ -126,6 +129,12 @@ function Nav() {
       }
       function logout(e){
           e.preventDefault();
+<<<<<<< HEAD
+=======
+          localStorage.removeItem('jwt');
+          window.alert('LOGGED OUT SUCCESSFULLY');
+          window.location.reload();
+>>>>>>> local
           }
        
       function profile(e){
@@ -140,10 +149,16 @@ function Nav() {
         const res = await fetch(`${link}userdata`, {
 				method: "GET",
                 headers: {
+<<<<<<< HEAD
                     Accept: "application/json",
 					"Content-Type": "application/json"
                   },
 				credentials: "include",
+=======
+                    Authorization: "Bearer " + localStorage.getItem("jwt"),
+                  },
+				//credentials: "include",
+>>>>>>> local
 			});
 			const data =await res.json();
             setUserInfo(data);

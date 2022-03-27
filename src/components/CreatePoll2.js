@@ -8,6 +8,7 @@ import { Button } from '@material-ui/core';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import AddIcon from '@material-ui/icons/Add';
 import Slide from '@mui/material/Slide';
+import { Delete } from '@material-ui/icons';
 import './CreatePoll.css';
 import './Nav.css';
 import { useNavigate } from 'react-router';
@@ -15,7 +16,13 @@ import Modal from 'react-modal';
 import PollIcon from '@material-ui/icons/Poll';
 import MenuIcon from '@mui/icons-material/Menu';
 import SaveIcon from '@mui/icons-material/Save';
+<<<<<<< HEAD
 import { Delete } from '@material-ui/icons';
+=======
+import Modal from 'react-modal';
+import io from 'socket.io-client';
+let socket
+>>>>>>> local
 const  useStyles = makeStyles({
     root:{
         margin:"0",
@@ -32,11 +39,34 @@ const  useStyles = makeStyles({
         ['@media (max-width:780px)']: {
             width:"100vw",
           }
+    },stylings:{
+        background:"#f4511e",
+        position:"absolute",
+        top:0,
+        left:0,
+        width:"50px",
+        height:"50px",
+        borderRadius:"15% 50% 50% 0%"
     },
     lobbypollsseen:{
-        width:"45%",height:"40vh",backgroundColor:"whitesmoke",display:"flex",padding:"2%",flexDirection:"column",alignItems:"flex-start",borderRadius:"1em",
+        position:"relative",width:"43%",height:"63vh",backgroundColor:"white",display:"flex",flexDirection:"column",alignItems:"flex-start",margin:"1%",borderLeft:"10px solid #f4511e",borderRadius:"1em",zIndex:"2",
         ['@media (max-width:780px)']: {
             width:"100%",
+            height:"70vh"
+          },
+          ['@media (max-width:340px)']: {
+            width:"100%",
+            height:"88vh"
+          }
+    },
+    lastStuf:{
+        display:"flex",fontFamily: "Roboto,Arial,sans-serif", fontSize: 25,width:"100%",position:"relative",top:"13vh",zIndex:"1",background:"#ebebeb",height:"45vh",borderRadius:"0 0 0 2%",
+        ['@media (max-width:780px)']: {height:"52vh",
+          }
+          ,
+          ['@media (max-width:340px)']: {
+            width:"100%",
+            height:"70vh"
           }
     },
     question:{
@@ -60,8 +90,14 @@ const  useStyles = makeStyles({
     },
     quest:{
         fontFamily: "'Google Sans',Roboto,Arial,sans-serif",
-        fontSize: 30,
-        fontweight: 400,
+        fontWeight: 400,
+    },
+    tired:{
+        color:"#333",
+        "&:hover":{
+            color:"red",
+            cursor:"pointer",
+        }
     },
     add_question_body:{
         display:"flex",
@@ -168,7 +204,7 @@ const  useStyles = makeStyles({
         fontFamily: "Roboto,Arial,sans-serif",
         textTransform:"capitalize",
         position:"fixed",
-        zIndex:"2",
+        zIndex:"50",
         top:"0",
         left:"0",
         right:"0",
@@ -273,7 +309,20 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 function CreatePoll2() {
     const [checked, setChecked] = useState(false);
+    const [repes, setrepes] = useState(true);
     let navigate = useNavigate();
+    const currentPathName = window.location.pathname;
+    const lobbyuuid = currentPathName.slice(6);
+    const [polldes, setItems] = useState([]);
+     const [lobbydes, setTritems] = useState([]);
+     let f = polldes.length+1;
+    const [num,setNum]=useState([{value:f}]);
+    let repeatingQues = [];
+    const classes = useStyles();
+    const [modal, setmodal] = useState(false);
+    const[deletepollid,setDeletepollid]=useState('');
+    const link="https://pollapp281907.herokuapp.com/";
+    const ENDPOINT = 'https://pollapp281907.herokuapp.com';
     function toggle(value){
         return !value;
       }
@@ -284,6 +333,7 @@ function CreatePoll2() {
         e.preventDefault();
         navigate("/vpoll/");
     }
+<<<<<<< HEAD
     const currentPathName = window.location.pathname;
     const lobbyuuid = currentPathName.slice(6);
     const [polldes, setItems] = useState([]);
@@ -294,6 +344,9 @@ function CreatePoll2() {
     const[deletepollid,setDeletepollid]=useState('')
     const link="https://pollapp281907.herokuapp.com/"
     const classes = useStyles();
+=======
+    
+>>>>>>> local
     useEffect(() => {
         fetch(`${link}bobs`, {method: "POST",
         headers: {
@@ -303,7 +356,6 @@ function CreatePoll2() {
     }).then((res) => res.json())
         .then((ret) => {
            setItems(ret.myitem);
-
         })
     }, [polldes]);
     useEffect(()=>{
@@ -317,6 +369,12 @@ function CreatePoll2() {
                 setTritems(rte.myitem[0]);
         })
     },[lobbydes]);
+    useEffect(()=>{
+        socket = io(ENDPOINT)
+        return()=>{
+          socket.off();
+      }
+    },[ENDPOINT, 'vpoll'])
     
     const [opt, setopt] = useState([{
         optionValue:"",
@@ -381,20 +439,36 @@ function CreatePoll2() {
     const DeletetingPoll = async()=>{
         let pollId = deletepollid;
         let lobbyId = lobbydes._id;
+<<<<<<< HEAD
+=======
+        console.log(lobbyId);
+>>>>>>> local
         const res = await fetch(`${link}deletePoll`, {
             method: "POST",
             headers: {
                 "Content-type": "application/json",
             },
             body: JSON.stringify({pollId,lobbyId})
+<<<<<<< HEAD
         }); 
         if (res.status === 200 ) { 
             setmodal(false);
       }
+=======
+        });
+        if (res.status === 200 ) { 
+            setmodal(false);
+            socket.emit('deletepoll',{lobbyuuid:lobbydes.lobbyId,poll:polldes,pollId:deletepollid},(error)=>{
+                if(error){alert(error);}
+            });
+      }
+
+>>>>>>> local
     }
     const CreatePoll = async(e)=>{
         var options = [...opt];
         var question = [...poll];
+        
         for(let i=0;i<options.length;i++){
             question[0].pollOption[i].optionValue = options[i].optionValue;
             question[0].pollOption[i].optionCorrect = options[i].optionCorrect;
@@ -406,7 +480,25 @@ function CreatePoll2() {
         }
         const lobbyUniqueId = poll[0].lobbyUniqueId;
         var pollQuestion = poll.pollQuestion;
+        console.log(poll.pollQuestion);
         console.log(poll);
+        console.log("Hey",pollQuestion);
+        console.log("Gg",repeatingQues);
+        console.log(polldes.length);
+        for(let i=0;i<polldes.length;i++){
+            repeatingQues.push(polldes[i].pollQuestion);
+        }
+        console.log("Hello",repeatingQues);
+        let rups = false;
+        for(let j=0;j<repeatingQues.length;j++){
+            if(pollQuestion===repeatingQues[j]){
+                console.log("equal");
+                rups = true;
+                break;
+            }
+        }
+        console.log(rups);
+       if(!rups){
         if(options.length<2){
             window.alert("Atleast 2 options required");
             var setPollQuestion = [...poll];
@@ -466,7 +558,13 @@ function CreatePoll2() {
                 question[0].pollOption[i].optionCorrect = false;
             }
             setPoll(question);
+            rups= false;
         }
+       }
+       else{
+           window.alert("Poll Already Exists");
+           rups = false;
+       }
     }
     return (
         <>

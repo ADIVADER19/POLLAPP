@@ -24,7 +24,7 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import Modal from 'react-modal';
 import LinearProgress from '@mui/material/LinearProgress';
-import Cookies from 'universal-cookie';
+import CodeIcon from '@mui/icons-material/Code';
 let socket;
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -235,7 +235,6 @@ function Vpoll() {
     const [createLob, setcreateLob] = useState(false);
     const [loadss, setloadss] = useState(true);
     const link="https://pollapp281907.herokuapp.com/"
-    const cookies = new Cookies();
     useEffect(() => () => {
       clearTimeout(timerRef.current);
     },
@@ -288,7 +287,7 @@ function Vpoll() {
 			const res = await fetch(`${link}userdata`, {
 				method: "GET",
         headers: {
-          Authorization: "Bearer " + cookies.get("jwt"),
+          Authorization: "Bearer " + localStorage.getItem("jwt"),
         }
 			});
 			const data = await res.json();      
@@ -429,13 +428,45 @@ function Vpoll() {
         setOpen(false);
     };
     const [Lobby, setLobby] = useState({
-        lobbyId:createid,
-        lobbyName:"",
-        lobbyDescription:"",
-        studentformId:[],
-        pollId:[],
-        userId:"",
-    });
+      lobbyId:'',
+      lobbyName:"",
+      lobbyDescription:"",
+      studentformId:[],
+      pollId:[],
+      userId:"",
+  });
+  useEffect(()=>{
+      
+    const d = new Date();
+    let timex = d.toLocaleString();
+    console.log(timex);
+    var xemit="";
+  for(var a=0;a<timex.length;a++){
+    if(timex[a]==':'||timex[a]==','||timex[a]=='/'){
+                if(timex[a]==','){
+                    xemit=xemit+'t';    
+                }
+                else{
+                    xemit=xemit+'-';
+                }
+            }
+    else{
+                if(timex[a]==" "||timex[a]=="P"||timex[a]=="A"||timex[a]=="M"){
+                    xemit=xemit+'';
+                }
+                else{
+      xemit=xemit+timex[a];
+      console.log(xemit);
+                }
+            }
+  }
+    var finalid=createid+xemit;
+    // var lobster = {...Lobby};
+    // lobster.lobbyId = finalid;
+    // setLobby(lobster)
+    Lobby.lobbyId=finalid
+    console.log(finalid);    
+},[])
     let name, value;
     const handleInputs = (e) => {
 		name = e.target.name;
@@ -468,7 +499,7 @@ function Vpoll() {
 			} 
       navigate("/poll/"+Lobby.lobbyId); 
         }
-    } 
+    }  
     return (
     <>
       {loading?<div className='coomtainer'>
@@ -601,7 +632,11 @@ function Vpoll() {
                 </div>
                 ))}
                 </div>
+                <div className='fature'>
+                    <CodeIcon fontSize='large'style={{color:"whitesmoke"}}/><h1 align="center" style={{fontSize:"1.5em",color:"whitesmoke",fontWeight:"normal"}}>  by  Advait,Soham and Hridayesh</h1>
+                </div>
             </div>
+          
         </div>
         :<div className={classes.loader}>
         <CircularProgress style={{color:"#f4511e"}} size={100} />

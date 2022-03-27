@@ -12,13 +12,22 @@ const useStyles=makeStyles({
         backgroundColor:"whitesmoke"
     },
     log:{
-        width:"30%",
-        marginLeft:"2%",
+        width:"200px",
+        marginBottom:"2%",
+        marginLeft:"1%",
+        marginTop:"1%",
     },
     sign:{
-        width:"30%",
-        marginLeft:"2%",
-    },   
+      width:"200px",
+      marginBottom:"2%",
+      marginTop:"1%",
+      marginLeft:"1%",
+  },
+  poptit:{
+      color:"#333",
+      fontWeight:"normal",
+      fontFamily: "Roboto,Arial,sans-serif"
+  }  
 });
 function PollStu() {
     const [timedPopup, setTimedPopup] = useState(false);
@@ -44,34 +53,42 @@ function PollStu() {
     const [polldes, setItems] = useState([]);
     const [lobbydes, setTritems] = useState([]);
     const [check, setBitems] = useState(Boolean);
-    const ENDPOINT = 'http://pollapp281907.herokuapp.com/';
+    const[loading,setLoading]=useState(false);
+    const ENDPOINT = 'https://pollapp281907.herokuapp.com';
     const link="https://pollapp281907.herokuapp.com/"
-    
-    
 
 
     
     const suserd = async () => {
+        
 		try {
+            const test=localStorage.getItem("sjwt");
+            console.log(test);
+            if(test === null) {
+                setTimeout(()=>{
+                    setTimedPopup(true);
+                },1000);
+            }
+             else
+             {
 			const res = await fetch(`${link}suserdata`, {
 				method: "GET",
-				headers: {
-					Accept: "application/json",
-					"Content-Type": "application/json",
-				},
-				credentials: "include",
+                headers: {
+                    Authorization: "Bearer " + localStorage.getItem("sjwt"),
+                  }
 			});
 			const data = await res.json();
 		
 
-			if (res.status === 200) {
+			if (res.status === 200 || res.status===201) {
                 setUserInfo(data);
-                
                 socket.emit('join',{data,lobbyuuid},(error)=>{
-                    if(error){alert(error);}
+                    if(error){alert(error);
+                        setLoading(true)}
                 });
 			}
-            else if (res.status === 422) {
+            else{ if (res.status === 422) {
+                
                 setTimeout(()=>{
                     setTimedPopup(true);
                 },1000);
@@ -82,8 +99,10 @@ function PollStu() {
                     setTimedPopup(true);
                 },1000);
             
-            }
-		} catch (err) {
+            }}
+		} 
+    }catch (err) {
+        console.log(err);
 		}
 	};
 
@@ -98,11 +117,7 @@ function PollStu() {
 			!name ||
 			!givenName 
 		) {
-		}
-        // else if(subexist){
-        //     console.log(subject);
-        // }
-        else {
+		} else {
 			const res = await fetch(`${link}slogin`, {
 				method: "POST",
 				headers: {
@@ -117,10 +132,17 @@ function PollStu() {
 				}),
 			});
             const data= await res.json();
+            const tok=data.message;
+            console.log(data);
+            console.log(tok);
 			if (res.status === 400 || !data) {
                 window.alert('Something went wrong')
+                setTimeout(()=>{
+                    setTimedPopup(true);
+                },1000);
 			} else if (res.status === 200 || res.status === 201) {
                 window.alert("SUCCESSFULLY LOGGED IN")
+                localStorage.setItem("sjwt", tok);
                 setTimedPopup(false);
                 suserd();
                 if(subexist){
@@ -129,7 +151,10 @@ function PollStu() {
 			} 
             else if(res.status === 422)
                 {
-                window.alert("USER DOES NOT EXSIST")
+                window.alert("USER DOES NOT EXSIST");
+                setTimeout(()=>{
+                    setTimedPopup(true);
+                },1000);
 			}
             else if(res.status === 450)
                 {
@@ -137,7 +162,10 @@ function PollStu() {
 			}
             else
             {
-                window.alert("INVALID USER")
+                window.alert("INVALID USER");
+                setTimeout(()=>{
+                    setTimedPopup(true);
+                },1000);
             }
 		}
 	};
@@ -169,7 +197,6 @@ function PollStu() {
                 window.alert('Something went wrong')
 			} else if (res.status === 200 || res.status === 201) {
                 window.alert("SUCCESSFULLY SIGNED UP")
-                document.getElementByclassName("sign").style.display="none";
                 
 			} 
             else if(res.status === 422)
@@ -330,7 +357,6 @@ function PollStu() {
     }
 
     return (
-        
         <div className='actuallythepagep'>
             {check == true &&(
                             <div style={{display:"flex",alignItems:"center",justifyContent:"center",width:"100%",padding:"1%",marginTop:"20%"}}>
@@ -349,39 +375,43 @@ function PollStu() {
                 <div className='styles'></div>
                     <div class="triangle-right"></div>
                     <div className="triangle-left"></div>
-                <div className='polldiv'>
+                    <div className='polldiv'>
                 {polldes.map((lob,x)=>(
-                <div className='questsp' key={lob}>
-                    {/* <div className='questionp'>
-                        <h1>{x+1}. {lob.pollQuestion}</h1>
-                    </div> */}
-                    <div className='shapes'></div>
-                    <h2 className='sequence'>{x+1}</h2>
-                    <h2 className='question1l'>{lob.pollQuestion}</h2>
-                    {lob.pollOption.map((oop)=>(
-                        <>{oop.optionValue == "" &&(
-                            <></>
-                        )}
-                        {!oop.optionValue == "" &&(
-                        <div id= "catrina" className='viki'>
-                            <div className= "optionsp" >
-                                <input type="radio" value={oop.optionValue} name={lob.pollQuestion} id="gywshb" 
-                                onClick={()=>nowdigonthis(lob._id,oop._id,lob.pollQuestion,oop.optionValue)}
-                                ></input>&nbsp;
-                                <h3 id="muda">{oop.optionValue}</h3>
-                            </div>
-                        </div>
-                        )}
-                        </>    
-                        ))}
-                </div>
+                    <>
+                    {loading?<div></div>:
+                     <div className='questsp' key={lob}>
+                     {/* <div className='questionp'>
+                         <h1>{x+1}. {lob.pollQuestion}</h1>
+                     </div> */}
+                     <div className='shapes'></div>
+                     <h2 className='sequence'>{x+1}</h2>
+                     <h2 className='question1l'>{lob.pollQuestion}</h2>
+                     {lob.pollOption.map((oop)=>(
+                         <>{oop.optionValue == "" &&(
+                             <></>
+                         )}
+                         {!oop.optionValue == "" &&(
+                         <div id= "catrina" className='viki'>
+                             <div className= "optionsp" >
+                                 <input type="radio" value={oop.optionValue} name={lob.pollQuestion} id="gywshb" 
+                                 onClick={()=>nowdigonthis(lob._id,oop._id,lob.pollQuestion,oop.optionValue)}
+                                 ></input>&nbsp;
+                                 <h3 id="muda">{oop.optionValue}</h3>
+                             </div>
+                         </div>
+                         )}
+                         </>    
+                         ))}
+                 </div>
+                    }
+                </>
                 ))}
                 </div>
             </div>
             <Popup className={classes.pops} id="popup" trigger={timedPopup} setTrigger={setTimedPopup}>
                 <h3 align="center" className={classes.poptit}>SIGN UP OR LOGIN TO CONTINUE</h3>
                 <div style={{display:"flex",width:"100%",alignItems:"center",justifyContent:"center"}}>
-                <GoogleLogin id="log" className={classes.log}  
+                <GoogleLogin id="log" className={classes.log}
                             clientId="399611436919-fo4n24pr7bpmslat5vamj5u8rc5q0v6f.apps.googleusercontent.com"
                             buttonText="LOGIN IN"
                             onSuccess={responseGoogle}
@@ -398,7 +428,8 @@ function PollStu() {
                             color="primary"
                         />
                 </div>
-            </Popup></>
+            </Popup>
+            </>
             )}
         </div>
     )
