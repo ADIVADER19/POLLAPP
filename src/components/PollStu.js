@@ -38,7 +38,7 @@ function PollStu() {
     const subexist=lobbyuuid.includes('s')
     let subject = '';
     if(subexist){
-        subject = lobbyuuid.slice(18);
+        subject = lobbyuuid.slice(19);
         console.log(subject);
     }
     const [polldes, setItems] = useState([]);
