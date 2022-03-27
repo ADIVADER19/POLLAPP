@@ -25,6 +25,7 @@ import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import Modal from 'react-modal';
 import LinearProgress from '@mui/material/LinearProgress';
 import CodeIcon from '@mui/icons-material/Code';
+import Cookies from 'universal-cookie';
 let socket;
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -235,6 +236,7 @@ function Vpoll() {
     const [createLob, setcreateLob] = useState(false);
     const [loadss, setloadss] = useState(true);
     const link="https://pollapp281907.herokuapp.com/"
+    const cookies = new Cookies();
     useEffect(() => () => {
       clearTimeout(timerRef.current);
     },
@@ -287,7 +289,7 @@ function Vpoll() {
 			const res = await fetch(`${link}userdata`, {
 				method: "GET",
         headers: {
-          Authorization: "Bearer " + localStorage.getItem("jwt"),
+          Authorization: "Bearer " + cookies.get("jwt"),
         }
 			});
 			const data = await res.json();      
