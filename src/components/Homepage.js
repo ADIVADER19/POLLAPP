@@ -11,6 +11,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import CodeIcon from '@mui/icons-material/Code';
 import Modal from 'react-modal';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import Cookies from 'universal-cookie';
 import Alert from '@mui/material/Alert';
 const  useStyles = makeStyles({
     pops:{
@@ -121,23 +122,16 @@ function HomePage() {
     const[existance,setexistance]=useState(false);
     const[logexist,setlogexist]=useState(false);
     const link="https://pollapp281907.herokuapp.com/"
+    const cookies = new Cookies();
     const userd = async () => {
-		try {
-            const test=localStorage.getItem("jwt");
-            console.log(test);
-            if(test === null) {
-                setTimeout(()=>{
-                    setLoading(true);
-                    setTimedPopup(true);
-                },1000);
-            }
-            else
-            {
-			const res = await fetch(`${link}userdata`, {
+	    	const res = await fetch(`${link}userdata`, {
 				method: "GET",
                 headers: {
-                    Authorization: "Bearer " + localStorage.getItem("jwt"),
-                  }
+                    Authorization: "Bearer " + cookies.get("jwt"),
+                    // Accept: "application/json",
+					// "Content-Type": "application/json"
+                  },
+                  //credentials : "include",
 			});
 			const data = await res.json();
 			if (res.status === 200 || res.status===201) {
@@ -158,10 +152,6 @@ function HomePage() {
                 },1000);
             
             }
-        }
-		} catch (err) {
-            console.log(err);
-		}
 	};
     const responseGoogle = async (response) => {
         
@@ -194,7 +184,7 @@ function HomePage() {
                 window.alert('Something went wrong')
 			} else if (res.status === 200 || res.status === 201) {
                 setloggedIn(true);
-                localStorage.setItem("jwt", tok);
+                //localStorage.setItem("jwt", tok);
                 window.setTimeout(() => {
                     setloggedIn(false);
                   }, 5000);
