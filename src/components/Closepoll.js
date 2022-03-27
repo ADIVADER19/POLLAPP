@@ -14,6 +14,7 @@ import Slide from '@mui/material/Slide';
 import zIndex from '@material-ui/core/styles/zIndex';
 import { maxWidth } from '@mui/system';
 import { VictoryBar, VictoryChart, VictoryAxis,VictoryTheme,VictoryScatter,VictoryLabel } from 'victory';
+import Cookies from 'universal-cookie';
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
   });
@@ -181,14 +182,14 @@ function Closepoll() {
     ]);
     var anotherVar;
     const link="https://pollapp281907.herokuapp.com/"
+    const cookies = new Cookies();
 
     const userd = async () => {
         try {
-              const res = await fetch(`${link}userdata`, {
+                const res = await fetch(`${link}userdata`, {
                   method: "GET",
                   headers: {
-                      Accept: "application/json",
-                      "Content-Type": "application/json",
+                    Authorization: "Bearer " + cookies.get("jwt")
                   },
                   credentials: "include",
               });
