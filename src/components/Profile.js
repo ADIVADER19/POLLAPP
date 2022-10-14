@@ -152,9 +152,10 @@ export default function Profile() {
 	const Input = styled('input')({
 		display: 'none',
 	  });
+	const link="https://pollapp281907.herokuapp.com/"
 	const callProfilePage = async () => {
 		try {
-			const res = await fetch("/userdata", {
+			const res = await fetch(`${link}userdata`, {
 				method: "GET",
 				headers: {
 					Accept: "application/json",
@@ -386,7 +387,7 @@ export default function Profile() {
 				emailArray.push(data[i].Email);
 			}
 			let mailid = userInfo.mail;
-			const res = await fetch("/createNewSubject", {
+			const res = await fetch(`${link}createNewSubject`, {
 				method: "POST",
 				headers: {
 					"Content-type": "application/json",
@@ -447,7 +448,7 @@ export default function Profile() {
 			console.log(mailid);
 			console.log(subjectName);
 			console.log(emailArray);
-			const res = await fetch("/createNewSubject", {
+			const res = await fetch(`${link}createNewSubject`, {
 				method: "POST",
 				headers: {
 					"Content-type": "application/json",

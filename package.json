@@ -15,14 +15,20 @@
     "@testing-library/jest-dom": "^5.16.1",
     "@testing-library/react": "^12.1.2",
     "@testing-library/user-event": "^13.5.0",
+    "assert": "^2.0.0",
     "axios": "^0.24.0",
+    "buffer": "^6.0.3",
     "chart.js": "^3.7.0",
     "d3": "^7.3.0",
     "history": "^5.2.0",
     "http-proxy-middleware": "^2.0.1",
+    "https-browserify": "^1.0.0",
     "materialize-css": "^1.0.0",
+    "os-browserify": "^0.3.0",
+    "process": "^0.11.10",
     "radium": "^0.26.1",
     "react": "^17.0.2",
+    "react-app-rewired": "^2.2.1",
     "react-chartjs-2": "^4.0.0",
     "react-dom": "^17.0.2",
     "react-google-login": "^5.2.2",
@@ -33,14 +39,18 @@
     "react-toastify": "^8.1.0",
     "read-excel-file": "^5.2.28",
     "socket.io-client": "^4.4.1",
+    "stream-browserify": "^3.0.0",
+    "stream-http": "^3.2.0",
+    "url": "^0.11.0",
     "uuid": "^8.3.2",
     "web-vitals": "^2.1.2",
-    "xlsx": "^0.18.3"
+    "xlsx": "^0.18.3",
+    "yarn": "^1.22.19"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": " react-scripts build",
-    "test": "react-scripts test",
+    "start": "react-app-rewired start",
+    "build": "react-app-rewired build",
+    "test": "react-app-rewired test",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -60,5 +70,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "main": "index.js",
+  "repository": "https://github.com/ADIVADER19/POLLAPP.git",
+  "author": "ADIVADER19 <advaitnurani@gmail.com>",
+  "license": "MIT"
 }

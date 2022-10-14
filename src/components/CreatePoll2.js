@@ -321,14 +321,15 @@ function CreatePoll2() {
     const lobbyuuid = currentPathName.slice(6);
     const [polldes, setItems] = useState([]);
      const [lobbydes, setTritems] = useState([]);
-     const ENDPOINT = 'localhost:2000';
+     const ENDPOINT = 'https://pollapp281907.herokuapp.com/';
+     const link="https://pollapp281907.herokuapp.com/"
      let f = polldes.length+1;
     const [num,setNum]=useState([{value:f}]);
     const [modal, setmodal] = useState(false);
     const[deletepollid,setDeletepollid]=useState('');
     const classes = useStyles();
     useEffect(() => {
-        fetch("/bobs", {method: "POST",
+        fetch(`${link}bobs`, {method: "POST",
         headers: {
             "Content-type": "application/json",
         },
@@ -340,7 +341,7 @@ function CreatePoll2() {
         })
     }, [polldes]);
     useEffect(()=>{
-        fetch("/ross", {method: "POST",
+        fetch(`${link}ross`, {method: "POST",
         headers: {
             "Content-type": "application/json",
         },
@@ -424,7 +425,7 @@ function CreatePoll2() {
         let pollId = deletepollid;
         let lobbyId = lobbydes._id;
         console.log(lobbyId);
-        const res = await fetch(`/deletePoll`, {
+        const res = await fetch(`${link}deletePoll`, {
             method: "POST",
             headers: {
                 "Content-type": "application/json",
@@ -487,7 +488,7 @@ function CreatePoll2() {
             setPoll(question);
         }
         else{
-            const res = await fetch("/createnewpoll", {
+            const res = await fetch(`${link}createnewpoll`, {
                 method: "POST",
                 headers: {
                     "Content-type": "application/json",

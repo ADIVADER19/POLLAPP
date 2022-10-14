@@ -190,7 +190,8 @@ function LivepollT() {
     const [users, setUsers] = useState([]);
     const [polls, setPolls] = useState([]);
     const data = {name:'teacher'};
-    const ENDPOINT = 'localhost:2000';
+    const ENDPOINT = 'https://pollapp281907.herokuapp.com/';
+    const link="https://pollapp281907.herokuapp.com/"
     const [sum,setSum] = useState([]);
     const [open, setOpen] = useState(false);
     const[op,setOp]=useState(false);
@@ -230,7 +231,7 @@ function LivepollT() {
         };
         const CloseLobby=()=>{
             const stuid = lobbyuuid;
-            fetch("/close", {
+            fetch(`${link}close`, {
               method: "put",
               headers: {
                 "Content-Type": "application/json",
@@ -300,7 +301,7 @@ function LivepollT() {
 
 
     useEffect(() => {
-        fetch("/bobs", {method: "POST",
+        fetch(`${link}bobs`, {method: "POST",
         headers: {
             "Content-type": "application/json",
         },
@@ -316,7 +317,7 @@ function LivepollT() {
     }, []);
 
     useEffect(()=>{
-        fetch("/ross",{method:"POST",
+        fetch(`${link}ross`,{method:"POST",
         headers: {
             "Content-type": "application/json",
         },

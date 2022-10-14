@@ -240,6 +240,7 @@ function Vpoll() {
     const [createLob, setcreateLob] = useState(false);
     const [loadss, setloadss] = useState(true);
     const[selectedSubject,setSelectedSubject]=useState('No subject selected');
+    const link="https://pollapp281907.herokuapp.com/"
     useEffect(() => () => {
       clearTimeout(timerRef.current);
     },
@@ -272,7 +273,7 @@ function Vpoll() {
     const[linktxt,setLinktxt]=useState("Share Link");
     const [op, setOp] = React.useState(false);
     const data = {name:'teacher'};
-    const ENDPOINT = 'localhost:2000';
+    const ENDPOINT = 'https://pollapp281907.herokuapp.com/';
     const [modal, setmodal] = useState(false);
     const[deletelobid,setDeletelobid]=useState('');
     const[delMessage,setdelMessage]=useState(false);
@@ -289,7 +290,7 @@ function Vpoll() {
       }
     const userd = async () => {
       try {
-			const res = await fetch("/userdata", {
+			const res = await fetch(`${link}userdata`, {
 				method: "GET",
 				headers: {
 					Accept: "application/json",
@@ -329,7 +330,7 @@ function Vpoll() {
     var userIds = usern._id;
     const openlobbies = async (tata,sub)=> {
       setLoading(false);
-        await fetch("/usrlobbies", {
+        await fetch(`${link}usrlobbies`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -343,7 +344,7 @@ function Vpoll() {
     };
 
     const closelobbies = async(tata,sub)=> {
-        fetch("/clsrlobbies", {
+        fetch(`${link}clsrlobbies`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -369,7 +370,7 @@ function Vpoll() {
     };
     const DeleteLobby = async()=>{
       console.log(deletelobid);
-      const res = await fetch("/delete", {
+      const res = await fetch(`${link}delete`, {
         method: "POST",
         headers: {
             "Content-type": "application/json",
@@ -445,7 +446,7 @@ function Vpoll() {
         }
       }
       console.log(finalizedArray);
-      const res = await fetch("/downloadExcel", {
+      const res = await fetch(`${link}downloadExcel`, {
         method: "POST",
         headers: {
             "Content-type": "application/json",
@@ -455,7 +456,7 @@ function Vpoll() {
     finalizedArray.splice(0, finalizedArray.length);
     }
     const Closepoll = (stuid) => {
-        fetch("/close", {
+        fetch(`${link}close`, {
           method: "put",
           headers: {
             "Content-Type": "application/json",
@@ -516,7 +517,7 @@ function Vpoll() {
         }
         else{
             const{lobbyId,lobbyName,lobbyDescription,studentformId,pollId,userId} = Lobby;
-            const res = await fetch("/createnewlobby", {
+            const res = await fetch(`${link}createnewlobby`, {
                 method: "POST",
                 headers: {
                     "Content-type": "application/json",

@@ -60,7 +60,7 @@ const blue = {
 	font-size: 0.875rem;
 	box-sizing: border-box;
 	min-height: calc(1.5em + 22px);
-	min-width: 70%;
+	min-width: %;
 	background: ${theme.palette.mode === 'dark' ? grey[900] : '#fff'};
 	border: 1px solid ${theme.palette.mode === 'dark' ? grey[800] : grey[300]};
 	border-radius: 0.75em;
@@ -303,6 +303,7 @@ function HomePage() {
       };
       const [loadUK, setLoadUK] = React.useState(false);
       const [sucUK, setSucUK] = React.useState(false);
+      const link="https://pollapp281907.herokuapp.com/";
       const tukmer = React.useRef();
       const buttonSxuk = {
           ...(sucUK && {
@@ -330,7 +331,7 @@ function HomePage() {
           };
     const userd = async () => {
 		try {
-			const res = await fetch("/userdata", {
+			const res = await fetch(`${link}userdata`, {
 				method: "GET",
 				headers: {
 					Accept: "application/json",
@@ -378,7 +379,7 @@ function HomePage() {
 			!givenName 
 		) {
 		} else {
-			const res = await fetch("/login", {
+			const res = await fetch(`${link}login`, {
 				method: "POST",
 				headers: {
 					"Content-type": "application/json",
@@ -427,7 +428,7 @@ function HomePage() {
 			!givenName 
 		) {
 		} else {
-			const res = await fetch("/u", {
+			const res = await fetch(`${link}u`, {
 				method: "POST",
 				headers: {
 					"Content-type": "application/json",
@@ -658,7 +659,7 @@ function HomePage() {
             Lobby.lobbyId=finalid
             console.log(finalid);   
             const{lobbyId,lobbyName,lobbyDescription,studentformId,pollId,userId} = Lobby;
-            const res = await fetch("/createnewlobby", {
+            const res = await fetch(`${link}createnewlobby`, {
                 method: "POST",
                 headers: {
                     "Content-type": "application/json",
@@ -682,7 +683,7 @@ function HomePage() {
             Lobby.lobbyId=finalid
             console.log(finalid);   
             const{lobbyId,lobbyName,lobbyDescription,studentformId,pollId,userId} = Lobby;
-            const res = await fetch("/createnewlobby", {
+            const res = await fetch(`${link}createnewlobby`, {
                 method: "POST",
                 headers: {
                     "Content-type": "application/json",

@@ -117,6 +117,7 @@ function Nav() {
     const [checked, setChecked] = useState(false);
     const[loggedOut,setloggedOut]=useState(false);
     const [userInfo, setUserInfo] = useState({});
+    const link="https://pollapp281907.herokuapp.com/"
       let navigate = useNavigate();
     function toggle(value){
         return !value;
@@ -126,7 +127,7 @@ function Nav() {
       }
       const logout = async (e) => {
           e.preventDefault();
-          await fetch("/logout", {
+          await fetch(`${link}logout`, {
               method: "GET",
               headers: {
                   "Content-type": "application/json",
@@ -160,7 +161,7 @@ function Nav() {
         navigate("/vpoll/");
     }
     useEffect(async() => {
-        const res = await fetch("/userdata", {
+        const res = await fetch(`${link}userdata`, {
 				method: "GET",
 				headers: {
 					Accept: "application/json",
